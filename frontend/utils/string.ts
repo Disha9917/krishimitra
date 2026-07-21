@@ -1,1 +1,9 @@
-// TODO: Implement module for KrishiMitra\n
+export function truncateText(text: string, maxLength: number): string {
+  if (text.length <= maxLength) return text;
+  return text.slice(0, maxLength) + "...";
+}
+
+export function capitalizeFirstLetter(str: string): string {
+  if (!str) return "";
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}

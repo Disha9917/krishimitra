@@ -1,1 +1,3 @@
-// TODO: Implement module for KrishiMitra\n
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";

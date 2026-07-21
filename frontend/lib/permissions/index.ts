@@ -1,1 +1,7 @@
-// TODO: Implement module for KrishiMitra\n
+export function canAccessAdmin(role: string): boolean {
+  return role === "Admin";
+}
+
+export function canExportReports(role: string): boolean {
+  return true;
+}

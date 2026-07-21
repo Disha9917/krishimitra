@@ -1,1 +1,4 @@
-// TODO: Implement module for KrishiMitra\n
+export const themeStore = {
+  getTheme: () => "light",
+  setTheme: (theme: "light" | "dark") => {},
+};

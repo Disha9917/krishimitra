@@ -1,1 +1,9 @@
-// TODO: Implement module for KrishiMitra\n
+{
+  "short_name": "KrishiMitra",
+  "name": "KrishiMitra AI Precision Crop Advisor",
+  "icons": [],
+  "start_url": "/",
+  "background_color": "#ffffff",
+  "theme_color": "#059669",
+  "display": "standalone"
+}

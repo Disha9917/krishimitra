@@ -1,1 +1,5 @@
-// TODO: Implement module for KrishiMitra\n
+import { authStore } from "./auth.store";
+
+export const userStore = {
+  getUser: authStore.getUser,
+};

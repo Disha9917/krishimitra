@@ -1,1 +1,22 @@
-// TODO: Implement module for KrishiMitra\n
+export const ROUTES = {
+  HOME: "/",
+  LOGIN: "/login",
+  REGISTER: "/register",
+  FORGOT_PASSWORD: "/forgot-password",
+  ABOUT: "/about",
+  CONTACT: "/contact",
+  DASHBOARD: {
+    OVERVIEW: "/dashboard",
+    CROP_ADVISOR: "/dashboard/crop-advisor",
+    POST_HARVEST: "/dashboard/post-harvest",
+    DISEASE_DETECTION: "/dashboard/disease-detection",
+    MARKET_PRICES: "/dashboard/market-prices",
+    WEATHER: "/dashboard/weather",
+    HISTORY: "/dashboard/history",
+    REPORTS: "/dashboard/reports",
+    SETTINGS: "/dashboard/settings",
+    IRRIGATION: "/dashboard/irrigation",
+    PROFILE: "/dashboard/profile",
+    ADMIN: "/dashboard/admin",
+  },
+};
