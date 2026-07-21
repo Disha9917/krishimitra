@@ -29,7 +29,7 @@ export function DropdownMenu({ trigger, children, className }: DropdownProps) {
       {isOpen && (
         <div
           className={cn(
-            "absolute right-0 z-50 mt-2 w-56 rounded-2xl border border-slate-100 bg-white p-2 shadow-lg ring-1 ring-black/5 animate-fade-in",
+            "absolute right-0 z-50 mt-2 w-56 rounded-2xl border border-slate-100 dark:border-[#2A2F3A] bg-white dark:bg-[#161B22] p-2 shadow-lg ring-1 ring-black/5 animate-fade-in text-slate-900 dark:text-white",
             className
           )}
           onClick={() => setIsOpen(false)}

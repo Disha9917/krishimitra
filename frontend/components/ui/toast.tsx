@@ -18,10 +18,10 @@ export function Toast({ type = "success", message, onClose }: ToastProps) {
   };
 
   const borders = {
-    success: "border-emerald-200 bg-emerald-50 text-emerald-900",
-    warning: "border-amber-200 bg-amber-50 text-amber-900",
-    error: "border-rose-200 bg-rose-50 text-rose-900",
-    info: "border-blue-200 bg-blue-50 text-blue-900",
+    success: "border-emerald-200 dark:border-emerald-800/40 bg-emerald-50 dark:bg-[#161B22] text-emerald-900 dark:text-emerald-300",
+    warning: "border-amber-200 dark:border-amber-800/40 bg-amber-50 dark:bg-[#161B22] text-amber-900 dark:text-amber-300",
+    error: "border-rose-200 dark:border-rose-800/40 bg-rose-50 dark:bg-[#161B22] text-rose-900 dark:text-rose-300",
+    info: "border-blue-200 dark:border-blue-800/40 bg-blue-50 dark:bg-[#161B22] text-blue-900 dark:text-blue-300",
   };
 
   return (

@@ -3,8 +3,8 @@ export const ROUTES = {
   LOGIN: "/login",
   REGISTER: "/register",
   FORGOT_PASSWORD: "/forgot-password",
-  ABOUT: "/about",
-  CONTACT: "/contact",
+  ABOUT: "/#about",
+  CONTACT: "/#contact",
   DASHBOARD: {
     OVERVIEW: "/dashboard",
     CROP_ADVISOR: "/dashboard/crop-advisor",
