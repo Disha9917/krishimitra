@@ -21,12 +21,12 @@ export function Navbar() {
         <div className="flex items-center gap-3">
           <Link href="/login">
             <Button variant="outline" size="sm">
-              Sign In
+              Login
             </Button>
           </Link>
           <Link href="/dashboard">
             <Button variant="primary" size="sm">
-              Farmer Dashboard
+              Register
             </Button>
           </Link>
         </div>

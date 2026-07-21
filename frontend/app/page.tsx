@@ -2,7 +2,6 @@ import * as React from "react";
 import { Navbar } from "../components/layout/navbar";
 import { Hero } from "../components/landing/hero";
 import { Features } from "../components/landing/features";
-import { AIFeatures } from "../components/landing/ai-features";
 import { HowItWorks } from "../components/landing/how-it-works";
 import { Statistics } from "../components/landing/statistics";
 import { Benefits } from "../components/landing/benefits";
@@ -18,7 +17,6 @@ export default function LandingPage() {
       <main className="flex-1">
         <Hero />
         <Features />
-        <AIFeatures />
         <HowItWorks />
         <Statistics />
         <Benefits />
