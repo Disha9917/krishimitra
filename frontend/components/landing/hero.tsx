@@ -1,7 +1,5 @@
 import * as React from "react";
-import { Button } from "../ui/button";
-import Link from "next/link";
-import { Sprout, Sparkles, ShieldCheck, Warehouse, ArrowRight } from "lucide-react";
+import { Sprout, Sparkles, ShieldCheck, Warehouse } from "lucide-react";
 
 export function Hero() {
   return (
@@ -20,23 +18,7 @@ export function Hero() {
           Top-ranked AI advisories, 7-day micro-climate timelines, leaf disease diagnosis, and post-harvest spoilage loss reduction for maximum farm profit.
         </p>
 
-        <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
-          <Link href="/register">
-            <Button variant="primary" size="lg" className="shadow-lg shadow-emerald-200/80 dark:shadow-emerald-900/30 hover:shadow-emerald-300 transition-all transform hover:-translate-y-0.5">
-              Launch Farmer Advisory System
-              <ArrowRight className="h-5 w-5" />
-            </Button>
-          </Link>
-          <Link href="#contact">
-            <Button variant="secondary" size="lg" className="backdrop-blur-sm bg-white/80 dark:bg-[#161B22] hover:bg-white dark:hover:bg-[#1C212A] border-emerald-200 dark:border-[#2A2F3A] text-slate-800 dark:text-[#C9D1D9]">
-              <Warehouse className="h-5 w-5 text-emerald-700 dark:text-emerald-400" />
-              Post-Harvest Loss Planner
-            </Button>
-          </Link>
-        </div>
-
-        {/* Highlight Chips */}
-        <div className="pt-8 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto text-left text-xs font-bold text-slate-800 dark:text-[#C9D1D9]">
+        <div className="pt-6 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto text-left text-xs font-bold text-slate-800 dark:text-[#C9D1D9]">
           <div className="rounded-2xl border border-emerald-100/80 dark:border-[#2A2F3A] bg-white/85 dark:bg-[#161B22]/90 backdrop-blur-md p-4 shadow-sm hover:shadow-md transition-all flex items-center gap-3">
             <Sprout className="h-6 w-6 text-emerald-600 dark:text-emerald-400 shrink-0" />
             <span>Top 3 Ranked Advisories</span>
