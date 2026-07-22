@@ -16,7 +16,7 @@ import { LiveBreezeBackground } from "../components/landing/live-breeze-backgrou
 export default function LandingPage() {
   return (
     <div className="relative min-h-screen bg-gradient-to-b from-emerald-50/40 via-emerald-50/10 to-emerald-100/30 dark:from-[#0B0F14] dark:via-[#0B0F14]/95 dark:to-[#111827] flex flex-col text-slate-900 dark:text-white transition-colors duration-300">
-      {/* Page-wide Swaying Farm Breeze Live Background (Option 3) */}
+      {/* Page-wide Swaying Farm Breeze Live Background */}
       <LiveBreezeBackground />
 
       <Navbar />
