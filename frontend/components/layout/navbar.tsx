@@ -16,18 +16,9 @@ import {
   MapPin,
   TrendingUp,
   Snowflake,
-  BookOpen,
   Map,
-  Coins,
-  ShieldCheck,
-  Droplets,
   CreditCard,
-  BadgeCheck,
-  BarChart3,
-  Database,
   Wrench,
-  Sprout,
-  Settings,
   Flag
 } from "lucide-react";
 
@@ -52,43 +43,34 @@ export function Navbar() {
       title: "Farm Equipment",
       emoji: "🚜",
       items: [
-        { label: "Tractor on Rent", href: "/register", subtitle: "Find high-power tractors", icon: <Tractor className="h-4 w-4" /> },
-        { label: "Rotavator on Rent", href: "/register", subtitle: "Soil preparation tools", icon: <Sprout className="h-4 w-4" /> },
-        { label: "Harvester on Rent", href: "/register", subtitle: "Efficient harvest machinery", icon: <Wrench className="h-4 w-4" /> },
-        { label: "Cultivator on Rent", href: "/register", subtitle: "Secondary tillage tools", icon: <Settings className="h-4 w-4" /> },
+        { label: "Tractor on Rent", href: "/services/tractor-rent", subtitle: "Find high-power tractors", icon: <Tractor className="h-4 w-4" /> },
+        { label: "Harvester on Rent", href: "/services/harvester-rent", subtitle: "Efficient harvest machinery", icon: <Wrench className="h-4 w-4" /> },
       ]
     },
     {
       title: "Storage & Warehousing",
       emoji: "🏢",
       items: [
-        { label: "Storage on Rent", href: "/dashboard/post-harvest", subtitle: "Rent dry storage spaces", icon: <Warehouse className="h-4 w-4" /> },
-        { label: "Cold Storage", href: "/dashboard/post-harvest", subtitle: "For perishable crops", icon: <Snowflake className="h-4 w-4" /> },
-        { label: "Warehouse Booking", href: "/dashboard/post-harvest", subtitle: "Pre-book storage units", icon: <BookOpen className="h-4 w-4" /> },
-        { label: "Grain Storage", href: "/dashboard/post-harvest", subtitle: "Silo and bag storage", icon: <Database className="h-4 w-4" /> },
+        { label: "Storage on Rent", href: "/services/storage-rent", subtitle: "Rent dry storage spaces", icon: <Warehouse className="h-4 w-4" /> },
+        { label: "Cold Storage", href: "/services/cold-storage", subtitle: "For perishable crops", icon: <Snowflake className="h-4 w-4" /> },
       ]
     },
     {
       title: "Government Support",
       emoji: "🏛",
       items: [
-        { label: "Government Subsidies", href: "/register", subtitle: "Claim financial aids", icon: <Landmark className="h-4 w-4" /> },
-        { label: "Central Schemes", href: "/register", subtitle: "National welfare programs", icon: <Flag className="h-4 w-4" /> },
-        { label: "State Schemes", href: "/register", subtitle: "Regional farming support", icon: <Map className="h-4 w-4" /> },
-        { label: "PM Kisan", href: "/register", subtitle: "Direct income support", icon: <Coins className="h-4 w-4" /> },
-        { label: "PMFBY", href: "/register", subtitle: "Fasal Bima Yojana", icon: <ShieldCheck className="h-4 w-4" /> },
-        { label: "PMKSY", href: "/register", subtitle: "Krishi Sinchayee Yojana", icon: <Droplets className="h-4 w-4" /> },
-        { label: "Kisan Credit Card", href: "/register", subtitle: "Easy credit line", icon: <CreditCard className="h-4 w-4" /> },
+        { label: "Government Subsidies", href: "/services/government-subsidies", subtitle: "Claim financial aids", icon: <Landmark className="h-4 w-4" /> },
+        { label: "Central Schemes", href: "/services/central-schemes", subtitle: "National welfare programs", icon: <Flag className="h-4 w-4" /> },
+        { label: "State Schemes", href: "/services/state-schemes", subtitle: "Regional farming support", icon: <Map className="h-4 w-4" /> },
+        { label: "Kisan Credit Card", href: "/services/kisan-credit-card", subtitle: "Easy credit line", icon: <CreditCard className="h-4 w-4" /> },
       ]
     },
     {
       title: "Market Services",
       emoji: "📍",
       items: [
-        { label: "Nearest Mandi", href: "/dashboard/market-prices", subtitle: "Locate local APMC markets", icon: <MapPin className="h-4 w-4" /> },
-        { label: "Live Mandi Prices", href: "/dashboard/market-prices", subtitle: "Real-time crop rates", icon: <TrendingUp className="h-4 w-4" /> },
-        { label: "Best Market to Sell", href: "/dashboard/market-prices", subtitle: "Maximize your sale profits", icon: <BadgeCheck className="h-4 w-4" /> },
-        { label: "Market Trends", href: "/dashboard/market-prices", subtitle: "Price forecast & analytics", icon: <BarChart3 className="h-4 w-4" /> },
+        { label: "Nearest Mandi", href: "/services/nearest-mandi", subtitle: "Locate local APMC markets", icon: <MapPin className="h-4 w-4" /> },
+        { label: "Live Mandi Prices", href: "/services/live-mandi-prices", subtitle: "Real-time crop rates", icon: <TrendingUp className="h-4 w-4" /> },
       ]
     }
   ];

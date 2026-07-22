@@ -19,4 +19,16 @@ export const ROUTES = {
     PROFILE: "/dashboard/profile",
     ADMIN: "/dashboard/admin",
   },
+  SERVICES: {
+    TRACTOR_RENT: "/services/tractor-rent",
+    HARVESTER_RENT: "/services/harvester-rent",
+    STORAGE_RENT: "/services/storage-rent",
+    COLD_STORAGE: "/services/cold-storage",
+    GOVERNMENT_SUBSIDIES: "/services/government-subsidies",
+    CENTRAL_SCHEMES: "/services/central-schemes",
+    STATE_SCHEMES: "/services/state-schemes",
+    KISAN_CREDIT_CARD: "/services/kisan-credit-card",
+    NEAREST_MANDI: "/services/nearest-mandi",
+    LIVE_MANDI_PRICES: "/services/live-mandi-prices",
+  },
 };
