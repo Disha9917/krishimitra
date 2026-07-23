@@ -10,10 +10,11 @@ import Link from "next/link";
 import { Button } from "../../../components/ui/button";
 
 const tractors = [
-  { name: "Mahindra 575 DI", hp: "45 HP", owner: "Rajesh Kumar", location: "Village Purana, 3.2 km", price: "₹1,200/hr", rating: 4.8, available: true, attachment: "Rotavator included" },
-  { name: "John Deere 5045D", hp: "50 HP", owner: "Amit Singh", location: "Village Naya, 5.1 km", price: "₹1,800/hr", rating: 4.9, available: true, attachment: "Cultivator + Disc Plough" },
-  { name: "Swaraj 735 FE", hp: "40 HP", owner: "Sunil Verma", location: "Village Baghpat, 2.8 km", price: "₹1,000/hr", rating: 4.6, available: false, attachment: "Standard Trolley" },
-  { name: "Massey Ferguson 1035", hp: "36 HP", owner: "Vikram Yadav", location: "Village Kheda, 4.0 km", price: "₹1,400/hr", rating: 4.7, available: true, attachment: "Seed Drill" },
+  { name: "Mahindra 575 DI", hp: "45 HP", owner: "Rajesh Kumar", location: "Fatehpura, East Gujarat (Dahod), 14.5 km", price: "₹1,200/hr", rating: 4.8, available: true, attachment: "Rotavator included" },
+  { name: "John Deere 5045D", hp: "50 HP", owner: "Amit Singh", location: "Mandvi, West Gujarat (Bhuj), 22.0 km", price: "₹1,800/hr", rating: 4.9, available: true, attachment: "Cultivator + Disc Plough" },
+  { name: "Swaraj 735 FE", hp: "40 HP", owner: "Sunil Verma", location: "Borsad, Central Gujarat (Anand), 8.5 km", price: "₹1,000/hr", rating: 4.6, available: false, attachment: "Standard Trolley" },
+  { name: "Massey Ferguson 1035", hp: "36 HP", owner: "Vikram Yadav", location: "Dhanera, North Gujarat (Banaskantha), 19.3 km", price: "₹1,400/hr", rating: 4.7, available: true, attachment: "Seed Drill" },
+  { name: "Eicher 380 Super DI", hp: "40 HP", owner: "Sanjay Patel", location: "Chikhli, South Gujarat (Navsari), 15.2 km", price: "₹1,150/hr", rating: 4.7, available: true, attachment: "Disc Harrow included" }
 ];
 
 export default function TractorRentPage() {

@@ -10,10 +10,11 @@ import Link from "next/link";
 import { Button } from "../../../components/ui/button";
 
 const coldStorages = [
-  { name: "Himalaya Cold Storage", location: "Industrial Area, 3.5 km", temp: "-2°C to 4°C", capacity: "1,000 MT", price: "₹22/kg/month", suitable: "Apples, Potatoes, Onions" },
-  { name: "Arctic Agro Chill", location: "NH-24, 5.2 km", temp: "0°C to 6°C", capacity: "750 MT", price: "₹18/kg/month", suitable: "Vegetables & Milk" },
-  { name: "FarmFresh Cold Hub", location: "Village Khera, 2.0 km", temp: "-5°C to 2°C", capacity: "500 MT", price: "₹25/kg/month", suitable: "Fruits & Floriculture" },
-  { name: "GreenChill Storage", location: "Mandi Road, 4.8 km", temp: "1°C to 8°C", capacity: "1,500 MT", price: "₹15/kg/month", suitable: "Perishable Crops" },
+  { name: "Dahod APMC Cold Chain", location: "Fatehpura, East Gujarat (Dahod), 22.1 km", temp: "-2°C to 4°C", capacity: "1,000 MT", price: "₹22/kg/month", suitable: "Maize, Paddy, Soybean, Tur" },
+  { name: "Bhuj APMC Cold Hub", location: "Mandvi, West Gujarat (Bhuj), 19.4 km", temp: "0°C to 6°C", capacity: "750 MT", price: "₹18/kg/month", suitable: "Bajra, Castor, Guar, Cumin" },
+  { name: "Anand Samarkha Cold Storage", location: "Petlad, Central Gujarat (Anand), 14.8 km", temp: "-5°C to 2°C", capacity: "500 MT", price: "₹25/kg/month", suitable: "Tobacco, Cotton, Wheat, Banana" },
+  { name: "Deesa APMC Cold Chambers", location: "Lakhani, North Gujarat (Banaskantha), 11.2 km", temp: "1°C to 8°C", capacity: "1,500 MT", price: "₹15/kg/month", suitable: "Cumin, Castor, Potato, Isabgol" },
+  { name: "Morarji Desai Cold Storage", location: "Gandevi, South Gujarat (Navsari), 7.5 km", temp: "0°C to 5°C", capacity: "800 MT", price: "₹20/kg/month", suitable: "Paddy, Sugarcane, Banana, Chickoo" }
 ];
 
 export default function ColdStoragePage() {
@@ -53,13 +54,13 @@ export default function ColdStoragePage() {
             </div>
 
             <div className="inline-flex items-center gap-2 rounded-full bg-emerald-100/90 dark:bg-[#161B22]/90 backdrop-blur-md px-4 py-1.5 text-xs font-bold text-emerald-900 dark:text-emerald-400 border border-emerald-300/60 dark:border-[#2A2F3A]">
-              <Snowflake className="h-4 w-4 text-blue-500" />
+              <Snowflake className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
               <span>Cold Chain & Warehousing</span>
             </div>
 
             <h1 className="text-4xl font-black text-slate-900 dark:text-white sm:text-5xl tracking-tight">
               Find Nearby Cold Storage <br />
-              <span className="bg-gradient-to-r from-blue-600 via-teal-500 to-emerald-500 bg-clip-text text-transparent">Prevent Post-Harvest Loss</span>
+              <span className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500 bg-clip-text text-transparent">Prevent Post-Harvest Loss</span>
             </h1>
 
             <p className="text-base sm:text-lg text-slate-600 dark:text-[#C9D1D9] max-w-xl mx-auto">
@@ -88,7 +89,7 @@ export default function ColdStoragePage() {
                 <div key={i} className="rounded-3xl border border-emerald-100/80 dark:border-[#2A2F3A] bg-white/80 dark:bg-[#161B22]/90 backdrop-blur-md p-6 shadow-sm hover:shadow-xl hover:border-emerald-300 dark:hover:border-emerald-700/50 transition-all duration-300 flex flex-col justify-between space-y-4">
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-800/30">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-800/30">
                         <Snowflake className="h-5 w-5" />
                       </div>
                       <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/30">Available</span>
@@ -96,13 +97,13 @@ export default function ColdStoragePage() {
 
                     <div>
                       <h3 className="text-base font-bold text-slate-900 dark:text-white">{cs.name}</h3>
-                      <p className="text-[11px] text-blue-600 dark:text-blue-400 font-medium mt-0.5">{cs.suitable}</p>
+                      <p className="text-xs text-slate-500 dark:text-[#8B949E] mt-0.5">{cs.suitable}</p>
                     </div>
 
                     <div className="space-y-1.5 text-xs text-slate-600 dark:text-[#C9D1D9]">
                       <div className="flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />{cs.location}</div>
-                      <div className="flex items-center gap-1.5"><Thermometer className="h-3.5 w-3.5 text-blue-500" />{cs.temp}</div>
-                      <div className="font-medium text-slate-500 dark:text-[#8B949E]">Capacity: {cs.capacity}</div>
+                      <div className="flex items-center gap-1.5"><Thermometer className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />{cs.temp}</div>
+                      <div className="text-emerald-700 dark:text-emerald-400 font-semibold">Capacity: {cs.capacity}</div>
                     </div>
                   </div>
 
@@ -150,7 +151,7 @@ export default function ColdStoragePage() {
 
               {bookingSuccess ? (
                 <div className="py-8 text-center space-y-3">
-                  <CheckCircle2 className="h-12 w-12 text-blue-500 mx-auto animate-bounce" />
+                  <CheckCircle2 className="h-12 w-12 text-emerald-500 mx-auto animate-bounce" />
                   <h3 className="text-lg font-bold text-slate-900 dark:text-white">Cold Room Reserved!</h3>
                   <p className="text-xs text-slate-500 dark:text-[#8B949E]">
                     {selectedStorage.name} will prepare your temperature chamber.
@@ -182,7 +183,7 @@ export default function ColdStoragePage() {
                         <input required type="number" min="1" max="1000" defaultValue="20" className="w-full p-2.5 rounded-xl border border-emerald-200 dark:border-[#2A2F3A] bg-white dark:bg-[#161B22] text-slate-900 dark:text-white" />
                       </div>
                     </div>
-                    <Button variant="primary" type="submit" className="w-full justify-center pt-2.5 pb-2.5 mt-2 bg-blue-600 hover:bg-blue-700">
+                    <Button variant="primary" type="submit" className="w-full justify-center pt-2.5 pb-2.5 mt-2">
                       Confirm Cold Chamber Booking
                     </Button>
                   </form>

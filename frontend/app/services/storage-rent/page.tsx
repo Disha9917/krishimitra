@@ -10,10 +10,11 @@ import Link from "next/link";
 import { Button } from "../../../components/ui/button";
 
 const storages = [
-  { name: "GreenField Warehouse", location: "Sector 9, 2.1 km", capacity: "500 MT", price: "₹15/kg/month", available: true, type: "Dry Grain Storage" },
-  { name: "AgriSafe Storage Hub", location: "NH-58, 4.5 km", capacity: "1,200 MT", price: "₹12/kg/month", available: true, type: "Pest-Controlled Warehouse" },
-  { name: "FarmFresh Godown", location: "Village Rampur, 1.8 km", capacity: "300 MT", price: "₹18/kg/month", available: false, type: "Standard Godown" },
-  { name: "Krishi Bhandar", location: "Mandi Road, 3.0 km", capacity: "800 MT", price: "₹10/kg/month", available: true, type: "Bulk Grain Storage" },
+  { name: "Dahod APMC Warehouse", location: "Devgadh Baria, East Gujarat (Dahod), 14.2 km", capacity: "500 MT", price: "₹15/kg/month", available: true, type: "Maize, Paddy, Soybean, Tur Storage" },
+  { name: "Bhuj APMC Market Yard Storage", location: "Anjar, West Gujarat (Bhuj), 18.5 km", capacity: "1,200 MT", price: "₹12/kg/month", available: true, type: "Bajra, Castor, Guar, Cumin Storage" },
+  { name: "Anand Samarkha APMC Godown", location: "Borsad, Central Gujarat (Anand), 9.4 km", capacity: "300 MT", price: "₹18/kg/month", available: false, type: "Tobacco, Cotton, Wheat, Banana Storage" },
+  { name: "Deesa APMC Storage Hub", location: "Dhanera, North Gujarat (Banaskantha), 21.0 km", capacity: "800 MT", price: "₹10/kg/month", available: true, type: "Cumin, Castor, Potato, Isabgol Storage" },
+  { name: "Morarji Desai APMC Yard Storage", location: "Chikhli, South Gujarat (Navsari), 15.2 km", capacity: "600 MT", price: "₹14/kg/month", available: true, type: "Paddy, Sugarcane, Banana, Chickoo Storage" }
 ];
 
 export default function StorageRentPage() {
@@ -88,7 +89,7 @@ export default function StorageRentPage() {
                 <div key={i} className="rounded-3xl border border-emerald-100/80 dark:border-[#2A2F3A] bg-white/80 dark:bg-[#161B22]/90 backdrop-blur-md p-6 shadow-sm hover:shadow-xl hover:border-emerald-300 dark:hover:border-emerald-700/50 transition-all duration-300 flex flex-col justify-between space-y-4">
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 border border-amber-100 dark:border-amber-800/30">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-800/30">
                         <Warehouse className="h-5 w-5" />
                       </div>
                       {s.available ? (
@@ -100,12 +101,12 @@ export default function StorageRentPage() {
 
                     <div>
                       <h3 className="text-base font-bold text-slate-900 dark:text-white">{s.name}</h3>
-                      <p className="text-[11px] text-emerald-700 dark:text-emerald-400 font-medium mt-0.5">{s.type}</p>
+                      <p className="text-xs text-slate-500 dark:text-[#8B949E] mt-0.5">{s.type}</p>
                     </div>
 
                     <div className="space-y-1.5 text-xs text-slate-600 dark:text-[#C9D1D9]">
                       <div className="flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />{s.location}</div>
-                      <div className="flex items-center gap-1.5"><Ruler className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />Capacity: {s.capacity}</div>
+                      <div className="text-emerald-700 dark:text-emerald-400 font-semibold flex items-center gap-1.5"><Ruler className="h-3.5 w-3.5" />Capacity: {s.capacity}</div>
                       <div className="flex items-center gap-1 text-[10px] text-slate-500 dark:text-[#8B949E]"><ShieldCheck className="h-3 w-3 text-emerald-500" /> 24/7 Security & Fumigated</div>
                     </div>
                   </div>

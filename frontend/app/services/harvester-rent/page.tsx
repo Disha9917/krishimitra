@@ -10,10 +10,11 @@ import Link from "next/link";
 import { Button } from "../../../components/ui/button";
 
 const harvesters = [
-  { name: "John Deere S680", owner: "Harvest Solutions Inc.", location: "Sector 12, 6.5 km", price: "₹2,500/hr", rating: 4.9, capacity: "8 acres/hr", operator: "Operator Included" },
-  { name: "CLAAS Dominator 140", owner: "GreenField Agro", location: "NH-24, 4.2 km", price: "₹1,800/hr", rating: 4.7, capacity: "5 acres/hr", operator: "Operator Included" },
-  { name: "New Holland CX 880", owner: "FarmTech Services", location: "Village Gopal, 7.8 km", price: "₹2,200/hr", rating: 4.8, capacity: "6 acres/hr", operator: "Operator Included" },
-  { name: "Kubota DC 105", owner: "Rural Rentals", location: "Mandi Road, 3.5 km", price: "₹1,500/hr", rating: 4.6, capacity: "4 acres/hr", operator: "Self-driven or Operator" },
+  { name: "John Deere S680", owner: "Harvest Solutions Inc.", location: "Devgadh Baria, East Gujarat (Dahod), 18.2 km", price: "₹2,500/hr", rating: 4.9, capacity: "8 acres/hr", operator: "Operator Included" },
+  { name: "CLAAS Dominator 140", owner: "GreenField Agro", location: "Anjar, West Gujarat (Bhuj), 12.8 km", price: "₹1,800/hr", rating: 4.7, capacity: "5 acres/hr", operator: "Operator Included" },
+  { name: "New Holland CX 880", owner: "FarmTech Services", location: "Khambhat, Central Gujarat (Anand), 24.5 km", price: "₹2,200/hr", rating: 4.8, capacity: "6 acres/hr", operator: "Operator Included" },
+  { name: "Kubota DC 105", owner: "Rural Rentals", location: "Tharad, North Gujarat (Banaskantha), 21.4 km", price: "₹1,500/hr", rating: 4.6, capacity: "4 acres/hr", operator: "Self-driven or Operator" },
+  { name: "Preet 987", owner: "Sardar Agro Rentals", location: "Gandevi, South Gujarat (Navsari), 9.6 km", price: "₹2,000/hr", rating: 4.8, capacity: "7 acres/hr", operator: "Operator Included" }
 ];
 
 export default function HarvesterRentPage() {

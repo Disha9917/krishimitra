@@ -55,13 +55,13 @@ export default function StateSchemesPage() {
             </div>
 
             <div className="inline-flex items-center gap-2 rounded-full bg-emerald-100/90 dark:bg-[#161B22]/90 backdrop-blur-md px-4 py-1.5 text-xs font-bold text-emerald-900 dark:text-emerald-400 border border-emerald-300/60 dark:border-[#2A2F3A]">
-              <Map className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+              <Map className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
               <span>Regional Farming Support</span>
             </div>
 
             <h1 className="text-4xl font-black text-slate-900 dark:text-white sm:text-5xl tracking-tight">
               State Government Schemes <br />
-              <span className="bg-gradient-to-r from-purple-600 via-emerald-600 to-teal-500 bg-clip-text text-transparent">Regional Agricultural Welfare</span>
+              <span className="bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">Regional Agricultural Welfare</span>
             </h1>
 
             <p className="text-base sm:text-lg text-slate-600 dark:text-[#C9D1D9] max-w-xl mx-auto">
@@ -90,10 +90,10 @@ export default function StateSchemesPage() {
                 <div key={i} className="rounded-3xl border border-emerald-100/80 dark:border-[#2A2F3A] bg-white/80 dark:bg-[#161B22]/90 backdrop-blur-md p-6 shadow-sm hover:shadow-xl hover:border-emerald-300 dark:hover:border-emerald-700/50 transition-all duration-300 flex flex-col justify-between space-y-4">
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-50 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400 border border-purple-100 dark:border-purple-800/30">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-800/30">
                         <Map className="h-5 w-5" />
                       </div>
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400">{s.type}</span>
+                      <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/30">{s.type}</span>
                     </div>
 
                     <h3 className="text-base font-bold text-slate-900 dark:text-white">{s.name}</h3>
@@ -144,7 +144,7 @@ export default function StateSchemesPage() {
 
               {appSuccess ? (
                 <div className="py-8 text-center space-y-3">
-                  <CheckCircle2 className="h-12 w-12 text-purple-500 mx-auto animate-bounce" />
+                  <CheckCircle2 className="h-12 w-12 text-emerald-500 mx-auto animate-bounce" />
                   <h3 className="text-lg font-bold text-slate-900 dark:text-white">State Application Registered!</h3>
                   <p className="text-xs text-slate-500 dark:text-[#8B949E]">
                     Your registration for {selectedScheme.name} has been received. Your local Block Agriculture Officer will verify your records.
@@ -170,7 +170,7 @@ export default function StateSchemesPage() {
                       <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Land Khata / Survey Number</label>
                       <input required type="text" placeholder="e.g. Survey # 142/A" className="w-full p-2.5 rounded-xl border border-emerald-200 dark:border-[#2A2F3A] bg-white dark:bg-[#161B22] text-slate-900 dark:text-white" />
                     </div>
-                    <Button variant="primary" type="submit" className="w-full justify-center pt-2.5 pb-2.5 mt-2 bg-purple-600 hover:bg-purple-700">
+                    <Button variant="primary" type="submit" className="w-full justify-center pt-2.5 pb-2.5 mt-2">
                       Submit State Scheme Application
                     </Button>
                   </form>
