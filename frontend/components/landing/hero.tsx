@@ -21,11 +21,11 @@ export function Hero() {
         <div className="pt-6 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto text-left text-xs font-bold text-slate-800 dark:text-[#C9D1D9]">
           <div className="rounded-2xl border border-emerald-100/80 dark:border-[#2A2F3A] bg-white/85 dark:bg-[#161B22]/90 backdrop-blur-md p-4 shadow-sm hover:shadow-md transition-all flex items-center gap-3">
             <Sprout className="h-6 w-6 text-emerald-600 dark:text-emerald-400 shrink-0" />
-            <span>Top 3 Ranked Advisories</span>
+            <span>Precision Crop Advisory</span>
           </div>
           <div className="rounded-2xl border border-emerald-100/80 dark:border-[#2A2F3A] bg-white/85 dark:bg-[#161B22]/90 backdrop-blur-md p-4 shadow-sm hover:shadow-md transition-all flex items-center gap-3">
             <ShieldCheck className="h-6 w-6 text-emerald-600 dark:text-emerald-400 shrink-0" />
-            <span>Confidence Badge Indicators</span>
+            <span>AI Leaf Disease Scanner</span>
           </div>
           <div className="rounded-2xl border border-emerald-100/80 dark:border-[#2A2F3A] bg-white/85 dark:bg-[#161B22]/90 backdrop-blur-md p-4 shadow-sm hover:shadow-md transition-all flex items-center gap-3">
             <Warehouse className="h-6 w-6 text-emerald-600 dark:text-emerald-400 shrink-0" />
@@ -33,7 +33,7 @@ export function Hero() {
           </div>
           <div className="rounded-2xl border border-emerald-100/80 dark:border-[#2A2F3A] bg-white/85 dark:bg-[#161B22]/90 backdrop-blur-md p-4 shadow-sm hover:shadow-md transition-all flex items-center gap-3">
             <Sparkles className="h-6 w-6 text-emerald-600 dark:text-emerald-400 shrink-0" />
-            <span>7-Day Advisory Timeline</span>
+            <span>Live APMC Mandi Intelligence</span>
           </div>
         </div>
       </div>

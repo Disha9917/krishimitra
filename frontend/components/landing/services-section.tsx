@@ -268,10 +268,10 @@ export function ServicesSection() {
 
               <div>
                 <h3 className="text-xl font-black text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
-                  Government Subsidies & KCC Credit
+                  Government Subsidies & Welfare Schemes
                 </h3>
                 <p className="text-xs text-slate-600 dark:text-[#C9D1D9] mt-1.5 leading-relaxed">
-                  Check eligibility for PM-KISAN, solar pump subsidies, state seed grants, and apply for Kisan Credit Cards at 4% concessional interest.
+                  Check eligibility for PM-KISAN, solar pump subsidies, seed grants, and national agricultural welfare schemes.
                 </p>
               </div>
 
@@ -288,12 +288,12 @@ export function ServicesSection() {
                 </Link>
 
                 <Link
-                  href="/services/kisan-credit-card"
+                  href="/services/central-schemes"
                   className="flex items-center justify-between p-3 rounded-2xl bg-white/80 dark:bg-[#0B0F14]/60 border border-emerald-100 dark:border-[#2A2F3A] hover:border-emerald-400 transition-all group/sub"
                 >
                   <div className="flex items-center gap-2">
-                    <CreditCard className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-                    <p className="text-xs font-bold text-slate-900 dark:text-white">Kisan Credit Card</p>
+                    <Flag className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                    <p className="text-xs font-bold text-slate-900 dark:text-white">Central Schemes</p>
                   </div>
                   <ArrowUpRight className="h-4 w-4 text-slate-400 group-hover/sub:text-emerald-500 transition-all" />
                 </Link>

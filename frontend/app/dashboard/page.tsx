@@ -288,28 +288,44 @@ export default function DashboardPage() {
   const spoilageRiskPct = storageFacilityType === "Cold Storage" ? 0.5 : storageFacilityType === "APMC Silo" ? 1.2 : 2.5;
   const weightLossQty = (quantityQuintals * (spoilageRiskPct / 100)).toFixed(1);
 
-  // Flattened All Crop APMC Rates Data for Mandi Tab
+  // APMC Mandi Rates Data strictly for the 5 allowed Gujarat Cities & their assigned crops
   const allMandiCommodities = [
-    { name: "Cumin (Jeera)", yard: "Unjha APMC (North)", zone: "banaskantha", modalPrice: 28500, minPrice: 26800, maxPrice: 29400, arrival: "1,450 Qtl", trend: "+4.8%", isHot: true },
-    { name: "Cotton (Kapash)", yard: "Rajkot / Kadi APMC", zone: "anand", modalPrice: 6850, minPrice: 6400, maxPrice: 7100, arrival: "3,800 Qtl", trend: "+2.1%", isHot: true },
-    { name: "Tobacco (Tambaku)", yard: "Anand / Dahod APMC", zone: "anand", modalPrice: 4800, minPrice: 4350, maxPrice: 5100, arrival: "950 Qtl", trend: "+3.5%", isHot: false },
-    { name: "Groundnut (Magfali)", yard: "Junagadh / Amreli APMC", zone: "anand", modalPrice: 6300, minPrice: 5900, maxPrice: 6550, arrival: "2,200 Qtl", trend: "+2.8%", isHot: true },
-    { name: "Mustard (Rai)", yard: "Palanpur APMC (North)", zone: "banaskantha", modalPrice: 5450, minPrice: 5100, maxPrice: 5700, arrival: "1,100 Qtl", trend: "+1.9%", isHot: false },
-    { name: "Rice / Paddy (Dangar)", yard: "Navsari / Bavla APMC", zone: "navsari", modalPrice: 2250, minPrice: 2050, maxPrice: 2400, arrival: "4,500 Qtl", trend: "+1.2%", isHot: false },
-    { name: "Maize (Makai)", yard: "Dahod / Godhra APMC", zone: "dahod", modalPrice: 2150, minPrice: 1950, maxPrice: 2300, arrival: "3,100 Qtl", trend: "+2.4%", isHot: false },
-    { name: "Castor (Eranda)", yard: "Deesa / Patan APMC", zone: "banaskantha", modalPrice: 6200, minPrice: 5850, maxPrice: 6450, arrival: "1,600 Qtl", trend: "+3.1%", isHot: true },
-    { name: "Soybean", yard: "Dahod APMC (East)", zone: "dahod", modalPrice: 4600, minPrice: 4300, maxPrice: 4850, arrival: "850 Qtl", trend: "+1.5%", isHot: false },
-    { name: "Tur / Arhar", yard: "Vadodara / Dahod APMC", zone: "dahod", modalPrice: 7000, minPrice: 6600, maxPrice: 7350, arrival: "620 Qtl", trend: "+4.1%", isHot: true },
-    { name: "Bajra", yard: "Kutch / Bhuj APMC", zone: "kutch", modalPrice: 2350, minPrice: 2150, maxPrice: 2500, arrival: "1,900 Qtl", trend: "+1.8%", isHot: false },
-    { name: "Guar (Cluster Bean)", yard: "Kutch APMC (West)", zone: "kutch", modalPrice: 5400, minPrice: 5100, maxPrice: 5700, arrival: "750 Qtl", trend: "+2.6%", isHot: false },
-    { name: "Sugarcane", yard: "Navsari / Bardoli APMC", zone: "navsari", modalPrice: 340, minPrice: 320, maxPrice: 360, arrival: "8,500 Qtl", trend: "+1.0%", isHot: false },
-    { name: "Banana", yard: "Navsari / Surat APMC", zone: "navsari", modalPrice: 1800, minPrice: 1600, maxPrice: 2000, arrival: "5,000 Qtl", trend: "+2.0%", isHot: false },
+    // Dahod (East)
+    { name: "Maize (Makai)", yard: "Dahod APMC (East)", city: "Dahod", zone: "dahod", modalPrice: 2150, minPrice: 1950, maxPrice: 2300, arrival: "3,100 Qtl", trend: "+2.4%", isHot: false },
+    { name: "Rice / Paddy (Dangar)", yard: "Dahod APMC (East)", city: "Dahod", zone: "dahod", modalPrice: 2183, minPrice: 1980, maxPrice: 2350, arrival: "2,800 Qtl", trend: "+1.6%", isHot: false },
+    { name: "Soybean", yard: "Dahod APMC (East)", city: "Dahod", zone: "dahod", modalPrice: 4600, minPrice: 4300, maxPrice: 4850, arrival: "850 Qtl", trend: "+1.5%", isHot: false },
+    { name: "Tur / Arhar (Tuver)", yard: "Dahod APMC (East)", city: "Dahod", zone: "dahod", modalPrice: 7000, minPrice: 6600, maxPrice: 7350, arrival: "620 Qtl", trend: "+4.1%", isHot: true },
+
+    // Kutch/Bhuj (West)
+    { name: "Bajra (Pearl Millet)", yard: "Bhuj APMC (West)", city: "Kutch/Bhuj", zone: "kutch", modalPrice: 2350, minPrice: 2150, maxPrice: 2500, arrival: "1,900 Qtl", trend: "+1.8%", isHot: false },
+    { name: "Castor (Eranda)", yard: "Kutch APMC (West)", city: "Kutch/Bhuj", zone: "kutch", modalPrice: 6200, minPrice: 5850, maxPrice: 6450, arrival: "1,600 Qtl", trend: "+3.1%", isHot: true },
+    { name: "Guar (Cluster Bean)", yard: "Gandhidham APMC (West)", city: "Kutch/Bhuj", zone: "kutch", modalPrice: 5400, minPrice: 5100, maxPrice: 5700, arrival: "750 Qtl", trend: "+2.6%", isHot: false },
+    { name: "Cumin (Jeera)", yard: "Kutch APMC (West)", city: "Kutch/Bhuj", zone: "kutch", modalPrice: 28500, minPrice: 26800, maxPrice: 29400, arrival: "1,450 Qtl", trend: "+4.8%", isHot: true },
+
+    // Anand (Central)
+    { name: "Tobacco (Tambaku)", yard: "Anand APMC (Central)", city: "Anand", zone: "anand", modalPrice: 4800, minPrice: 4350, maxPrice: 5100, arrival: "950 Qtl", trend: "+3.5%", isHot: false },
+    { name: "Cotton (Kapash)", yard: "Anand APMC (Central)", city: "Anand", zone: "anand", modalPrice: 6850, minPrice: 6400, maxPrice: 7100, arrival: "3,800 Qtl", trend: "+2.1%", isHot: true },
+    { name: "Maize (Makai)", yard: "Petlad / Anand APMC", city: "Anand", zone: "anand", modalPrice: 2150, minPrice: 1950, maxPrice: 2300, arrival: "2,400 Qtl", trend: "+2.0%", isHot: false },
+    { name: "Groundnut (Magfali)", yard: "Anand APMC (Central)", city: "Anand", zone: "anand", modalPrice: 6300, minPrice: 5900, maxPrice: 6550, arrival: "2,200 Qtl", trend: "+2.8%", isHot: true },
+
+    // Banaskantha (North)
+    { name: "Cumin (Jeera)", yard: "Palanpur APMC (North)", city: "Banaskantha", zone: "banaskantha", modalPrice: 28500, minPrice: 26800, maxPrice: 29400, arrival: "1,850 Qtl", trend: "+4.8%", isHot: true },
+    { name: "Castor (Eranda)", yard: "Deesa APMC (North)", city: "Banaskantha", zone: "banaskantha", modalPrice: 6200, minPrice: 5850, maxPrice: 6450, arrival: "1,600 Qtl", trend: "+3.1%", isHot: true },
+    { name: "Mustard (Rai)", yard: "Palanpur APMC (North)", city: "Banaskantha", zone: "banaskantha", modalPrice: 5450, minPrice: 5100, maxPrice: 5700, arrival: "1,100 Qtl", trend: "+1.9%", isHot: false },
+    { name: "Bajra (Pearl Millet)", yard: "Dhanera APMC (North)", city: "Banaskantha", zone: "banaskantha", modalPrice: 2350, minPrice: 2150, maxPrice: 2500, arrival: "1,500 Qtl", trend: "+1.8%", isHot: false },
+
+    // Navsari (South)
+    { name: "Rice / Paddy (Dangar)", yard: "Navsari APMC (South)", city: "Navsari", zone: "navsari", modalPrice: 2250, minPrice: 2050, maxPrice: 2400, arrival: "4,500 Qtl", trend: "+1.2%", isHot: false },
+    { name: "Sugarcane (Sherdi)", yard: "Gandevi / Navsari APMC", city: "Navsari", zone: "navsari", modalPrice: 340, minPrice: 320, maxPrice: 360, arrival: "8,500 Qtl", trend: "+1.0%", isHot: false },
+    { name: "Banana (Kela)", yard: "Navsari APMC (South)", city: "Navsari", zone: "navsari", modalPrice: 1800, minPrice: 1600, maxPrice: 2000, arrival: "5,000 Qtl", trend: "+2.0%", isHot: false },
+    { name: "Mango (Kesar / Alphonso)", yard: "Navsari APMC (South)", city: "Navsari", zone: "navsari", modalPrice: 4200, minPrice: 3800, maxPrice: 4600, arrival: "1,200 Qtl", trend: "+5.2%", isHot: true },
   ];
 
   const filteredMandiCommodities = allMandiCommodities.filter((c) => {
     const matchesSearch =
       c.name.toLowerCase().includes(mandiSearchQuery.toLowerCase()) ||
-      c.yard.toLowerCase().includes(mandiSearchQuery.toLowerCase());
+      c.yard.toLowerCase().includes(mandiSearchQuery.toLowerCase()) ||
+      (c.city && c.city.toLowerCase().includes(mandiSearchQuery.toLowerCase()));
     const matchesZone =
       selectedMandiZoneFilter === "all" || c.zone === selectedMandiZoneFilter;
     return matchesSearch && matchesZone;

@@ -61,8 +61,6 @@ export function Navbar() {
       items: [
         { label: "Government Subsidies", href: "/services/government-subsidies", subtitle: "Claim financial aids", icon: <Landmark className="h-4 w-4" /> },
         { label: "Central Schemes", href: "/services/central-schemes", subtitle: "National welfare programs", icon: <Flag className="h-4 w-4" /> },
-        { label: "State Schemes", href: "/services/state-schemes", subtitle: "Regional farming support", icon: <Map className="h-4 w-4" /> },
-        { label: "Kisan Credit Card", href: "/services/kisan-credit-card", subtitle: "Easy credit line", icon: <CreditCard className="h-4 w-4" /> },
       ]
     },
     {

@@ -100,22 +100,6 @@ const categories = [
         icon: <Flag className="h-5 w-5" />,
         stat: "100% Coverage",
         accent: "emerald"
-      },
-      {
-        title: "State Schemes",
-        href: "/services/state-schemes",
-        desc: "Regional agriculture welfare policies and state subsidies.",
-        icon: <Map className="h-5 w-5" />,
-        stat: "State Benefits",
-        accent: "indigo"
-      },
-      {
-        title: "Kisan Credit Card",
-        href: "/services/kisan-credit-card",
-        desc: "Low-interest credit lines up to ₹3 Lakh at 4% interest rate.",
-        icon: <CreditCard className="h-5 w-5" />,
-        stat: "4% Interest",
-        accent: "rose"
       }
     ]
   },

@@ -10,14 +10,16 @@ import Link from "next/link";
 import { Button } from "../../../components/ui/button";
 
 const prices = [
-  { crop: "Wheat", variety: "Sharbati", mandi: "Azadpur APMC", min: "₹2,150", max: "₹2,450", trend: "up", change: "+3.2%", category: "Cereals" },
-  { crop: "Rice", variety: "Basmati 1121", mandi: "Karnal APMC", min: "₹3,800", max: "₹4,200", trend: "up", change: "+1.8%", category: "Cereals" },
-  { crop: "Potato", variety: "Jyoti", mandi: "Agra APMC", min: "₹850", max: "₹1,050", trend: "down", change: "-2.1%", category: "Vegetables" },
-  { crop: "Onion", variety: "Red Nashik", mandi: "Nashik APMC", min: "₹1,200", max: "₹1,600", trend: "up", change: "+5.4%", category: "Vegetables" },
-  { crop: "Tomato", variety: "Hybrid", mandi: "Kolar APMC", min: "₹950", max: "₹1,200", trend: "down", change: "-4.0%", category: "Vegetables" },
-  { crop: "Mustard", variety: "Yellow", mandi: "Jaipur APMC", min: "₹1,800", max: "₹2,100", trend: "up", change: "+2.5%", category: "Oilseeds" },
-  { crop: "Sugarcane", variety: "CO-0238", mandi: "Meerut APMC", min: "₹340", max: "₹360", trend: "stable", change: "0.0%", category: "Cash Crop" },
-  { crop: "Maize", variety: "Hybrid", mandi: "Dahod APMC", min: "₹1,100", max: "₹1,350", trend: "up", change: "+1.2%", category: "Cereals" },
+  { crop: "Tobacco", variety: "Flue Cured", mandi: "Anand APMC (Central)", min: "₹4,350", max: "₹5,100", trend: "up", change: "+3.5%", category: "Cash Crop" },
+  { crop: "Cotton", variety: "Kapash Bt", mandi: "Anand APMC (Central)", min: "₹6,400", max: "₹7,100", trend: "up", change: "+2.1%", category: "Cash Crop" },
+  { crop: "Maize", variety: "Yellow Grain", mandi: "Dahod APMC (East)", min: "₹1,950", max: "₹2,300", trend: "up", change: "+2.4%", category: "Cereals" },
+  { crop: "Rice / Paddy", variety: "Gurjari", mandi: "Navsari APMC (South)", min: "₹2,050", max: "₹2,400", trend: "up", change: "+1.2%", category: "Cereals" },
+  { crop: "Cumin (Jeera)", variety: "Unjha Special", mandi: "Palanpur APMC (North)", min: "₹26,800", max: "₹29,400", trend: "up", change: "+4.8%", category: "Spices" },
+  { crop: "Castor", variety: "Hybrid 4", mandi: "Bhuj APMC (West)", min: "₹5,850", max: "₹6,450", trend: "up", change: "+3.1%", category: "Oilseeds" },
+  { crop: "Mustard", variety: "Rai Black", mandi: "Palanpur APMC (North)", min: "₹5,100", max: "₹5,700", trend: "up", change: "+1.9%", category: "Oilseeds" },
+  { crop: "Sugarcane", variety: "Co-86032", mandi: "Navsari APMC (South)", min: "₹320", max: "₹360", trend: "stable", change: "0.0%", category: "Cash Crop" },
+  { crop: "Banana", variety: "Grand Naine", mandi: "Navsari APMC (South)", min: "₹1,600", max: "₹2,000", trend: "up", change: "+2.0%", category: "Fruits" },
+  { crop: "Mango", variety: "Kesar", mandi: "Navsari APMC (South)", min: "₹3,800", max: "₹4,600", trend: "up", change: "+5.2%", category: "Fruits" },
 ];
 
 export default function LiveMandiPricesPage() {
