@@ -5,7 +5,7 @@ import { CROPS_REPOSITORY } from "../data/crops";
 // Re-export full 33 Districts dynamically formatted for legacy component compatibility
 export const GUJARAT_DISTRICT_ZONES = ALL_GUJARAT_DISTRICTS.map((district) => {
   const region = getRegionById(district.regionId);
-  const districtCrops = getCropsByDistrict(district.id);
+  const districtCrops = getCropsByDistrict(district.id, true);
 
   return {
     id: district.id,
@@ -18,6 +18,7 @@ export const GUJARAT_DISTRICT_ZONES = ALL_GUJARAT_DISTRICTS.map((district) => {
       price: c.avgPricePerQtl || 3500,
       season: c.season || "Kharif",
       sowing: c.sowingPeriod || "Jun 15 - Jul 15",
+      isPremium: c.isPremium || false,
     })),
   };
 });

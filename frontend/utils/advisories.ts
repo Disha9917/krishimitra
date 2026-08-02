@@ -1710,8 +1710,27 @@ export const PRECISION_CROP_ADVISORIES: Record<string, CropLifecycleAdvisory> = 
 
 // Dynamic Fallback Advisory Generator for any custom crop name
 export function getPrecisionCropAdvisory(cropName: string): CropLifecycleAdvisory {
+  // Try exact match first
   if (PRECISION_CROP_ADVISORIES[cropName]) {
     return PRECISION_CROP_ADVISORIES[cropName];
+  }
+
+  // Normalize key name (remove brackets, extra tags, etc.)
+  const cleanName = cropName.split("(")[0].trim().toLowerCase();
+  
+  // Try to find a partial match in PRECISION_CROP_ADVISORIES keys
+  const keys = Object.keys(PRECISION_CROP_ADVISORIES);
+  const foundKey = keys.find(k => {
+    const kLower = k.toLowerCase();
+    return cleanName.includes(kLower) || kLower.includes(cleanName) ||
+           cropName.toLowerCase().includes(kLower) || kLower.includes(cropName.toLowerCase());
+  });
+
+  if (foundKey) {
+    return {
+      ...PRECISION_CROP_ADVISORIES[foundKey],
+      cropName: cropName,
+    };
   }
 
   // Fallback template tailored for generic agricultural crops

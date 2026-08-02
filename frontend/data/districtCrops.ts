@@ -9,7 +9,9 @@ import { REGION_CROPS_MAP } from "./regionCrops";
 export const DISTRICT_CROPS_MAP: Record<string, DistrictCropMap> = ALL_GUJARAT_DISTRICTS.reduce(
   (acc, district) => {
     const regionDefinition = REGION_CROPS_MAP[district.regionId];
-    const cropIds = regionDefinition ? regionDefinition.traditionalCropIds : ["bajra", "cotton", "maize", "groundnut"];
+    const cropIds = regionDefinition 
+      ? [...regionDefinition.traditionalCropIds, ...regionDefinition.premiumCropIds]
+      : ["bajra", "cotton", "maize", "groundnut"];
 
     acc[district.id] = {
       districtId: district.id,

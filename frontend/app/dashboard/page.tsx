@@ -86,14 +86,33 @@ export default function DashboardPage() {
   const selectedDistrict = GUJARAT_DISTRICT_ZONES.find((d) => d.id === selectedDistrictId) || GUJARAT_DISTRICT_ZONES[0];
 
   // Precision Advisor Crop & Stage State
+  const [selectedCropCategory, setSelectedCropCategory] = useState<"traditional" | "exotic">("traditional");
   const [selectedAdvisorCropName, setSelectedAdvisorCropName] = useState<string>("Tobacco");
   const [activeStageIndex, setActiveStageIndex] = useState<number>(0);
   const [checkedChecklist, setCheckedChecklist] = useState<Record<string, boolean>>({});
 
+  const handleCategoryChange = (category: "traditional" | "exotic") => {
+    setSelectedCropCategory(category);
+    const filtered = selectedDistrict.crops.filter((c) => category === "exotic" ? c.isPremium : !c.isPremium);
+    if (filtered.length > 0) {
+      setSelectedAdvisorCropName(filtered[0].name);
+      setActiveStageIndex(0);
+    }
+  };
+
   // Ensure selected crop is valid for active district when switching district
   useEffect(() => {
     if (selectedDistrict.crops.length > 0) {
-      setSelectedAdvisorCropName(selectedDistrict.crops[0].name);
+      const hasExotic = selectedDistrict.crops.some((c) => c.isPremium);
+      const category = selectedCropCategory === "exotic" && !hasExotic ? "traditional" : selectedCropCategory;
+      setSelectedCropCategory(category);
+
+      const filtered = selectedDistrict.crops.filter((c) => category === "exotic" ? c.isPremium : !c.isPremium);
+      if (filtered.length > 0) {
+        setSelectedAdvisorCropName(filtered[0].name);
+      } else {
+        setSelectedAdvisorCropName(selectedDistrict.crops[0].name);
+      }
       setActiveStageIndex(0);
     }
   }, [selectedDistrictId]);
@@ -686,30 +705,84 @@ export default function DashboardPage() {
             </div>
 
             {/* CROP SELECTION BAR */}
-            <div className="rounded-3xl border border-emerald-100 dark:border-[#2A2F3A] bg-white/90 dark:bg-[#161B22]/90 backdrop-blur-md p-5 shadow-sm space-y-3">
-              <div className="flex items-center justify-between text-xs font-bold text-slate-500 dark:text-[#8B949E]">
-                <span>Select Crop from {selectedDistrict.name} to view Interval Advisory:</span>
-                <span className="text-emerald-600 dark:text-emerald-400">{selectedDistrict.crops.length} Active Regional Crops</span>
-              </div>
+            <div className="rounded-3xl border border-emerald-100 dark:border-[#2A2F3A] bg-white/90 dark:bg-[#161B22]/90 backdrop-blur-md p-6 shadow-sm space-y-6">
+              {/* Category Navigation Tabs */}
+              <div className="flex border-b border-slate-100 dark:border-[#2A2F3A]">
+                <button
+                  onClick={() => handleCategoryChange("traditional")}
+                  className={`pb-3 text-xs font-bold border-b-2 transition-all flex items-center gap-2 cursor-pointer ${
+                    selectedCropCategory === "traditional"
+                      ? "border-emerald-600 text-emerald-700 dark:text-emerald-400 dark:border-emerald-500"
+                      : "border-transparent text-slate-500 dark:text-[#8B949E] hover:text-slate-800 dark:hover:text-slate-200"
+                  }`}
+                >
+                  <Sprout className="h-4 w-4 shrink-0" />
+                  <span>🌾 Traditional Crops</span>
+                </button>
 
-              <div className="flex flex-wrap gap-2.5">
-                {selectedDistrict.crops.map((crop) => (
+                {selectedDistrict.crops.some(c => c.isPremium) && (
                   <button
-                    key={crop.name}
-                    onClick={() => {
-                      setSelectedAdvisorCropName(crop.name);
-                      setActiveStageIndex(0);
-                    }}
-                    className={`text-xs font-bold px-4 py-2.5 rounded-2xl transition-all duration-300 flex items-center gap-2.5 border cursor-pointer ${
-                      selectedAdvisorCropName === crop.name
-                        ? "bg-emerald-600 text-white border-emerald-600 shadow-md dark:bg-emerald-500"
-                        : "bg-white dark:bg-[#111827] text-slate-700 dark:text-[#C9D1D9] border-emerald-100 dark:border-[#2A2F3A] hover:bg-emerald-50 dark:hover:bg-[#1C212A]"
+                    onClick={() => handleCategoryChange("exotic")}
+                    className={`ml-6 pb-3 text-xs font-bold border-b-2 transition-all flex items-center gap-2 cursor-pointer ${
+                      selectedCropCategory === "exotic"
+                        ? "border-emerald-600 text-emerald-700 dark:text-emerald-400 dark:border-emerald-500"
+                        : "border-transparent text-slate-500 dark:text-[#8B949E] hover:text-slate-800 dark:hover:text-slate-200"
                     }`}
                   >
-                    <Sprout className="h-4 w-4 shrink-0" />
-                    <span>{crop.name}</span>
+                    <Sparkles className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                    <span>🌟 Exotic Crops (Premium)</span>
                   </button>
-                ))}
+                )}
+              </div>
+
+              {/* Title & Subtitle block based on selection */}
+              <div className="space-y-1">
+                {selectedCropCategory === "traditional" ? (
+                  <>
+                    <h3 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
+                      Traditional Crops
+                    </h3>
+                    <p className="text-xs text-slate-500 dark:text-[#8B949E] leading-relaxed">
+                      Select a traditional crop from your region to view precision timelines, irrigation volumes, and specific fertilizer inputs.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-base font-black text-slate-900 dark:text-white">
+                        Exotic Crops
+                      </h3>
+                      <span className="px-2 py-0.5 text-[10px] font-black uppercase tracking-wider bg-emerald-500/10 text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-400 border border-emerald-500/20 dark:border-emerald-400/20 rounded-md">
+                        Premium
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-500 dark:text-[#8B949E] leading-relaxed">
+                      High-value crops with higher profit potential. Suitable cultivation practices and climate are recommended.
+                    </p>
+                  </>
+                )}
+              </div>
+
+              {/* Crop list depending on the selected category */}
+              <div className="flex flex-wrap gap-2.5">
+                {selectedDistrict.crops
+                  .filter((crop) => selectedCropCategory === "exotic" ? crop.isPremium : !crop.isPremium)
+                  .map((crop) => (
+                    <button
+                      key={crop.name}
+                      onClick={() => {
+                        setSelectedAdvisorCropName(crop.name);
+                        setActiveStageIndex(0);
+                      }}
+                      className={`text-xs font-bold px-4 py-2.5 rounded-2xl transition-all duration-300 flex items-center gap-2 border cursor-pointer ${
+                        selectedAdvisorCropName === crop.name
+                          ? "bg-emerald-600 text-white border-emerald-600 shadow-md dark:bg-emerald-500"
+                          : "bg-white dark:bg-[#111827] text-slate-700 dark:text-[#C9D1D9] border-slate-100 dark:border-[#2A2F3A] hover:bg-slate-50 dark:hover:bg-[#1C212A]"
+                      }`}
+                    >
+                      <span>{crop.name}</span>
+                    </button>
+                  ))}
               </div>
             </div>
 
@@ -1190,8 +1263,8 @@ export default function DashboardPage() {
                       className="w-full rounded-2xl border border-slate-200 dark:border-[#2A2F3A] bg-emerald-50/50 dark:bg-[#111827] p-3 text-xs font-extrabold text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:outline-none"
                     >
                       {selectedDistrict.crops.map((c, i) => (
-                        <option key={c.name} value={i}>
-                          {c.name} (Current APMC: ₹{c.price.toLocaleString()}/Qtl • {c.season})
+                        <option key={c.name} value={i} className="bg-white dark:bg-[#161B22] text-slate-900 dark:text-white">
+                          {c.isPremium ? "🌟 " : "🌾 "} {c.name} (Current APMC: ₹{c.price.toLocaleString()}/Qtl • {c.season})
                         </option>
                       ))}
                     </select>
