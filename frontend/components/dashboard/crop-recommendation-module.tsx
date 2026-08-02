@@ -13,7 +13,7 @@ export function CropRecommendationModule() {
       {advisory && (
         <div className="space-y-8 animate-fade-in">
           <AIRecommendationSection advisory={advisory} />
-          <Timeline days={advisory.timeline7Days} />
+          <Timeline days={advisory.timeline7Days || advisory.timeline || []} />
         </div>
       )}
     </div>

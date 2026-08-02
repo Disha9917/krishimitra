@@ -20,9 +20,9 @@ export function AIRecommendationSection({ advisory, className }: AIRecommendatio
             AI Precision Crop Engine Active
           </span>
           <h2 className="text-xl font-extrabold text-slate-900 sm:text-2xl">
-            Ranked Recommendations for {advisory.farmerInput.cropType || "Wheat"}
+            Ranked Recommendations for {advisory.farmerInput?.cropType || advisory.cropName || "Wheat"}
           </h2>
-          <p className="text-xs text-slate-500">Tailored for PIN {advisory.farmerInput.pinCode} • Sowing: {advisory.farmerInput.sowingDate}</p>
+          <p className="text-xs text-slate-500">Sowing Period: {advisory.farmerInput?.sowingDate || "Current Season"}</p>
         </div>
       </div>
 
@@ -30,8 +30,8 @@ export function AIRecommendationSection({ advisory, className }: AIRecommendatio
       <div className="space-y-4">
         <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500">Top 3 Ranked Field Advisories</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {advisory.top3Advisories.map((rec) => (
-            <RecommendationCard key={rec.id} item={rec} />
+          {(advisory.top3Advisories || advisory.recommendations || []).map((rec: any, idx: number) => (
+            <RecommendationCard key={rec.id || idx} item={rec} />
           ))}
         </div>
       </div>

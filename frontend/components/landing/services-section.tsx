@@ -11,6 +11,7 @@ import {
   Warehouse,
   Snowflake,
   Landmark,
+  Flag,
   CreditCard,
   MapPin,
   TrendingUp,

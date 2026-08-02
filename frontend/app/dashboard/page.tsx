@@ -9,6 +9,8 @@ import { Button } from "../../components/ui/button";
 import { LiveBreezeBackground } from "../../components/landing/live-breeze-background";
 import { GUJARAT_DISTRICT_ZONES } from "../../utils/constants";
 import { getPrecisionCropAdvisory, CropLifecycleAdvisory } from "../../utils/advisories";
+import { RegionDistrictSelector } from "../../components/forms/region-district-selector";
+import { getLegacyDistrictFallback } from "../../lib/regionData";
 import {
   Sprout,
   TrendingUp,
@@ -78,9 +80,10 @@ export default function DashboardPage() {
     router.push("/login");
   };
 
-  // Selected Gujarat District State (Defaults to Anand Central)
+  // Selected Gujarat Region & District State (Defaults to Central Gujarat -> Anand)
+  const [selectedRegionId, setSelectedRegionId] = useState("central-gujarat");
   const [selectedDistrictId, setSelectedDistrictId] = useState("anand");
-  const selectedDistrict = GUJARAT_DISTRICT_ZONES.find((d) => d.id === selectedDistrictId) || GUJARAT_DISTRICT_ZONES[2];
+  const selectedDistrict = GUJARAT_DISTRICT_ZONES.find((d) => d.id === selectedDistrictId) || GUJARAT_DISTRICT_ZONES[0];
 
   // Precision Advisor Crop & Stage State
   const [selectedAdvisorCropName, setSelectedAdvisorCropName] = useState<string>("Tobacco");
@@ -348,14 +351,17 @@ export default function DashboardPage() {
               <select
                 value={selectedDistrictId}
                 onChange={(e) => {
-                  setSelectedDistrictId(e.target.value);
+                  const distId = e.target.value;
+                  const fallback = getLegacyDistrictFallback(distId);
+                  setSelectedRegionId(fallback.regionId);
+                  setSelectedDistrictId(distId);
                   setSelectedCropIndex(0);
                 }}
                 className="bg-transparent text-slate-900 dark:text-white font-extrabold focus:outline-none cursor-pointer pr-1"
               >
                 {GUJARAT_DISTRICT_ZONES.map((dist) => (
                   <option key={dist.id} value={dist.id} className="bg-white dark:bg-[#161B22] text-slate-900 dark:text-white">
-                    {dist.name} (PIN {dist.pincode})
+                    {dist.name}
                   </option>
                 ))}
               </select>
@@ -452,31 +458,89 @@ export default function DashboardPage() {
         {/* TAB 1: OVERVIEW */}
         {activeTab === "overview" && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-8">
-            <div className="rounded-3xl border border-emerald-200/80 dark:border-[#2A2F3A] bg-gradient-to-r from-emerald-600 via-emerald-700 to-teal-800 text-white p-6 sm:p-8 shadow-xl relative overflow-hidden">
-              <div className="relative z-10 space-y-3 max-w-2xl">
-                <div className="inline-flex items-center gap-2 rounded-full bg-white/20 px-3.5 py-1 text-xs font-bold text-emerald-100 border border-white/30">
-                  <Sparkles className="h-4 w-4" />
-                  <span>{selectedDistrict.zone} • {selectedDistrict.name} Advisory Active</span>
+            {/* Statewide Gujarat 6-Region / 33-District Cascading Selector */}
+            <RegionDistrictSelector
+              selectedRegionId={selectedRegionId}
+              selectedDistrictId={selectedDistrictId}
+              onSelect={(regionId, districtId) => {
+                setSelectedRegionId(regionId);
+                setSelectedDistrictId(districtId);
+                setSelectedCropIndex(0);
+              }}
+            />
+
+            {/* Premium Dual-Theme Welcome Banner Hero Widget */}
+            <div className="relative z-10 rounded-3xl border-2 border-emerald-500/30 dark:border-emerald-500/40 bg-gradient-to-br from-emerald-500/10 via-teal-500/5 to-emerald-500/10 dark:from-[#0F172A] dark:via-emerald-950/90 dark:to-[#0B0F14] text-slate-900 dark:text-white p-6 sm:p-8 shadow-xl dark:shadow-2xl overflow-hidden backdrop-blur-xl transition-all">
+              {/* Background Ambient Radial Glow */}
+              <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-emerald-500/10 dark:bg-emerald-500/20 blur-3xl pointer-events-none" />
+              <div className="absolute -left-16 -bottom-16 h-64 w-64 rounded-full bg-teal-500/10 dark:bg-teal-500/20 blur-3xl pointer-events-none" />
+
+              <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                {/* Left Column: Greeting & CTAs */}
+                <div className="lg:col-span-8 space-y-4">
+                  <div className="inline-flex items-center gap-2 rounded-full bg-emerald-600/10 dark:bg-emerald-500/20 backdrop-blur-md px-3.5 py-1 text-xs font-black text-emerald-800 dark:text-emerald-300 border border-emerald-500/30 dark:border-emerald-400/30 shadow-xs">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 dark:bg-emerald-400 opacity-75" />
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-600 dark:bg-emerald-400" />
+                    </span>
+                    <Sparkles className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-300" />
+                    <span>{selectedDistrict.zone} • {selectedDistrict.name} Advisory Active</span>
+                  </div>
+
+                  <h2 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
+                    Welcome back, <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-700 via-teal-700 to-emerald-900 dark:from-emerald-300 dark:via-teal-200 dark:to-white">Rajesh!</span>
+                  </h2>
+
+                  <p className="text-xs sm:text-sm text-slate-700 dark:text-emerald-100/90 leading-relaxed max-w-xl font-medium">
+                    Active agricultural location set to <strong className="text-slate-900 dark:text-white font-black">{selectedDistrict.name}</strong>. Top recommended crops for your zone: <span className="text-emerald-700 dark:text-emerald-300 font-bold">{selectedDistrict.crops.map((c) => c.name).join(", ")}</span>.
+                  </p>
+
+                  <div className="pt-2 flex flex-wrap items-center gap-3">
+                    <button
+                      onClick={() => setActiveTab("crops")}
+                      className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white dark:bg-emerald-400 dark:hover:bg-emerald-300 dark:text-slate-950 font-black px-5 py-3 text-xs shadow-md shadow-emerald-600/20 dark:shadow-emerald-500/25 transition-all duration-200 hover:scale-[1.02] cursor-pointer"
+                    >
+                      <span>Explore Stage-by-Stage Advisory ({selectedDistrict.crops.length} Crops)</span>
+                      <ArrowRight className="h-4 w-4" />
+                    </button>
+                    <button
+                      onClick={() => setActiveTab("disease")}
+                      className="inline-flex items-center gap-2 rounded-xl bg-white/80 hover:bg-white text-slate-800 border border-slate-200/90 dark:bg-white/10 dark:hover:bg-white/20 dark:text-white dark:border-white/20 font-bold px-4 py-3 text-xs transition-all duration-200 shadow-xs cursor-pointer"
+                    >
+                      <Scan className="h-4 w-4 text-emerald-600 dark:text-emerald-300" />
+                      <span>Scan Leaf Image</span>
+                    </button>
+                  </div>
                 </div>
-                <h2 className="text-2xl sm:text-3xl font-black">Welcome back, Rajesh!</h2>
-                <p className="text-xs sm:text-sm text-emerald-100 leading-relaxed">
-                  Active location set to <strong>{selectedDistrict.name}</strong> (PIN {selectedDistrict.pincode}). Top recommended crops for your zone: {selectedDistrict.crops.map((c) => c.name).join(", ")}.
-                </p>
-                <div className="pt-2 flex flex-wrap gap-3">
-                  <button
-                    onClick={() => setActiveTab("crops")}
-                    className="inline-flex items-center gap-2 rounded-xl bg-white text-emerald-800 font-bold px-4 py-2.5 text-xs shadow-md hover:bg-emerald-50 transition-all cursor-pointer"
-                  >
-                    <span>Explore Stage-by-Stage Advisory ({selectedDistrict.crops.length} Crops)</span>
-                    <ArrowRight className="h-4 w-4" />
-                  </button>
-                  <button
-                    onClick={() => setActiveTab("disease")}
-                    className="inline-flex items-center gap-2 rounded-xl bg-emerald-900/60 backdrop-blur-md text-white border border-emerald-400/40 font-bold px-4 py-2.5 text-xs hover:bg-emerald-900/80 transition-all cursor-pointer"
-                  >
-                    <Scan className="h-4 w-4" />
-                    <span>Scan Leaf Image</span>
-                  </button>
+
+                {/* Right Column: Live Agro Status Mini-Card */}
+                <div className="lg:col-span-4 hidden lg:block">
+                  <div className="rounded-2xl border border-emerald-200 dark:border-emerald-400/30 bg-white/90 dark:bg-emerald-950/50 backdrop-blur-md p-4 space-y-3 shadow-md dark:shadow-inner">
+                    <div className="flex items-center justify-between border-b border-slate-100 dark:border-emerald-800/60 pb-2">
+                      <span className="text-[11px] font-extrabold uppercase tracking-wider text-emerald-800 dark:text-emerald-300 flex items-center gap-1.5">
+                        <MapPin className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+                        Region Specs
+                      </span>
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20 dark:border-emerald-500/30">
+                        Synced
+                      </span>
+                    </div>
+
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-slate-600 dark:text-emerald-200/80 font-medium">District Zone:</span>
+                        <span className="font-extrabold text-slate-900 dark:text-white">{selectedDistrict.name}</span>
+                      </div>
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-slate-600 dark:text-emerald-200/80 font-medium">Primary Crop Match:</span>
+                        <span className="font-extrabold text-emerald-700 dark:text-emerald-300">{selectedDistrict.crops[0]?.name} ({selectedDistrict.crops[0]?.match}%)</span>
+                      </div>
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-slate-600 dark:text-emerald-200/80 font-medium">Market Benchmark:</span>
+                        <span className="font-mono font-black text-slate-900 dark:text-white">₹{selectedDistrict.crops[0]?.price.toLocaleString()} / Qtl</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1258,53 +1322,53 @@ export default function DashboardPage() {
 
               {/* Output */}
               <div className="lg:col-span-7 space-y-6">
-                <div className={`rounded-3xl border p-6 sm:p-8 shadow-xl space-y-6 flex flex-col justify-between transition-all ${
+                <div className={`rounded-3xl border-2 p-6 sm:p-8 shadow-xl space-y-6 flex flex-col justify-between transition-all ${
                   netProfitGain > 0
-                    ? "border-emerald-300 dark:border-emerald-800/80 bg-gradient-to-br from-emerald-950 via-[#0B0F14] to-emerald-900 text-white"
-                    : "border-amber-300 dark:border-amber-800/80 bg-gradient-to-br from-amber-950 via-[#0B0F14] to-amber-900 text-white"
+                    ? "border-emerald-500/40 dark:border-emerald-800/80 bg-gradient-to-br from-emerald-50/90 via-teal-50/70 to-emerald-100/80 dark:from-emerald-950 dark:via-[#0B0F14] dark:to-emerald-900 text-slate-900 dark:text-white"
+                    : "border-amber-500/40 dark:border-amber-800/80 bg-gradient-to-br from-amber-50/90 via-amber-50/70 to-orange-100/80 dark:from-amber-950 dark:via-[#0B0F14] dark:to-amber-900 text-slate-900 dark:text-white"
                 }`}>
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 text-[10px] font-black px-3 py-1 uppercase tracking-wider">
+                      <span className="rounded-full bg-emerald-600/10 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30 dark:border-emerald-400/40 text-[10px] font-black px-3 py-1 uppercase tracking-wider">
                         AI Commercial Agronomy Decision
                       </span>
-                      <span className="text-xs font-bold text-emerald-200">
+                      <span className="text-xs font-black text-emerald-800 dark:text-emerald-200">
                         Confidence: 97.4%
                       </span>
                     </div>
 
-                    <h3 className="text-2xl sm:text-3xl font-black text-white leading-tight">
+                    <h3 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white leading-tight">
                       {netProfitGain > 0
                         ? `RECOMMENDED: HOLD IN ${storageFacilityType.toUpperCase()} FOR ${storageDays} DAYS`
                         : "RECOMMENDED: SELL IMMEDIATELY AT APMC MANDI"}
                     </h3>
 
-                    <p className="text-xs sm:text-sm text-emerald-100 leading-relaxed">
+                    <p className="text-xs sm:text-sm text-slate-700 dark:text-emerald-100 leading-relaxed font-medium">
                       {netProfitGain > 0
                         ? `Harvest arrival pressure in ${selectedDistrict.name} APMC is causing temporary price dips. Holding ${quantityQuintals} Qtl of ${currentCrop.name} for ${storageDays} days yields an estimated extra net profit of +₹${netProfitGain.toLocaleString()} (+${returnOnInvestmentPct}% ROI).`
                         : `Current APMC prices for ${currentCrop.name} are at peak seasonal highs. Immediate selling is advised to avoid holding expenses.`}
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 border-t border-white/10 pt-5 text-xs">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 border-t border-slate-200 dark:border-white/10 pt-5 text-xs">
                     <div className="space-y-1">
-                      <span className="text-emerald-300 text-[11px]">Immediate APMC Payout</span>
-                      <p className="text-lg font-black text-white">₹{immediateRevenue.toLocaleString()}</p>
+                      <span className="text-slate-600 dark:text-emerald-300 text-[11px] font-bold">Immediate APMC Payout</span>
+                      <p className="text-lg font-black text-slate-900 dark:text-white">₹{immediateRevenue.toLocaleString()}</p>
                     </div>
 
                     <div className="space-y-1">
-                      <span className="text-emerald-300 text-[11px]">Projected Gross Sale</span>
-                      <p className="text-lg font-black text-emerald-400">₹{projectedGrossRevenue.toLocaleString()}</p>
+                      <span className="text-slate-600 dark:text-emerald-300 text-[11px] font-bold">Projected Gross Sale</span>
+                      <p className="text-lg font-black text-emerald-700 dark:text-emerald-400">₹{projectedGrossRevenue.toLocaleString()}</p>
                     </div>
 
                     <div className="space-y-1">
-                      <span className="text-emerald-300 text-[11px]">Storage & Transport Fee</span>
-                      <p className="text-lg font-black text-rose-300">-₹{totalOverheadCost.toLocaleString()}</p>
+                      <span className="text-slate-600 dark:text-emerald-300 text-[11px] font-bold">Storage & Transport Fee</span>
+                      <p className="text-lg font-black text-rose-600 dark:text-rose-300">-₹{totalOverheadCost.toLocaleString()}</p>
                     </div>
 
                     <div className="space-y-1">
-                      <span className="text-emerald-300 text-[11px]">Net Profit Gain</span>
-                      <p className="text-xl font-black text-emerald-300">+₹{netProfitGain.toLocaleString()}</p>
+                      <span className="text-slate-600 dark:text-emerald-300 text-[11px] font-bold">Net Profit Gain</span>
+                      <p className="text-xl font-black text-emerald-700 dark:text-emerald-300">+₹{netProfitGain.toLocaleString()}</p>
                     </div>
                   </div>
                 </div>
@@ -1394,13 +1458,13 @@ export default function DashboardPage() {
             </div>
 
             {/* Live Scrolling Infinite Marquee Ticker */}
-            <div className="rounded-2xl border border-emerald-200/80 dark:border-[#2A2F3A] bg-emerald-950 text-white p-3.5 shadow-md overflow-hidden flex items-center gap-4 text-xs font-bold relative">
+            <div className="rounded-2xl border-2 border-emerald-500/30 dark:border-[#2A2F3A] bg-emerald-50/90 dark:bg-emerald-950 text-slate-900 dark:text-white p-3.5 shadow-md overflow-hidden flex items-center gap-4 text-xs font-bold relative">
               <span className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-emerald-600 text-white shrink-0 font-extrabold uppercase text-[10px] z-10 shadow-sm">
-                <Flame className="h-3.5 w-3.5" />
+                <Flame className="h-3.5 w-3.5 text-amber-300 animate-pulse" />
                 Live Ticker
               </span>
 
-              <div className="flex items-center overflow-hidden whitespace-nowrap text-emerald-100 w-full relative no-scrollbar">
+              <div className="flex items-center overflow-hidden whitespace-nowrap text-slate-700 dark:text-emerald-100 w-full relative no-scrollbar">
                 <motion.div
                   animate={{ x: ["0%", "-50%"] }}
                   transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
@@ -1408,10 +1472,10 @@ export default function DashboardPage() {
                 >
                   {[...allMandiCommodities, ...allMandiCommodities].map((c, i) => (
                     <span key={`${c.name}-${i}`} className="flex items-center gap-2">
-                      <span className="text-white font-bold">{c.name}:</span>
-                      <span className="text-emerald-400 font-extrabold">₹{c.modalPrice.toLocaleString()}/Qtl</span>
-                      <span className="text-[10px] text-emerald-300 font-semibold">{c.trend}</span>
-                      <span className="text-emerald-700">|</span>
+                      <span className="text-slate-900 dark:text-white font-black">{c.name}:</span>
+                      <span className="text-emerald-700 dark:text-emerald-400 font-black">₹{c.modalPrice.toLocaleString()}/Qtl</span>
+                      <span className="text-[10px] text-emerald-800 dark:text-emerald-300 font-bold">{c.trend}</span>
+                      <span className="text-emerald-300 dark:text-emerald-700">|</span>
                     </span>
                   ))}
                 </motion.div>
@@ -1461,9 +1525,9 @@ export default function DashboardPage() {
 
             {/* Commodity Price Cards Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredMandiCommodities.map((item) => (
+              {filteredMandiCommodities.map((item, idx) => (
                 <div
-                  key={item.name}
+                  key={`${item.name}-${item.yard}-${idx}`}
                   className="rounded-3xl border border-emerald-100 dark:border-[#2A2F3A] bg-white/90 dark:bg-[#161B22]/90 backdrop-blur-md p-6 shadow-md space-y-4 flex flex-col justify-between hover:border-emerald-400 transition-all"
                 >
                   <div className="space-y-3">

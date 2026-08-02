@@ -9,6 +9,7 @@ import { Button } from "../../components/ui/button";
 import { ThemeToggle } from "../../components/ui/theme-toggle";
 import { LiveBreezeBackground } from "../../components/landing/live-breeze-background";
 import { GUJARAT_DISTRICT_ZONES } from "../../utils/constants";
+import { RegionDistrictSelector } from "../../components/forms/region-district-selector";
 import {
   Sprout,
   ShieldCheck,
@@ -32,11 +33,11 @@ import { motion, AnimatePresence } from "framer-motion";
 const translations = {
   en: {
     backToHome: "Back to KrishiMitra",
-    heading: "Farmer Passport Registration",
+    heading: "Farmer Profile Registration",
     subheading: "Set up your personalized Gujarat AI Advisory profile in 3 simple steps",
     step1Title: "Personal Details",
     step2Title: "District & Crops",
-    step3Title: "AI Kisan ID Passport",
+    step3Title: "AI Kisan Digital ID",
     fullNameLabel: "Full Name",
     mobileLabel: "Mobile Number",
     passwordLabel: "Password",
@@ -49,16 +50,16 @@ const translations = {
     demoRegisterBtn: "Instant Demo Registration (1-Click)",
     alreadyRegistered: "Already registered?",
     signInLink: "Sign In",
-    passportHeader: "OFFICIAL KISAN DIGITAL PASSPORT",
+    passportHeader: "OFFICIAL KISAN DIGITAL ID",
     verifiedBadge: "PAU & AgriTech Certified Extension",
   },
   hi: {
     backToHome: "कृषि मित्र मुख्य पृष्ठ पर लौटें",
-    heading: "किसान पासपोर्ट पंजीकरण",
+    heading: "किसान पंजीकरण",
     subheading: "3 सरल चरणों में अपना व्यक्तिगत गुजरात एआई सलाहकार प्रोफाइल सेट करें",
     step1Title: "व्यक्तिगत विवरण",
     step2Title: "ज़िला और फसलें",
-    step3Title: "एआई किसान आईडी पासपोर्ट",
+    step3Title: "एआई किसान डिजिटल आईडी",
     fullNameLabel: "पूरा नाम",
     mobileLabel: "मोबाइल नंबर",
     passwordLabel: "पासवर्ड",
@@ -71,16 +72,16 @@ const translations = {
     demoRegisterBtn: "त्वरित डेमो पंजीकरण (1-क्लिक)",
     alreadyRegistered: "पहले से पंजीकृत हैं?",
     signInLink: "साइन इन करें",
-    passportHeader: "आधिकारिक किसान डिजिटल पासपोर्ट",
+    passportHeader: "आधिकारिक किसान डिजिटल आईडी",
     verifiedBadge: "पीएयू और एग्रीटेक प्रमाणित एक्सटेंशन",
   },
   gu: {
     backToHome: "કૃષિમિત્ર મુખ્ય પૃષ્ઠ પર પાછા ફરો",
-    heading: "ખેડૂત પાસપોર્ટ નોંધણી",
+    heading: "ખેડૂત નોંધણી",
     subheading: "3 સરળ પગલાઓમાં તમારી વ્યક્તિગત ગુજરાત એઆઈ પ્રોફાઇલ સેટ કરો",
     step1Title: "વ્યક્તિગત વિગતો",
     step2Title: "જીલ્લો અને પાક",
-    step3Title: "એઆઈ કિસાન આઈડી પાસપોર્ટ",
+    step3Title: "એઆઈ કિસાન આઈડી",
     fullNameLabel: "પૂરું નામ",
     mobileLabel: "મોબાઇલ નંબર",
     passwordLabel: "પાસવર્ડ",
@@ -93,7 +94,7 @@ const translations = {
     demoRegisterBtn: "ત્વરિત ડેમો નોંધણી (1-ક્લિક)",
     alreadyRegistered: "પહેલેથી જ નોંધાયેલ છો?",
     signInLink: "સાઇન ઇન કરો",
-    passportHeader: "સત્તાવાર કિસાન ડિજિટલ પાસપોર્ટ",
+    passportHeader: "સત્તાવાર કિસાન ડિજિટલ આઈડી",
     verifiedBadge: "પીએયુ અને એગ્રીટેક પ્રમાણિત એક્સ્ટેંશન",
   },
 };
@@ -107,13 +108,14 @@ export default function RegisterPage() {
   const [fullName, setFullName] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
   const [password, setPassword] = useState("");
+  const [selectedRegionId, setSelectedRegionId] = useState("central-gujarat");
   const [selectedDistrictId, setSelectedDistrictId] = useState("anand");
   const [landAcres, setLandAcres] = useState(12);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
   const t = translations[language];
-  const selectedDistrict = GUJARAT_DISTRICT_ZONES.find((d) => d.id === selectedDistrictId) || GUJARAT_DISTRICT_ZONES[2];
+  const selectedDistrict = GUJARAT_DISTRICT_ZONES.find((d) => d.id === selectedDistrictId) || GUJARAT_DISTRICT_ZONES[0];
 
   // 1-Click Instant Demo Registration
   const handleDemoRegister = () => {
@@ -246,7 +248,7 @@ export default function RegisterPage() {
             <div className="py-12 text-center space-y-3 animate-fade-in">
               <CheckCircle2 className="h-16 w-16 text-emerald-500 mx-auto animate-bounce" />
               <h3 className="text-xl font-black text-slate-900 dark:text-white">Registration Successful!</h3>
-              <p className="text-xs text-slate-600 dark:text-[#C9D1D9]">Creating Kisan Passport & Launching Dashboard...</p>
+              <p className="text-xs text-slate-600 dark:text-[#C9D1D9]">Creating Kisan Profile & Launching Dashboard...</p>
             </div>
           ) : (
             <form onSubmit={handleFinalSubmit} className="space-y-6">
@@ -297,31 +299,16 @@ export default function RegisterPage() {
                     transition={{ duration: 0.2 }}
                     className="space-y-6"
                   >
-                    {/* District Picker Cards */}
+                    {/* Region & District Selector */}
                     <div className="space-y-2">
-                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-[#C9D1D9]">
-                        {t.selectDistrict}
-                      </label>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                        {GUJARAT_DISTRICT_ZONES.map((dist) => (
-                          <button
-                            key={dist.id}
-                            type="button"
-                            onClick={() => setSelectedDistrictId(dist.id)}
-                            className={`p-3.5 rounded-2xl border text-left transition-all ${
-                              selectedDistrictId === dist.id
-                                ? "border-emerald-600 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-300 ring-2 ring-emerald-500/20"
-                                : "border-slate-200 dark:border-[#2A2F3A] bg-white dark:bg-[#111827] text-slate-700 dark:text-[#C9D1D9] hover:border-emerald-300"
-                            }`}
-                          >
-                            <div className="flex items-center justify-between font-bold text-xs">
-                              <span>{dist.name}</span>
-                              {selectedDistrictId === dist.id && <Check className="h-4 w-4 text-emerald-600 shrink-0" />}
-                            </div>
-                            <p className="text-[11px] text-slate-500 dark:text-[#8B949E] mt-0.5">{dist.zone} • PIN {dist.pincode}</p>
-                          </button>
-                        ))}
-                      </div>
+                      <RegionDistrictSelector
+                        selectedRegionId={selectedRegionId}
+                        selectedDistrictId={selectedDistrictId}
+                        onSelect={(regionId, districtId) => {
+                          setSelectedRegionId(regionId);
+                          setSelectedDistrictId(districtId);
+                        }}
+                      />
                     </div>
 
                     {/* Dedicated Crops Preview */}
@@ -368,7 +355,7 @@ export default function RegisterPage() {
                     transition={{ duration: 0.2 }}
                     className="space-y-6"
                   >
-                    {/* Digital Kisan ID Passport Card */}
+                    {/* Digital Kisan ID Card */}
                     <div className="rounded-3xl border border-emerald-300 dark:border-emerald-700/60 bg-gradient-to-br from-emerald-950 via-emerald-900 to-teal-950 text-white p-6 sm:p-8 shadow-2xl space-y-6 relative overflow-hidden">
                       <div className="flex justify-between items-start border-b border-emerald-800/60 pb-4">
                         <div className="space-y-1">

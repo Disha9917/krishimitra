@@ -85,15 +85,6 @@ export function FarmerInputForm({ onSubmit, isLoading }: FarmerInputFormProps) {
           </div>
         </div>
 
-        {/* PIN Code */}
-        <Input
-          label="Postal PIN Code"
-          value={pinCode}
-          onChange={(e) => setPinCode(e.target.value)}
-          placeholder="e.g. 141001"
-          required
-        />
-
         {/* Crop Type Select */}
         <Select
           label="Crop Type"
