@@ -12,6 +12,7 @@ import {
   History,
   FileText,
   BellRing,
+  Flag,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 
@@ -25,6 +26,7 @@ const iconMap: Record<string, React.ReactNode> = {
   History: <History className="h-4 w-4" />,
   FileText: <FileText className="h-4 w-4" />,
   BellRing: <BellRing className="h-4 w-4" />,
+  Flag: <Flag className="h-4 w-4" />,
 };
 
 export function NavMain({ onItemClick }: { onItemClick?: () => void }) {

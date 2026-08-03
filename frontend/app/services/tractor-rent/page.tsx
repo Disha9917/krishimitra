@@ -766,13 +766,6 @@ export default function TractorRentPage() {
                   <Plus className="h-4 w-4" />
                   List Your Tractor
                 </button>
-                <button
-                  onClick={() => setActiveTab("admin")}
-                  className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black transition-all ${activeTab === "admin" ? "bg-emerald-800 text-white shadow-md" : "text-slate-500 dark:text-[#8B949E] hover:bg-slate-100 dark:hover:bg-slate-800/40"}`}
-                >
-                  <Settings className="h-4 w-4" />
-                  Admin Dashboard
-                </button>
               </div>
             </div>
           </Container>

@@ -18,6 +18,7 @@ export const ROUTES = {
     IRRIGATION: "/dashboard/irrigation",
     PROFILE: "/dashboard/profile",
     ADMIN: "/dashboard/admin",
+    SCHEMES: "/dashboard/schemes",
   },
   SERVICES: {
     TRACTOR_RENT: "/services/tractor-rent",

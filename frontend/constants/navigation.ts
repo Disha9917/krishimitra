@@ -16,4 +16,5 @@ export const DASHBOARD_NAV_ITEMS = [
   { label: "Advisory History", href: ROUTES.DASHBOARD.HISTORY, icon: "History" },
   { label: "Reports & Downloads", href: ROUTES.DASHBOARD.REPORTS, icon: "FileText" },
   { label: "Alert Settings", href: ROUTES.DASHBOARD.SETTINGS, icon: "BellRing" },
+  { label: "Government Schemes", href: ROUTES.DASHBOARD.SCHEMES, icon: "Flag" },
 ];
