@@ -5,13 +5,18 @@ import React, { useEffect, useRef, useState } from "react";
 interface BreezeLeaf {
   x: number;
   y: number;
+  vx: number;
+  vy: number;
   size: number;
-  speedX: number;
-  speedY: number;
   angle: number;
   spinSpeed: number;
+  baseSpinSpeed: number;
   color: string;
   opacity: number;
+  floatPhaseX: number;
+  floatPhaseY: number;
+  floatFreqX: number;
+  floatFreqY: number;
 }
 
 interface GrassBlade {
@@ -53,34 +58,40 @@ export function LiveBreezeBackground() {
 
     window.addEventListener("resize", handleResize);
 
-    // Mouse wind turbulence tracking
+    // Mouse Tracking for Gentle Air Breeze
     const mouse = {
       x: -1000,
       y: -1000,
       vx: 0,
+      vy: 0,
       lastX: -1000,
+      lastY: -1000,
     };
 
     const handleMouseMove = (e: MouseEvent) => {
       if (mouse.lastX !== -1000) {
-        mouse.vx = (e.clientX - mouse.lastX) * 0.15;
+        mouse.vx = e.clientX - mouse.lastX;
+        mouse.vy = e.clientY - mouse.lastY;
       }
       mouse.x = e.clientX;
       mouse.y = e.clientY;
       mouse.lastX = e.clientX;
+      mouse.lastY = e.clientY;
     };
 
     const handleMouseLeave = () => {
       mouse.x = -1000;
       mouse.y = -1000;
       mouse.vx = 0;
+      mouse.vy = 0;
       mouse.lastX = -1000;
+      mouse.lastY = -1000;
     };
 
     window.addEventListener("mousemove", handleMouseMove);
     document.body.addEventListener("mouseleave", handleMouseLeave);
 
-    // 1. Generate Floating Leaves & Spores
+    // Leaf Color Palette
     const leafColors = [
       "rgba(34, 197, 94, ",   // green-500
       "rgba(16, 185, 129, ",  // emerald-500
@@ -89,21 +100,27 @@ export function LiveBreezeBackground() {
       "rgba(20, 184, 166, ",  // teal-500
     ];
 
-    const leafCount = Math.min(Math.floor((width * height) / 16000), 50);
+    // High Density Leaf Count (180 leaves max)
+    const leafCount = Math.min(Math.floor((width * height) / 4500), 180);
     const leaves: BreezeLeaf[] = [];
 
-    function createLeaf(startX?: number): BreezeLeaf {
+    function createLeaf(): BreezeLeaf {
       const colorBase = leafColors[Math.floor(Math.random() * leafColors.length)];
       return {
-        x: startX !== undefined ? startX : Math.random() * width,
+        x: Math.random() * width,
         y: Math.random() * height,
-        size: Math.random() * 5 + 4,
-        speedX: Math.random() * 1.5 + 0.8, // Breeze moving left to right
-        speedY: (Math.random() - 0.3) * 0.4,
+        vx: 0,
+        vy: 0,
+        size: Math.random() * 8 + 7.5, // Increased leaf size (7.5px to 15.5px)
         angle: Math.random() * Math.PI * 2,
-        spinSpeed: (Math.random() - 0.5) * 0.04,
+        spinSpeed: (Math.random() - 0.5) * 0.015,
+        baseSpinSpeed: (Math.random() - 0.5) * 0.008,
         color: colorBase,
-        opacity: Math.random() * 0.5 + 0.3,
+        opacity: Math.random() * 0.45 + 0.3,
+        floatPhaseX: Math.random() * Math.PI * 2,
+        floatPhaseY: Math.random() * Math.PI * 2,
+        floatFreqX: Math.random() * 0.6 + 0.3,
+        floatFreqY: Math.random() * 0.6 + 0.3,
       };
     }
 
@@ -111,7 +128,7 @@ export function LiveBreezeBackground() {
       leaves.push(createLeaf());
     }
 
-    // 2. Generate Swaying Grass / Wheat Blade Silhouettes at Bottom
+    // Swaying Grass Blades at Bottom
     const bladeCount = Math.floor(width / 12);
     const blades: GrassBlade[] = [];
     const grassColors = [
@@ -136,54 +153,94 @@ export function LiveBreezeBackground() {
     let time = 0;
 
     const render = () => {
-      time += 0.015;
-      mouse.vx *= 0.95; // Decay mouse wind impulse
+      time += 0.012;
+      mouse.vx *= 0.88;
+      mouse.vy *= 0.88;
       ctx.clearRect(0, 0, width, height);
 
-      // 1. Render Floating Breeze Leaves
-      leaves.forEach((l, idx) => {
-        // Wind speed modulation + mouse gust
-        const windBoost = Math.max(0, mouse.vx);
-        l.x += l.speedX + windBoost;
-        l.y += l.speedY + Math.sin(time + l.angle) * 0.4;
-        l.angle += l.spinSpeed + windBoost * 0.02;
+      // Render Leaves with Calm Hover Scatter Physics
+      leaves.forEach((l) => {
+        // 1. Gentle Organic In-Place Floating Wave
+        const ambientVx = Math.sin(time * l.floatFreqX + l.floatPhaseX) * 0.25;
+        const ambientVy = Math.cos(time * l.floatFreqY + l.floatPhaseY) * 0.2;
 
-        // Reset when moving off screen right
-        if (l.x > width + 20) {
-          leaves[idx] = createLeaf(-20);
+        // 2. Calm Mouse Hover Breeze Scatter
+        if (mouse.x !== -1000) {
+          const dx = l.x - mouse.x;
+          const dy = l.y - mouse.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          const blowRadius = 180; // Soft breeze radius
+
+          if (dist < blowRadius && dist > 0) {
+            const proximityFactor = Math.pow(1 - dist / blowRadius, 1.8);
+            const blowForce = proximityFactor * 4.2;
+
+            const dirX = dx / dist;
+            const dirY = dy / dist;
+
+            l.vx += dirX * blowForce + mouse.vx * 0.03;
+            l.vy += dirY * blowForce + mouse.vy * 0.03;
+            l.spinSpeed += (dirX > 0 ? 1 : -1) * proximityFactor * 0.02;
+          }
         }
 
+        // Apply Position Updates
+        l.x += l.vx + ambientVx;
+        l.y += l.vy + ambientVy;
+        l.angle += l.spinSpeed + l.baseSpinSpeed;
+
+        // Smooth Damping for Fluid, Calm Motion
+        l.vx *= 0.94;
+        l.vy *= 0.94;
+        l.spinSpeed *= 0.94;
+
+        // Soft Containment inside Screen Edges
+        const margin = 25;
+        if (l.x < margin) {
+          l.x = margin;
+          l.vx = Math.abs(l.vx) * 0.5 + 0.3;
+        } else if (l.x > width - margin) {
+          l.x = width - margin;
+          l.vx = -Math.abs(l.vx) * 0.5 - 0.3;
+        }
+
+        if (l.y < margin) {
+          l.y = margin;
+          l.vy = Math.abs(l.vy) * 0.5 + 0.3;
+        } else if (l.y > height - margin) {
+          l.y = height - margin;
+          l.vy = -Math.abs(l.vy) * 0.5 - 0.3;
+        }
+
+        // Render Leaf
         ctx.save();
         ctx.translate(l.x, l.y);
         ctx.rotate(l.angle);
 
-        // Draw detailed leaf silhouette
         ctx.beginPath();
         ctx.moveTo(0, -l.size);
         ctx.quadraticCurveTo(l.size, 0, 0, l.size);
         ctx.quadraticCurveTo(-l.size, 0, 0, -l.size);
         ctx.fillStyle = `${l.color}${l.opacity})`;
-        ctx.shadowBlur = 6;
-        ctx.shadowColor = `${l.color}0.6)`;
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = `${l.color}0.55)`;
         ctx.fill();
 
-        // Leaf stem line
         ctx.beginPath();
         ctx.moveTo(0, -l.size);
         ctx.lineTo(0, l.size);
-        ctx.strokeStyle = `rgba(255, 255, 255, ${l.opacity * 0.5})`;
-        ctx.lineWidth = 0.8;
+        ctx.strokeStyle = `rgba(255, 255, 255, ${l.opacity * 0.55})`;
+        ctx.lineWidth = 0.9;
         ctx.stroke();
 
         ctx.restore();
       });
 
-      // 2. Render Swaying Grass Blades at the Viewport Bottom
+      // Render Swaying Grass Blades at Bottom
       blades.forEach((b) => {
-        const naturalSway = Math.sin(time * 2 + b.phase) * 18;
-        // Mouse proximity wind bend
+        const naturalSway = Math.sin(time * 2 + b.phase) * 16;
         const dx = mouse.x - b.x;
-        const proximity = Math.max(0, 1 - Math.abs(dx) / 150);
+        const proximity = Math.max(0, 1 - Math.abs(dx) / 160);
         const mouseBend = proximity * (mouse.vx || (dx < 0 ? 15 : -15));
 
         const tipX = b.x + naturalSway + mouseBend;
@@ -224,7 +281,7 @@ export function LiveBreezeBackground() {
 
   return (
     <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-      {/* Dynamic Animated Ambient Aurora Gradients */}
+      {/* Dynamic Ambient Aurora Gradients */}
       <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-emerald-400/20 rounded-full blur-3xl animate-pulse-glow" />
       <div className="absolute top-1/3 -right-20 w-[600px] h-[600px] bg-lime-300/25 rounded-full blur-3xl animate-pulse-glow style-delay" />
       <div className="absolute bottom-10 left-1/4 w-[700px] h-[400px] bg-teal-300/20 rounded-full blur-3xl" />
