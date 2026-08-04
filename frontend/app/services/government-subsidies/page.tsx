@@ -116,25 +116,6 @@ export default function GovernmentSubsidiesPage() {
           </Container>
         </section>
 
-        {/* FAQs */}
-        <section className="py-16 bg-transparent border-t border-emerald-100/60 dark:border-[#2A2F3A]">
-          <Container className="max-w-3xl space-y-8">
-            <h2 className="text-3xl font-black text-slate-900 dark:text-white text-center">Frequently Asked Questions</h2>
-            <div className="space-y-4">
-              {[
-                { q: "How do I apply for PM-KISAN?", a: "Visit the PM-KISAN portal or your nearest Common Service Centre. You will need Aadhaar, land records (Khatauni), and bank account details." },
-                { q: "Can I apply for multiple schemes simultaneously?", a: "Yes, farmers can enroll in multiple schemes as long as they meet the distinct criteria for each scheme." },
-                { q: "How long does subsidy approval take?", a: "Most direct benefit transfer (DBT) subsidies are processed within 14 to 30 days post-verification." },
-              ].map((faq, i) => (
-                <div key={i} className="rounded-2xl border border-emerald-100/80 dark:border-[#2A2F3A] bg-white/80 dark:bg-[#161B22]/90 backdrop-blur-md p-5 shadow-xs">
-                  <h4 className="text-sm font-bold text-slate-900 dark:text-white">{faq.q}</h4>
-                  <p className="text-xs text-slate-600 dark:text-[#C9D1D9] mt-2 leading-relaxed">{faq.a}</p>
-                </div>
-              ))}
-            </div>
-          </Container>
-        </section>
-
         {/* Dialog Modal */}
         {selectedScheme && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">

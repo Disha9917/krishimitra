@@ -2,9 +2,9 @@ import * as React from "react";
 
 export function HowItWorks() {
   const steps = [
-    { number: "01", title: "Enter Farmer Field Parameters", desc: "GPS coordinates, PIN code, crop type, sowing date, and weather observations." },
-    { number: "02", title: "AI Precision Analysis", desc: "KrishiMitra evaluates micro-climate, regional soil profile, and market trend forecasts." },
-    { number: "03", title: "Get Ranked Advisories & Timeline", desc: "Top 3 ranked advisories, 7-day timeline, disease remedies, and sell/store decision matrix." },
+    { number: "01", title: "Get AI Crop & Mandi Insights", desc: "Receive hyper-local crop recommendations, run AI leaf disease scans, and monitor live APMC mandi prices." },
+    { number: "02", title: "Book Rental Machinery & Storage", desc: "Rent verified local tractors/harvesters, and book dry storage godowns or cold storage chambers to preserve your harvest." },
+    { number: "03", title: "Claim Subsidies & Apply Schemes", desc: "Verify eligibility for central welfare programs like PM-KISAN and claim government subsidies for solar pumps and seeds." },
   ];
 
   return (

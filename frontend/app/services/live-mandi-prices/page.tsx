@@ -194,25 +194,6 @@ export default function LiveMandiPricesPage() {
           </Container>
         </section>
 
-        {/* FAQs */}
-        <section className="py-16 bg-transparent border-t border-emerald-100/60 dark:border-[#2A2F3A]">
-          <Container className="max-w-3xl space-y-8">
-            <h2 className="text-3xl font-black text-slate-900 dark:text-white text-center">Frequently Asked Questions</h2>
-            <div className="space-y-4">
-              {[
-                { q: "How frequently are live mandi prices updated?", a: "Crop prices are refreshed every 30 minutes straight from government Agmarknet APMC data feeds." },
-                { q: "Can I set custom price threshold alerts?", a: "Yes, click 'Set Price Alert' above to receive SMS or WhatsApp notifications when crop prices hit your target rate." },
-                { q: "Do these prices include transport and commission fees?", a: "No, listed prices reflect direct APMC yard auction quotes before transportation and APMC cess charges." },
-              ].map((faq, i) => (
-                <div key={i} className="rounded-2xl border border-emerald-100/80 dark:border-[#2A2F3A] bg-white/80 dark:bg-[#161B22]/90 backdrop-blur-md p-5 shadow-xs">
-                  <h4 className="text-sm font-bold text-slate-900 dark:text-white">{faq.q}</h4>
-                  <p className="text-xs text-slate-600 dark:text-[#C9D1D9] mt-2 leading-relaxed">{faq.a}</p>
-                </div>
-              ))}
-            </div>
-          </Container>
-        </section>
-
         {/* Price Alert Dialog Modal */}
         {showAlertModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">

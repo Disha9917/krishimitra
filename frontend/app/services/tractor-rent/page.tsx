@@ -1180,26 +1180,7 @@ export default function TractorRentPage() {
                     </div>
                   )}
 
-                  {/* FAQS (Bottom of Rent Page) */}
-                  <div className="pt-12 border-t border-emerald-100/50 dark:border-[#2A2F3A]/50">
-                    <h3 className="text-lg font-black text-slate-900 dark:text-white text-center mb-6">Frequently Asked Questions</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {[
-                        { q: "How do I rent a tractor on KrishiMitra?", a: "Browse listed tractors near your village, check details, and click Book Now. Enter your booking specifics, and the owner will receive your details to coordinate delivery." },
-                        { q: "How does the Region / District filter work?", a: "You select your region (e.g. North Gujarat) which automatically filters the districts. Selecting a district then unlocks the dynamic village selection list, letting you locate machines listed specifically near your land." },
-                        { q: "Is fuel cost included in the rental price?", a: "Generally, the rental rate does not include fuel. The tractor will be delivered with a full tank, and the farmer should replenish fuel, or pay actual consumption costs directly to the owner." },
-                        { q: "How do I contact the tractor owner?", a: "Clicking on the 'Contact' button on the card will reveal the owner's verified phone number and email address to talk directly regarding timings, transport charges, and implements." }
-                      ].map((faq, idx) => (
-                        <div key={idx} className="rounded-2xl border border-emerald-100/80 dark:border-[#2A2F3A] bg-white/50 dark:bg-[#161B22]/50 p-5 shadow-xs">
-                          <h4 className="text-xs font-black text-slate-900 dark:text-white flex items-start gap-1.5">
-                            <Info className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
-                            {faq.q}
-                          </h4>
-                          <p className="text-xs text-slate-600 dark:text-[#C9D1D9] mt-2 leading-relaxed ml-5">{faq.a}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+
                 </div>
 
               </div>

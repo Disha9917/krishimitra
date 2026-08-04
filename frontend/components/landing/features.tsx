@@ -1,6 +1,6 @@
 import * as React from "react";
 import { FeatureCard } from "../cards/feature-card";
-import { Sprout, Scan, Warehouse, TrendingUp, CloudSun, BellRing } from "lucide-react";
+import { Sprout, Scan, Warehouse, TrendingUp, Tractor, Landmark } from "lucide-react";
 
 export function Features() {
   const items = [
@@ -8,8 +8,8 @@ export function Features() {
     { icon: <Warehouse />, title: "Post-Harvest Loss Planner", description: "Predict spoilage risk % and shelf life days. Receive SELL vs STORE vs TRANSPORT decisions with net profit estimates." },
     { icon: <Scan />, title: "AI Leaf Disease Scanner", description: "Instant leaf image analysis for crop disease detection, symptom isolation, and prescribed remedies." },
     { icon: <TrendingUp />, title: "APMC Mandi Intelligence", description: "Track daily, weekly, and monthly market price trends with integrated transport cost calculation." },
-    { icon: <CloudSun />, title: "7-Day Advisory Timeline", description: "Micro-climate weather forecasting with daily field action checklists for irrigation and spraying." },
-    { icon: <BellRing />, title: "SMS & WhatsApp Alerts", description: "Instant automated alerts when APMC market price crosses your threshold or disease outbreaks occur." },
+    { icon: <Tractor />, title: "Farm Equipment Rental", description: "Rent high-horsepower tractors, combine harvesters, and tools from verified local owners at hourly or daily rates." },
+    { icon: <Landmark />, title: "Government Subsidies & Schemes", description: "Check eligibility and apply for PM-KISAN, solar pump subsidies, seed grants, and central welfare programs." },
   ];
 
   return (

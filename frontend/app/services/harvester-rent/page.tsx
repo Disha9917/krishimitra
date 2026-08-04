@@ -1126,26 +1126,7 @@ export default function HarvesterRentPage() {
                     </div>
                   )}
 
-                  {/* FAQS (Bottom of Rent Page) */}
-                  <div className="pt-12 border-t border-emerald-100/50 dark:border-[#2A2F3A]/50">
-                    <h3 className="text-lg font-black text-slate-900 dark:text-white text-center mb-6">Frequently Asked Questions</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {[
-                        { q: "Do harvesters include experienced operators?", a: "Yes. All listed combine harvesters include a certified machine operator who handles transport, field configuration, and harvesting operations directly." },
-                        { q: "How are paddy crop fields harvested?", a: "For paddy/rice field harvesting, we recommend selecting 'Paddy Harvester' type machines (like Kubota crawlers) which feature continuous rubber tracks designed not to sink in wet paddy mud." },
-                        { q: "What does Capacity (Acres/hr) mean?", a: "It represents the average field processing rate. A machine with '5 acres/hr' capacity will complete a 10-acre harvesting job in roughly 2 operating hours under standard crop density." },
-                        { q: "How is delivery scheduled?", a: "Once your booking request is confirmed, the owner will contact you to coordinate arrival timings, tractor trailering routes, and outline any field accessibility requirements." }
-                      ].map((faq, idx) => (
-                        <div key={idx} className="rounded-2xl border border-emerald-100/80 dark:border-[#2A2F3A] bg-white/50 dark:bg-[#161B22]/50 p-5 shadow-xs">
-                          <h4 className="text-xs font-black text-slate-900 dark:text-white flex items-start gap-1.5">
-                            <Info className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
-                            {faq.q}
-                          </h4>
-                          <p className="text-xs text-slate-600 dark:text-[#C9D1D9] mt-2 leading-relaxed ml-5">{faq.a}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+
                 </div>
 
               </div>

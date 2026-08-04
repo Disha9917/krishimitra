@@ -755,30 +755,6 @@ export default function ColdStoragePage() {
                   🏭 List Your Cold Storage
                 </button>
               </div>
-
-              <div className="inline-flex rounded-2xl bg-white/80 dark:bg-[#161B22]/90 p-1.5 border border-emerald-100 dark:border-[#2A2F3A] backdrop-blur-md shadow-sm">
-                <button
-                  onClick={() => setActiveTab("my-bookings")}
-                  className={`flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${activeTab === "my-bookings" ? "bg-emerald-600 text-white" : "text-slate-600 dark:text-[#8B949E] hover:bg-slate-100 dark:hover:bg-slate-800/40"}`}
-                >
-                  <FileText className="h-3.5 w-3.5" />
-                  My Bookings ({bookings.length})
-                </button>
-                <button
-                  onClick={() => setActiveTab("my-chambers")}
-                  className={`flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${activeTab === "my-chambers" ? "bg-emerald-600 text-white" : "text-slate-600 dark:text-[#8B949E] hover:bg-slate-100 dark:hover:bg-slate-800/40"}`}
-                >
-                  <TrendingUp className="h-3.5 w-3.5" />
-                  Owner Dashboard
-                </button>
-                <button
-                  onClick={() => setActiveTab("admin")}
-                  className={`flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${activeTab === "admin" ? "bg-emerald-600 text-white" : "text-slate-600 dark:text-[#8B949E] hover:bg-slate-100 dark:hover:bg-slate-800/40"}`}
-                >
-                  <ShieldCheck className="h-3.5 w-3.5" />
-                  Admin
-                </button>
-              </div>
             </div>
           </Container>
         </section>

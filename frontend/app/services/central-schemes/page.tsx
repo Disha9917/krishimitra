@@ -115,25 +115,6 @@ export default function CentralSchemesPage() {
           </Container>
         </section>
 
-        {/* FAQs */}
-        <section className="py-16 bg-transparent border-t border-emerald-100/60 dark:border-[#2A2F3A]">
-          <Container className="max-w-3xl space-y-8">
-            <h2 className="text-3xl font-black text-slate-900 dark:text-white text-center">Frequently Asked Questions</h2>
-            <div className="space-y-4">
-              {[
-                { q: "How are central schemes different from state schemes?", a: "Central schemes are fully or partially funded by the Central Government of India and implemented across all states, while state schemes focus on region-specific needs." },
-                { q: "Can I avail benefits from multiple central schemes?", a: "Yes, as long as your land records and crop profiles satisfy each scheme's eligibility prerequisites." },
-                { q: "Where do I submit physical documents if required?", a: "Applications are submitted online; document verification is conducted at your local District Agriculture Office or CSC." },
-              ].map((faq, i) => (
-                <div key={i} className="rounded-2xl border border-emerald-100/80 dark:border-[#2A2F3A] bg-white/80 dark:bg-[#161B22]/90 backdrop-blur-md p-5 shadow-xs">
-                  <h4 className="text-sm font-bold text-slate-900 dark:text-white">{faq.q}</h4>
-                  <p className="text-xs text-slate-600 dark:text-[#C9D1D9] mt-2 leading-relaxed">{faq.a}</p>
-                </div>
-              ))}
-            </div>
-          </Container>
-        </section>
-
         {/* Dialog Modal */}
         {selectedScheme && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
