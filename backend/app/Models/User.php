@@ -12,9 +12,11 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
+    use HasApiTokens;
     use HasFactory;
     use HasUuids;
     use Notifiable;
@@ -58,6 +60,33 @@ class User extends Authenticatable
     public function getAuthPassword(): ?string
     {
         return $this->password_hash;
+    }
+
+    public function isActive(): bool
+    {
+        return (bool) $this->is_active;
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->phone_verified_at !== null || $this->email_verified_at !== null;
+    }
+
+    public function hasRole(string $code): bool
+    {
+        return $this->roles()->where('code', $code)->exists();
+    }
+
+    public function hasAnyRole(array $codes): bool
+    {
+        return $this->roles()->whereIn('code', $codes)->exists();
+    }
+
+    public function hasPermission(string $code): bool
+    {
+        return $this->roles()
+            ->whereHas('permissions', fn ($query) => $query->where('permissions.code', $code))
+            ->exists();
     }
 
     /**
