@@ -17,18 +17,64 @@ class EloquentFarmerCropRepository extends BaseEloquentRepository implements Far
 
     public function cropsForUser(int $userId): Collection
     {
-            return $this->model
-                ->where('user_id', $userId)
-                ->with(['crop', 'field'])
-                ->orderByDesc('id')
-                ->get();
+        return $this->model
+            ->where('user_id', $userId)
+            ->with(['crop', 'field'])
+            ->orderByDesc('id')
+            ->get();
     }
 
     public function cropsForField(int $fieldId): Collection
     {
-            return $this->model
-                ->where('field_id', $fieldId)
-                ->orderByDesc('id')
-                ->get();
+        return $this->model
+            ->where('field_id', $fieldId)
+            ->orderByDesc('id')
+            ->get();
+    }
+
+    public function findForUser(int $userId, int $cropId): ?FarmerCrop
+    {
+        return $this->model
+            ->where('user_id', $userId)
+            ->with(['crop', 'field', 'harvests'])
+            ->find($cropId);
+    }
+
+    public function activeCropsForUser(int $userId): Collection
+    {
+        return $this->model
+            ->where('user_id', $userId)
+            ->where('is_current', true)
+            ->with(['crop', 'field'])
+            ->orderByDesc('sowing_date')
+            ->get();
+    }
+
+    public function seasonalCropsForUser(int $userId, string $season): Collection
+    {
+        return $this->model
+            ->where('user_id', $userId)
+            ->where('season', $season)
+            ->with(['crop', 'field'])
+            ->orderByDesc('id')
+            ->get();
+    }
+
+    public function cropHistoryForUser(int $userId): Collection
+    {
+        return $this->model
+            ->withTrashed()
+            ->where('user_id', $userId)
+            ->with(['crop', 'field', 'harvests'])
+            ->orderByDesc('id')
+            ->get();
+    }
+
+    public function activeCropForField(int $fieldId): ?FarmerCrop
+    {
+        return $this->model
+            ->where('field_id', $fieldId)
+            ->where('is_current', true)
+            ->first();
     }
 }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Services\Farmer;
 
-use App\Models\FarmerCrop;
 use App\Models\FarmerField;
 use App\Models\FarmerProfile;
 use App\Models\User;
@@ -35,8 +34,7 @@ class FarmerService implements FarmerServiceInterface
         private readonly HarvestRepositoryInterface $harvests,
         private readonly DiseaseDetectionRepositoryInterface $detections,
         private readonly NotificationRepositoryInterface $notifications,
-    ) {
-    }
+    ) {}
 
     public function registerFarmer(string $phone, string $fullName, string $pincode, string $preferredLanguage = 'gu'): User
     {
@@ -102,6 +100,11 @@ class FarmerService implements FarmerServiceInterface
         return $this->profiles->update((int) $profile->id, $this->profileAttributes($attributes));
     }
 
+    public function getProfile(int $userId): ?FarmerProfile
+    {
+        return $this->profiles->findFirstWhere(['user_id' => $userId]);
+    }
+
     public function dashboard(int $userId): FarmerDashboardDTO
     {
         return FarmerDashboardDTO::assemble(
@@ -122,6 +125,22 @@ class FarmerService implements FarmerServiceInterface
         ]);
     }
 
+    public function fieldsForUser(int $userId): Collection
+    {
+        return $this->fields->linkedFields($userId);
+    }
+
+    public function getField(int $userId, int $fieldId): ?FarmerField
+    {
+        $field = $this->fields->findById($fieldId);
+
+        if ($field === null || (int) $field->user_id !== $userId) {
+            return null;
+        }
+
+        return $field;
+    }
+
     public function updateField(int $userId, int $fieldId, array $data): ?FarmerField
     {
         $field = $this->assertFieldOwnership($userId, $fieldId);
@@ -134,19 +153,6 @@ class FarmerService implements FarmerServiceInterface
         $field = $this->assertFieldOwnership($userId, $fieldId);
 
         return $this->fields->delete((int) $field->id);
-    }
-
-    public function recordCrop(int $userId, array $data): FarmerCrop
-    {
-        return $this->farmerCrops->create([
-            'user_id' => $userId,
-            ...$data,
-        ]);
-    }
-
-    public function cropsForUser(int $userId): Collection
-    {
-        return $this->farmerCrops->cropsForUser($userId);
     }
 
     /**

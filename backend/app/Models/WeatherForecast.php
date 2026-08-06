@@ -23,6 +23,8 @@ class WeatherForecast extends Model
         'rainfall_probability_pct',
         'humidity_pct',
         'wind_speed_kmh',
+        'sunrise_at',
+        'sunset_at',
         'irrigation_needed',
         'disease_risk',
         'provider',
@@ -35,6 +37,8 @@ class WeatherForecast extends Model
         'rainfall_probability_pct' => 'integer',
         'humidity_pct' => 'integer',
         'wind_speed_kmh' => 'decimal:2',
+        'sunrise_at' => 'datetime',
+        'sunset_at' => 'datetime',
         'irrigation_needed' => 'boolean',
     ];
 

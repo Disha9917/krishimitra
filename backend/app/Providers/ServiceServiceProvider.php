@@ -38,6 +38,8 @@ use App\Services\Soil\SoilService;
 use App\Services\Soil\SoilServiceInterface;
 use App\Services\Transport\TransportService;
 use App\Services\Transport\TransportServiceInterface;
+use App\Services\Weather\Providers\OpenMeteoProvider;
+use App\Services\Weather\Providers\WeatherProviderInterface;
 use App\Services\Weather\WeatherService;
 use App\Services\Weather\WeatherServiceInterface;
 use Illuminate\Support\ServiceProvider;
@@ -53,6 +55,7 @@ class ServiceServiceProvider extends ServiceProvider
         $this->app->bind(FarmerServiceInterface::class, FarmerService::class);
         $this->app->bind(CropServiceInterface::class, CropService::class);
         $this->app->bind(WeatherServiceInterface::class, WeatherService::class);
+        $this->app->bind(WeatherProviderInterface::class, OpenMeteoProvider::class);
         $this->app->bind(SoilServiceInterface::class, SoilService::class);
         $this->app->bind(DiseaseServiceInterface::class, DiseaseService::class);
         $this->app->bind(MarketServiceInterface::class, MarketService::class);

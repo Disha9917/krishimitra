@@ -23,9 +23,10 @@ final readonly class WeatherSnapshotDTO
         public ?string $condition = null,
         public ?int $uvIndex = null,
         public ?int $airQualityIndex = null,
+        public ?Carbon $sunriseAt = null,
+        public ?Carbon $sunsetAt = null,
         public ?Carbon $observedAt = null,
-    ) {
-    }
+    ) {}
 
     public static function fromModel(WeatherCache $cache): self
     {
@@ -40,6 +41,8 @@ final readonly class WeatherSnapshotDTO
             condition: $cache->condition,
             uvIndex: $cache->uv_index,
             airQualityIndex: $cache->air_quality_index,
+            sunriseAt: $cache->sunrise_at,
+            sunsetAt: $cache->sunset_at,
             observedAt: $cache->observed_at,
         );
     }

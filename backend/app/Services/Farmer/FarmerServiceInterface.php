@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Services\Farmer;
 
-use App\Models\FarmerCrop;
 use App\Models\FarmerField;
 use App\Models\FarmerProfile;
 use App\Models\User;
@@ -26,6 +25,11 @@ interface FarmerServiceInterface
     public function updateProfile(int $userId, array $attributes): ?FarmerProfile;
 
     /**
+     * Fetch the farmer profile, or null when none exists yet.
+     */
+    public function getProfile(int $userId): ?FarmerProfile;
+
+    /**
      * Aggregate every farmer-scoped record into a dashboard payload.
      */
     public function dashboard(int $userId): FarmerDashboardDTO;
@@ -34,6 +38,16 @@ interface FarmerServiceInterface
      * Register a new field owned by the user.
      */
     public function addField(int $userId, array $data): FarmerField;
+
+    /**
+     * List every field owned by the user (with soil type and current crop).
+     */
+    public function fieldsForUser(int $userId): Collection;
+
+    /**
+     * Fetch one of the user's fields, or null when missing or not owned.
+     */
+    public function getField(int $userId, int $fieldId): ?FarmerField;
 
     /**
      * Update an existing field, enforcing ownership.
@@ -48,14 +62,4 @@ interface FarmerServiceInterface
      * @throws \DomainException when the field belongs to another user
      */
     public function deleteField(int $userId, int $fieldId): bool;
-
-    /**
-     * Register a planted crop for a farmer.
-     */
-    public function recordCrop(int $userId, array $data): FarmerCrop;
-
-    /**
-     * List every planted crop for a farmer.
-     */
-    public function cropsForUser(int $userId): Collection;
 }

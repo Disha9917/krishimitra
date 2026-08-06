@@ -31,6 +31,8 @@ class WeatherCache extends Model
         'condition',
         'uv_index',
         'air_quality_index',
+        'sunrise_at',
+        'sunset_at',
         'observed_at',
     ];
 
@@ -42,6 +44,8 @@ class WeatherCache extends Model
         'wind_speed_kmh' => 'decimal:2',
         'uv_index' => 'integer',
         'air_quality_index' => 'integer',
+        'sunrise_at' => 'datetime',
+        'sunset_at' => 'datetime',
         'observed_at' => 'datetime',
     ];
 

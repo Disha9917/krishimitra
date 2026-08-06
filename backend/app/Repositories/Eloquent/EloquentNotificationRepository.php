@@ -17,26 +17,35 @@ class EloquentNotificationRepository extends BaseEloquentRepository implements N
 
     public function unreadForUser(int $userId): Collection
     {
-            return $this->model
-                ->where('user_id', $userId)
-                ->where('is_read', false)
-                ->orderByDesc('id')
-                ->get();
+        return $this->model
+            ->where('user_id', $userId)
+            ->where('is_read', false)
+            ->orderByDesc('id')
+            ->get();
     }
 
     public function unreadCount(int $userId): int
     {
-            return $this->model
-                ->where('user_id', $userId)
-                ->where('is_read', false)
-                ->count();
+        return $this->model
+            ->where('user_id', $userId)
+            ->where('is_read', false)
+            ->count();
     }
 
     public function markAllRead(int $userId): int
     {
-            return $this->model
-                ->where('user_id', $userId)
-                ->where('is_read', false)
-                ->update(['is_read' => true, 'read_at' => now()]);
+        return $this->model
+            ->where('user_id', $userId)
+            ->where('is_read', false)
+            ->update(['is_read' => true, 'read_at' => now()]);
+    }
+
+    public function forUserByType(int $userId, string $type): Collection
+    {
+        return $this->model
+            ->where('user_id', $userId)
+            ->where('type', $type)
+            ->orderByDesc('id')
+            ->get();
     }
 }
