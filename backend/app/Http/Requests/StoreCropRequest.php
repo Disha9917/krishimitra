@@ -1,0 +1,31 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class StoreCropRequest extends FormRequest
+{
+    public function authorize(): bool
+    {
+        return $this->user() !== null;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function rules(): array
+    {
+        return [
+            'cropId' => ['required', 'integer', 'exists:crops,id'],
+            'fieldId' => ['required', 'integer', 'exists:farmer_fields,id'],
+            'season' => ['required', 'string', 'max:30'],
+            'sowingDate' => ['sometimes', 'nullable', 'date'],
+            'expectedHarvestDate' => ['sometimes', 'nullable', 'date'],
+            'isCurrent' => ['sometimes', 'boolean'],
+            'allowOverlap' => ['sometimes', 'boolean'],
+        ];
+    }
+}
