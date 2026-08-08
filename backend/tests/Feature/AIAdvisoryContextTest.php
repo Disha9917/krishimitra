@@ -166,6 +166,28 @@ class AIAdvisoryContextTest extends TestCase
         $this->assertStringContainsString('flag: true', $prompt);
     }
 
+    public function test_history_stores_prompt_context_snapshot_and_response(): void
+    {
+        $user = $this->makeUser();
+
+        $this->actingAs($user, 'sanctum')->postJson('/v1/ai/advisory', [
+            'topic' => 'Fertilizer advice for my farm',
+            'advisory_type' => 'crop',
+            'context' => ['crop' => 'wheat'],
+        ])->assertCreated();
+
+        $history = $this->actingAs($user, 'sanctum')->getJson('/v1/ai/history')->assertOk();
+        $history->assertJsonCount(1, 'data');
+        $this->assertSame('crop', $history->json('data.0.advisoryType'));
+        $this->assertSame('wheat', $history->json('data.0.contextSnapshot.crop.requested.value'));
+        $this->assertArrayHasKey('dashboard', $history->json('data.0.contextSnapshot'));
+        $this->assertArrayHasKey('weather', $history->json('data.0.contextSnapshot'));
+        $this->assertStringContainsString('## Strict JSON Output Contract', (string) $history->json('data.0.prompt'));
+        $this->assertArrayHasKey('input_tokens', $history->json('data.0.usage'));
+        $this->assertNotNull($history->json('data.0.latencyMs'));
+        $this->assertNotNull($history->json('data.0.response'));
+    }
+
     /**
      * Replace the active provider with one that records the assembled
      * context and prompt so tests can inspect the engine output.

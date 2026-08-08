@@ -20,6 +20,7 @@ class AdvisoryResource extends JsonResource
 
         return [
             'content' => $response->content,
+            'data' => $response->raw['payload'] ?? null,
             'provider' => $response->provider,
             'model' => $response->model,
             'usage' => [

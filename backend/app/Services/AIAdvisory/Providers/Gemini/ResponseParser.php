@@ -8,9 +8,11 @@ use JsonException;
 
 /**
  * Validates and normalizes the Gemini JSON payload into the canonical
- * advisory shape. Malformed or empty input yields null so the provider can
- * retry once and finally fall back to a safe response - the advisory flow
- * never crashes on bad model output.
+ * advisory shape: summary, riskLevel, confidence, sevenDayPlan, the
+ * nine-module recommendations map, priorityTasks and avoid list. Malformed
+ * or empty input yields null so the provider can retry once and finally fall
+ * back to a safe response - the advisory flow never crashes on bad model
+ * output. Legacy list-shaped recommendations are folded into the module map.
  */
 class ResponseParser
 {
@@ -18,7 +20,19 @@ class ResponseParser
 
     private const PRIORITIES = ['Low', 'Medium', 'High'];
 
-    private const CATEGORIES = ['Weather', 'Soil', 'Crop', 'Disease', 'Market', 'Government', 'Equipment', 'Transport', 'Storage'];
+    private const MODULES = ['weather', 'soil', 'crop', 'disease', 'market', 'schemes', 'equipment', 'storage', 'transport'];
+
+    private const LEGACY_CATEGORY_TO_MODULE = [
+        'Weather' => 'weather',
+        'Soil' => 'soil',
+        'Crop' => 'crop',
+        'Disease' => 'disease',
+        'Market' => 'market',
+        'Government' => 'schemes',
+        'Equipment' => 'equipment',
+        'Storage' => 'storage',
+        'Transport' => 'transport',
+    ];
 
     /**
      * @return array<string, mixed>|null
@@ -90,65 +104,181 @@ class ResponseParser
      */
     private function normalize(array $payload): array
     {
-        $recommendations = [];
-
-        foreach ($this->asList($payload['recommendations'] ?? []) as $recommendation) {
-            if (is_array($recommendation)) {
-                $recommendations[] = $this->normalizeRecommendation($recommendation);
-            }
-        }
-
         $riskLevel = (string) ($payload['riskLevel'] ?? 'Low');
         $confidence = (float) ($payload['confidence'] ?? 0.0);
 
         return [
             'summary' => (string) ($payload['summary'] ?? ''),
             'riskLevel' => in_array($riskLevel, self::RISK_LEVELS, true) ? $riskLevel : 'Low',
-            'confidence' => max(0.0, min(1.0, $confidence)),
-            'recommendations' => $recommendations,
-            'alerts' => $this->normalizeAlerts($this->asList($payload['alerts'] ?? [])),
-            'bestMarket' => $this->asMap($payload['bestMarket'] ?? null),
-            'eligibleSchemes' => $this->asList($payload['eligibleSchemes'] ?? []),
-            'nextReviewDate' => (string) ($payload['nextReviewDate'] ?? ''),
+            'confidence' => round(max(0.0, min(1.0, $confidence)), 4),
+            'sevenDayPlan' => $this->normalizeSevenDayPlan($payload['sevenDayPlan'] ?? []),
+            'recommendations' => $this->normalizeRecommendations($payload['recommendations'] ?? []),
+            'priorityTasks' => $this->normalizePriorityTasks($payload['priorityTasks'] ?? []),
+            'avoid' => $this->normalizeAvoid($payload['avoid'] ?? []),
         ];
     }
 
     /**
-     * @param  array<string, mixed>  $recommendation
-     * @return array<string, mixed>
-     */
-    private function normalizeRecommendation(array $recommendation): array
-    {
-        $priority = (string) ($recommendation['priority'] ?? 'Medium');
-        $category = (string) ($recommendation['category'] ?? 'Crop');
-
-        return [
-            'title' => (string) ($recommendation['title'] ?? ''),
-            'description' => (string) ($recommendation['description'] ?? ''),
-            'priority' => in_array($priority, self::PRIORITIES, true) ? $priority : 'Medium',
-            'category' => in_array($category, self::CATEGORIES, true) ? $category : 'Crop',
-        ];
-    }
-
-    /**
-     * @param  list<mixed>  $alerts
      * @return list<array<string, mixed>>
      */
-    private function normalizeAlerts(array $alerts): array
+    private function normalizeSevenDayPlan(mixed $plan): array
     {
         $normalized = [];
 
-        foreach ($alerts as $alert) {
-            if (is_array($alert)) {
+        foreach ($this->asList($plan) as $day) {
+            if (! is_array($day)) {
+                continue;
+            }
+
+            $normalized[] = [
+                'day' => (int) ($day['day'] ?? 0),
+                'date' => (string) ($day['date'] ?? ''),
+                'focus' => (string) ($day['focus'] ?? ''),
+                'actions' => $this->stringList($day['actions'] ?? []),
+                'weatherNotes' => (string) ($day['weatherNotes'] ?? ''),
+            ];
+        }
+
+        usort($normalized, fn (array $a, array $b): int => $a['day'] <=> $b['day']);
+
+        return $normalized;
+    }
+
+    /**
+     * @return array<string, array<string, mixed>>
+     */
+    private function normalizeRecommendations(mixed $recommendations): array
+    {
+        $normalized = [];
+
+        foreach ($this->asMap($recommendations) as $module => $content) {
+            $key = strtolower((string) $module);
+
+            if (in_array($key, self::MODULES, true) && is_array($content)) {
+                $normalized[$key] = $this->normalizeModule($content);
+            }
+        }
+
+        foreach ($this->asList($recommendations) as $legacy) {
+            if (! is_array($legacy)) {
+                continue;
+            }
+
+            $category = (string) ($legacy['category'] ?? '');
+            $module = self::LEGACY_CATEGORY_TO_MODULE[$category] ?? null;
+
+            if ($module === null) {
+                continue;
+            }
+
+            $entry = $this->normalizeModule($legacy);
+            $current = $normalized[$module] ?? ['summary' => '', 'actions' => []];
+
+            if ($entry['summary'] !== '') {
+                $current['summary'] = $current['summary'] !== ''
+                    ? $current['summary'].' '.$entry['summary']
+                    : $entry['summary'];
+            }
+
+            $current['actions'] = [...$current['actions'], ...$entry['actions']];
+            $normalized[$module] = $current;
+        }
+
+        return $normalized;
+    }
+
+    /**
+     * @param  array<string, mixed>  $content
+     * @return array<string, mixed>
+     */
+    private function normalizeModule(array $content): array
+    {
+        $summary = (string) ($content['summary'] ?? '');
+        $summary = $summary !== '' ? $summary : (string) ($content['title'] ?? '');
+
+        $actions = $this->stringList($content['actions'] ?? []);
+
+        if ($actions === [] && isset($content['description'])) {
+            $actions = [(string) $content['description']];
+        }
+
+        $normalized = [
+            'summary' => $summary,
+            'actions' => $actions,
+        ];
+
+        foreach ($content as $key => $value) {
+            if (! in_array($key, ['summary', 'actions', 'title', 'description'], true)) {
+                $normalized[$key] = $value;
+            }
+        }
+
+        return $normalized;
+    }
+
+    /**
+     * @return list<array<string, string>>
+     */
+    private function normalizePriorityTasks(mixed $tasks): array
+    {
+        $normalized = [];
+
+        foreach ($this->asList($tasks) as $task) {
+            if (! is_array($task)) {
+                continue;
+            }
+
+            $priority = (string) ($task['priority'] ?? 'Medium');
+
+            $normalized[] = [
+                'task' => (string) ($task['task'] ?? ''),
+                'reason' => (string) ($task['reason'] ?? ''),
+                'priority' => in_array($priority, self::PRIORITIES, true) ? $priority : 'Medium',
+            ];
+        }
+
+        return $normalized;
+    }
+
+    /**
+     * @return list<array<string, string>>
+     */
+    private function normalizeAvoid(mixed $avoid): array
+    {
+        $normalized = [];
+
+        foreach ($this->asList($avoid) as $item) {
+            if (is_string($item)) {
+                $normalized[] = ['action' => $item, 'reason' => ''];
+
+                continue;
+            }
+
+            if (is_array($item)) {
                 $normalized[] = [
-                    'title' => (string) ($alert['title'] ?? ''),
-                    'message' => (string) ($alert['message'] ?? ''),
-                    'severity' => (string) ($alert['severity'] ?? 'Info'),
+                    'action' => (string) ($item['action'] ?? ''),
+                    'reason' => (string) ($item['reason'] ?? ''),
                 ];
             }
         }
 
         return $normalized;
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function stringList(mixed $value): array
+    {
+        $strings = [];
+
+        foreach ($this->asList($value) as $item) {
+            if (is_string($item) && trim($item) !== '') {
+                $strings[] = $item;
+            }
+        }
+
+        return $strings;
     }
 
     /**

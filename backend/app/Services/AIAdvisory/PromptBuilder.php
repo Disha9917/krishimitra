@@ -41,8 +41,45 @@ class PromptBuilder implements PromptBuilderInterface
             $lines[] = '';
         }
 
-        $lines[] = 'Give a clear, numbered recommendation list followed by do\'s and don\'ts.';
-        $lines[] = 'If the topic cannot be answered safely, say so and suggest where the farmer can get help.';
+        $lines[] = '## Strict JSON Output Contract';
+        $lines[] = 'Return ONLY one valid JSON object. Never return markdown, code fences, or explanations outside JSON.';
+        $lines[] = 'Every field must follow this exact schema. Use only data present in the structured context; never invent numbers, prices, schemes or locations.';
+        $lines[] = '';
+        $lines[] = '{';
+        $lines[] = '  "summary": "Executive summary of the whole advisory (2-4 sentences)",';
+        $lines[] = '  "riskLevel": "Low" | "Medium" | "High",';
+        $lines[] = '  "confidence": number between 0 and 1,';
+        $lines[] = '  "sevenDayPlan": [';
+        $lines[] = '    {';
+        $lines[] = '      "day": 1,';
+        $lines[] = '      "date": "YYYY-MM-DD",';
+        $lines[] = '      "focus": "Main focus of this day",';
+        $lines[] = '      "actions": ["Action for the day"],';
+        $lines[] = '      "weatherNotes": "How weather affects today\'s work"';
+        $lines[] = '    }';
+        $lines[] = '  ],';
+        $lines[] = '  "recommendations": {';
+        $lines[] = '    "weather": { "summary": "string", "actions": ["string"] },';
+        $lines[] = '    "soil": { "summary": "string", "actions": ["string"] },';
+        $lines[] = '    "crop": { "summary": "string", "actions": ["string"] },';
+        $lines[] = '    "disease": { "summary": "string", "actions": ["string"] },';
+        $lines[] = '    "market": { "summary": "string", "actions": ["string"] },';
+        $lines[] = '    "schemes": { "summary": "string", "actions": ["string"] },';
+        $lines[] = '    "equipment": { "summary": "string", "actions": ["string"] },';
+        $lines[] = '    "storage": { "summary": "string", "actions": ["string"] },';
+        $lines[] = '    "transport": { "summary": "string", "actions": ["string"] }';
+        $lines[] = '  },';
+        $lines[] = '  "priorityTasks": [';
+        $lines[] = '    { "task": "What to do", "reason": "Why it matters", "priority": "High" | "Medium" | "Low" }';
+        $lines[] = '  ],';
+        $lines[] = '  "avoid": [';
+        $lines[] = '    { "action": "What NOT to do", "reason": "Why to avoid it" }';
+        $lines[] = '  ]';
+        $lines[] = '}';
+        $lines[] = '';
+        $lines[] = 'Only include the nine recommendation modules when you have real supporting data in the context.';
+        $lines[] = 'When a module has no supporting data, omit its key entirely. Never fill a module with guesses.';
+        $lines[] = 'Use the "avoid" list for dangerous or wasteful practices. If the topic cannot be answered safely, say so in "summary" and suggest where the farmer can get help.';
 
         return implode("\n", $lines);
     }

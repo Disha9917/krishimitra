@@ -20,34 +20,78 @@ class PromptTemplates
      */
     public static function expectedJsonSchema(): array
     {
+        $moduleRecommendation = [
+            'type' => 'object',
+            'properties' => [
+                'summary' => ['type' => 'string'],
+                'actions' => [
+                    'type' => 'array',
+                    'items' => ['type' => 'string'],
+                ],
+            ],
+            'additionalProperties' => true,
+        ];
+
         return [
             'type' => 'object',
             'properties' => [
                 'summary' => ['type' => 'string'],
                 'riskLevel' => ['type' => 'string', 'enum' => ['Low', 'Medium', 'High']],
                 'confidence' => ['type' => 'number', 'minimum' => 0, 'maximum' => 1],
-                'recommendations' => [
+                'sevenDayPlan' => [
                     'type' => 'array',
                     'items' => [
                         'type' => 'object',
                         'properties' => [
-                            'title' => ['type' => 'string'],
-                            'description' => ['type' => 'string'],
-                            'priority' => ['type' => 'string', 'enum' => ['High', 'Medium', 'Low']],
-                            'category' => [
-                                'type' => 'string',
-                                'enum' => ['Weather', 'Soil', 'Crop', 'Disease', 'Market', 'Government', 'Equipment', 'Transport', 'Storage'],
-                            ],
+                            'day' => ['type' => 'integer', 'minimum' => 1],
+                            'date' => ['type' => 'string'],
+                            'focus' => ['type' => 'string'],
+                            'actions' => ['type' => 'array', 'items' => ['type' => 'string']],
+                            'weatherNotes' => ['type' => 'string'],
                         ],
-                        'required' => ['title', 'description', 'priority', 'category'],
+                        'required' => ['day', 'date', 'focus', 'actions'],
                     ],
                 ],
-                'alerts' => ['type' => 'array'],
-                'bestMarket' => ['type' => 'object'],
-                'eligibleSchemes' => ['type' => 'array'],
-                'nextReviewDate' => ['type' => 'string'],
+                'recommendations' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'weather' => $moduleRecommendation,
+                        'soil' => $moduleRecommendation,
+                        'crop' => $moduleRecommendation,
+                        'disease' => $moduleRecommendation,
+                        'market' => $moduleRecommendation,
+                        'schemes' => $moduleRecommendation,
+                        'equipment' => $moduleRecommendation,
+                        'storage' => $moduleRecommendation,
+                        'transport' => $moduleRecommendation,
+                    ],
+                    'additionalProperties' => true,
+                ],
+                'priorityTasks' => [
+                    'type' => 'array',
+                    'items' => [
+                        'type' => 'object',
+                        'properties' => [
+                            'task' => ['type' => 'string'],
+                            'reason' => ['type' => 'string'],
+                            'priority' => ['type' => 'string', 'enum' => ['High', 'Medium', 'Low']],
+                        ],
+                        'required' => ['task', 'reason', 'priority'],
+                    ],
+                ],
+                'avoid' => [
+                    'type' => 'array',
+                    'items' => [
+                        'type' => 'object',
+                        'properties' => [
+                            'action' => ['type' => 'string'],
+                            'reason' => ['type' => 'string'],
+                        ],
+                        'required' => ['action', 'reason'],
+                    ],
+                ],
             ],
-            'required' => ['summary', 'riskLevel', 'confidence', 'recommendations'],
+            'required' => ['summary', 'riskLevel', 'confidence', 'sevenDayPlan', 'recommendations', 'priorityTasks', 'avoid'],
         ];
     }
 

@@ -39,7 +39,9 @@ class AIAdvisoryService implements AIAdvisoryServiceInterface
         $this->advisories->create([
             'user_id' => $userId,
             'advisory_type' => $request->advisoryType,
+            'topic' => $request->topic,
             'input_snapshot' => $request->toArray(),
+            'context_snapshot' => $context->sections,
             'top3_advisories' => [],
             'irrigation_plan' => [],
             'fertilizer_plan' => [],
@@ -47,6 +49,8 @@ class AIAdvisoryService implements AIAdvisoryServiceInterface
             'timeline_7_days' => [],
             'provider' => $response->provider,
             'model_version' => $response->model,
+            'risk_level' => $response->raw['payload']['riskLevel'] ?? null,
+            'confidence' => $response->raw['payload']['confidence'] ?? null,
             'prompt_text' => $prompt,
             'response_content' => $response->content,
             'usage' => $response->usage,

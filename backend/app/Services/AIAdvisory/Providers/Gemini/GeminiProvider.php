@@ -72,7 +72,10 @@ class GeminiProvider implements AIProviderInterface
             usage: $this->normalizeUsage($attempt['usage']),
             latencyMs: $this->latencyMs($started),
             createdAt: CarbonImmutable::now(),
-            raw: ['attempts' => $this->retryHandler->attemptsUsed()],
+            raw: [
+                'attempts' => $this->retryHandler->attemptsUsed(),
+                'payload' => $attempt['payload'],
+            ],
         );
     }
 
@@ -134,7 +137,18 @@ class GeminiProvider implements AIProviderInterface
             model: $this->model(),
             content: $content,
             latencyMs: $this->latencyMs($started),
-            raw: ['error' => $reason],
+            raw: [
+                'error' => $reason,
+                'payload' => [
+                    'summary' => $content,
+                    'riskLevel' => 'Medium',
+                    'confidence' => 0.0,
+                    'sevenDayPlan' => [],
+                    'recommendations' => [],
+                    'priorityTasks' => [],
+                    'avoid' => [],
+                ],
+            ],
         );
     }
 

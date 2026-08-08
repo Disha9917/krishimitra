@@ -31,9 +31,24 @@ class GeminiProviderModuleTest extends TestCase
     {
         Http::fake([
             'generativelanguage.googleapis.com/*' => Http::response($this->apiResponse([
-                'text' => '{"summary":"Water your wheat crop in the evening.","riskLevel":"Medium","confidence":0.85,'
-                    .'"recommendations":[{"title":"Evening irrigation","description":"Irrigate after 6 pm to cut evaporation loss.","priority":"High","category":"Weather"}],'
-                    .'"alerts":[],"bestMarket":{},"eligibleSchemes":[],"nextReviewDate":"2026-08-16"}',
+                'text' => json_encode([
+                    'summary' => 'Water your wheat crop in the evening and watch for the heat wave.',
+                    'riskLevel' => 'Medium',
+                    'confidence' => 0.85,
+                    'sevenDayPlan' => [
+                        ['day' => 1, 'date' => '2026-08-09', 'focus' => 'Irrigation', 'actions' => ['Irrigate after 6 pm'], 'weatherNotes' => 'Dry, hot'],
+                    ],
+                    'recommendations' => [
+                        'weather' => ['summary' => 'Hot and dry next 3 days.', 'actions' => ['Irrigate in the evening']],
+                        'crop' => ['summary' => 'Wheat is in grain-filling stage.', 'actions' => ['Monitor moisture']],
+                    ],
+                    'priorityTasks' => [
+                        ['task' => 'Evening irrigation', 'reason' => 'Cut evaporation loss', 'priority' => 'High'],
+                    ],
+                    'avoid' => [
+                        ['action' => 'Do not irrigate at noon', 'reason' => 'High evaporation'],
+                    ],
+                ], JSON_UNESCAPED_UNICODE),
             ])),
         ]);
 
@@ -47,7 +62,12 @@ class GeminiProviderModuleTest extends TestCase
         ])->assertCreated()
             ->assertJsonPath('data.provider', 'gemini')
             ->assertJsonPath('data.model', 'gemini-3.5-flash')
-            ->assertJsonPath('data.usage.totalTokens', 460);
+            ->assertJsonPath('data.usage.totalTokens', 460)
+            ->assertJsonPath('data.data.riskLevel', 'Medium')
+            ->assertJsonPath('data.data.recommendations.crop.actions.0', 'Monitor moisture')
+            ->assertJsonCount(1, 'data.data.sevenDayPlan')
+            ->assertJsonCount(1, 'data.data.priorityTasks')
+            ->assertJsonCount(1, 'data.data.avoid');
 
         Http::assertSentCount(1);
         Http::assertSent(fn ($request): bool => str_contains($request->url(), 'gemini-3.5-flash:generateContent'));
@@ -59,8 +79,11 @@ class GeminiProviderModuleTest extends TestCase
         $this->assertSame('gemini-3.5-flash', $advisory->model_version);
         $this->assertStringContainsString($topic, $advisory->prompt_text);
         $this->assertStringContainsString('## Structured Context', $advisory->prompt_text);
+        $this->assertStringContainsString('## Strict JSON Output Contract', $advisory->prompt_text);
         $this->assertStringContainsString('"summary"', $advisory->response_content);
         $this->assertStringContainsString('Water your wheat crop', $advisory->response_content);
+        $this->assertIsArray($advisory->context_snapshot);
+        $this->assertArrayHasKey('crop', $advisory->context_snapshot);
         $this->assertSame(120, $advisory->usage['prompt_token_count']);
         $this->assertSame(340, $advisory->usage['candidates_token_count']);
         $this->assertSame(460, $advisory->usage['total_tokens']);
@@ -166,21 +189,51 @@ class GeminiProviderModuleTest extends TestCase
     {
         $parser = app(ResponseParser::class);
 
-        $this->assertNotNull($parser->parse('{"summary":"s","riskLevel":"High","confidence":0.5,"recommendations":[{"title":"t","description":"d","priority":"High","category":"Market"}]}'));
+        $this->assertNotNull($parser->parse('{"summary":"s","riskLevel":"High","confidence":0.5,"sevenDayPlan":[],"recommendations":{},"priorityTasks":[],"avoid":[]}'));
         $this->assertNotNull($parser->parse("```json\n{\"summary\":\"fenced\",\"riskLevel\":\"Low\"}\n```"));
 
         $this->assertNull($parser->parse('not json at all'));
         $this->assertNull($parser->parse(''));
         $this->assertNull($parser->parse('[1,2,3]'));
 
-        $coerced = $parser->parse('{"summary":"x","riskLevel":"Extreme","confidence":5,"recommendations":[{"title":"t"}],"bestMarket":{"name":"Unjha Mandi"},"eligibleSchemes":[{"code":"PM-KISAN"}]}');
-        $this->assertIsArray($coerced);
-        $this->assertSame('Low', $coerced['riskLevel']);
-        $this->assertSame(1.0, $coerced['confidence']);
-        $this->assertSame('Medium', $coerced['recommendations'][0]['priority']);
-        $this->assertSame('Crop', $coerced['recommendations'][0]['category']);
-        $this->assertSame('Unjha Mandi', $coerced['bestMarket']['name']);
-        $this->assertSame('PM-KISAN', $coerced['eligibleSchemes'][0]['code']);
+        $parsed = $parser->parse('{"summary":"x","riskLevel":"Extreme","confidence":5,'
+            .'"sevenDayPlan":[{"day":2,"date":"2026-08-10","focus":"Spray","actions":["A","B"],"weatherNotes":"Rain"},'
+            .'{"day":1,"date":"2026-08-09","focus":"Irrigate","actions":["C"],"weatherNotes":"Hot"}],'
+            .'"recommendations":{"weather":{"summary":"Hot","actions":["Irrigate evening"]},'
+            .'"market":{"summary":"Prices rising","actions":["Hold stock"],"bestMandi":"Unjha"}},'
+            .'"priorityTasks":[{"task":"Spray","reason":"Pest window","priority":"Extreme"},{"task":"Irrigate","reason":"Dry soil"}],'
+            .'"avoid":[{"action":"No noon watering","reason":"Evaporation"},{"action":"Just avoid this"}]}');
+
+        $this->assertIsArray($parsed);
+        $this->assertSame('Low', $parsed['riskLevel']);
+        $this->assertSame(1.0, $parsed['confidence']);
+        $this->assertCount(2, $parsed['sevenDayPlan']);
+        $this->assertSame(1, $parsed['sevenDayPlan'][0]['day'], 'Plan must be sorted by day');
+        $this->assertSame(['C'], $parsed['sevenDayPlan'][0]['actions']);
+        $this->assertSame('Hot', $parsed['recommendations']['weather']['summary']);
+        $this->assertSame(['Irrigate evening'], $parsed['recommendations']['weather']['actions']);
+        $this->assertSame('Unjha', $parsed['recommendations']['market']['bestMandi'], 'Extra module keys must be preserved');
+        $this->assertArrayNotHasKey('crop', $parsed['recommendations']);
+        $this->assertSame('Medium', $parsed['priorityTasks'][0]['priority'], 'Invalid priority must be coerced');
+        $this->assertSame('Irrigate', $parsed['priorityTasks'][1]['task']);
+        $this->assertSame('No noon watering', $parsed['avoid'][0]['action']);
+        $this->assertSame('Just avoid this', $parsed['avoid'][1]['action'], 'Plain-string avoid items must be accepted');
+    }
+
+    public function test_response_parser_folds_legacy_list_recommendations_into_modules(): void
+    {
+        $parser = app(ResponseParser::class);
+
+        $parsed = $parser->parse('{"summary":"legacy","recommendations":['
+            .'{"title":"Evening irrigation","description":"Irrigate after 6 pm","priority":"High","category":"Weather"},'
+            .'{"title":"PM-KISAN","description":"Apply for scheme","priority":"Medium","category":"Government"}]}');
+
+        $this->assertIsArray($parsed);
+        $this->assertSame('Evening irrigation', $parsed['recommendations']['weather']['summary']);
+        $this->assertSame('Irrigate after 6 pm', $parsed['recommendations']['weather']['actions'][0]);
+        $this->assertSame('PM-KISAN', $parsed['recommendations']['schemes']['summary']);
+        $this->assertSame('Apply for scheme', $parsed['recommendations']['schemes']['actions'][0]);
+        $this->assertArrayNotHasKey('crop', $parsed['recommendations']);
     }
 
     public function test_retry_handler_retries_null_results_and_transient_errors(): void

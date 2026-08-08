@@ -189,6 +189,33 @@ class AIAdvisoryModuleTest extends TestCase
         $this->assertStringContainsString('temperature: 28', $prompt);
     }
 
+    public function test_prompt_builder_demands_structured_json_only(): void
+    {
+        $builder = app(PromptBuilderInterface::class);
+
+        $context = new AdvisoryContextDTO(
+            topic: 'Cotton pest control',
+            advisoryType: 'disease',
+            locale: 'en',
+            sections: [],
+        );
+
+        $prompt = $builder->build($context);
+
+        $this->assertStringContainsString('## Strict JSON Output Contract', $prompt);
+        $this->assertStringContainsString('Return ONLY one valid JSON object', $prompt);
+        $this->assertStringContainsString('"sevenDayPlan"', $prompt);
+        $this->assertStringContainsString('"recommendations"', $prompt);
+        $this->assertStringContainsString('"priorityTasks"', $prompt);
+        $this->assertStringContainsString('"avoid"', $prompt);
+        $this->assertStringContainsString('"riskLevel"', $prompt);
+        $this->assertStringContainsString('"confidence"', $prompt);
+        foreach (['weather', 'soil', 'crop', 'disease', 'market', 'schemes', 'equipment', 'storage', 'transport'] as $module) {
+            $this->assertStringContainsString('"'.$module.'":', $prompt);
+        }
+        $this->assertStringNotContainsString('numbered recommendation list', $prompt);
+    }
+
     private function requestAdvisory(User $user, string $topic, string $type): void
     {
         $this->actingAs($user, 'sanctum')->postJson('/v1/ai/advisory', [

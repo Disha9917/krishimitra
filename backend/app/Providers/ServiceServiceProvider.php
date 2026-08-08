@@ -8,8 +8,10 @@ use App\Services\AI\AIService;
 use App\Services\AI\AIServiceInterface;
 use App\Services\AIAdvisory\AdvisoryContextBuilder;
 use App\Services\AIAdvisory\AIAdvisoryService;
+use App\Services\AIAdvisory\AIHistoryService;
 use App\Services\AIAdvisory\Contracts\AdvisoryContextBuilderInterface;
 use App\Services\AIAdvisory\Contracts\AIAdvisoryServiceInterface;
+use App\Services\AIAdvisory\Contracts\AIHistoryServiceInterface;
 use App\Services\AIAdvisory\Contracts\AIProviderInterface;
 use App\Services\AIAdvisory\Contracts\PromptBuilderInterface;
 use App\Services\AIAdvisory\PromptBuilder;
@@ -110,6 +112,7 @@ class ServiceServiceProvider extends ServiceProvider
         $this->app->bind(UnifiedDashboardServiceInterface::class, UnifiedDashboardService::class);
         $this->app->bind(AIServiceInterface::class, AIService::class);
         $this->app->bind(AIAdvisoryServiceInterface::class, AIAdvisoryService::class);
+        $this->app->bind(AIHistoryServiceInterface::class, AIHistoryService::class);
         $this->app->bind(AdvisoryContextBuilderInterface::class, AdvisoryContextBuilder::class);
 
         // The active AI provider is resolved from config('ai.providers') so

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\Api\Admin\ImportController;
 use App\Http\Controllers\Api\AIAdvisoryController;
+use App\Http\Controllers\Api\AIHistoryController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ColdStorageBookingController;
 use App\Http\Controllers\Api\ColdStorageController;
@@ -234,8 +235,15 @@ Route::prefix('reports')->middleware(['auth:sanctum', 'active'])->group(function
 
 Route::prefix('ai')->middleware(['auth:sanctum', 'active'])->group(function () {
     Route::post('advisory', [AIAdvisoryController::class, 'store']);
-    Route::get('history', [AIAdvisoryController::class, 'index']);
     Route::get('providers', [AIAdvisoryController::class, 'providers']);
+
+    Route::get('history', [AIHistoryController::class, 'index']);
+    Route::get('history/{id}', [AIHistoryController::class, 'show']);
+    Route::delete('history/{id}', [AIHistoryController::class, 'destroy']);
+    Route::post('history/{id}/favorite', [AIHistoryController::class, 'favorite']);
+    Route::delete('history/{id}/favorite', [AIHistoryController::class, 'unfavorite']);
+    Route::post('history/{id}/feedback', [AIHistoryController::class, 'feedback']);
+    Route::get('favorites', [AIHistoryController::class, 'favorites']);
 });
 
 Route::prefix('admin/imports')->middleware(['auth:sanctum', 'active', 'role:admin'])->group(function () {
@@ -248,3 +256,4 @@ Route::prefix('admin/imports')->middleware(['auth:sanctum', 'active', 'role:admi
     Route::get('{importId}', [ImportController::class, 'show']);
     Route::get('{importId}/logs', [ImportController::class, 'logs']);
 });
+
