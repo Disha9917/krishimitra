@@ -17,9 +17,17 @@ class EloquentUploadedFileRepository extends BaseEloquentRepository implements U
 
     public function filesForUser(int $userId): Collection
     {
-            return $this->model
-                ->where('user_id', $userId)
-                ->orderByDesc('id')
-                ->get();
+        return $this->model
+            ->where('user_id', $userId)
+            ->orderByDesc('id')
+            ->get();
+    }
+
+    public function findForUser(int $userId, int $fileId): ?UploadedFile
+    {
+        return $this->model
+            ->where('id', $fileId)
+            ->where('user_id', $userId)
+            ->first();
     }
 }

@@ -22,18 +22,31 @@ class Report extends Model
         'user_id',
         'title',
         'category',
+        'report_type',
+        'status',
+        'formats',
+        'filters',
+        'data',
+        'files',
+        'is_favorite',
         'file_format',
         'file_size_bytes',
         'file_size_display',
         'summary_text',
         'storage_path',
         'source_ref',
+        'error_message',
         'generated_at',
     ];
 
     protected $casts = [
         'file_size_bytes' => 'integer',
         'generated_at' => 'datetime',
+        'formats' => 'array',
+        'filters' => 'array',
+        'data' => 'array',
+        'files' => 'array',
+        'is_favorite' => 'boolean',
     ];
 
     /**

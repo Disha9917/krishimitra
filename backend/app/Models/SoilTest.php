@@ -18,6 +18,7 @@ class SoilTest extends Model
     protected $fillable = [
         'user_id',
         'field_id',
+        'crop_id',
         'lab_name',
         'report_date',
         'ph',
@@ -26,6 +27,13 @@ class SoilTest extends Model
         'phosphorus_kg_ha',
         'potassium_kg_ha',
         'organic_carbon_pct',
+        'moisture_pct',
+        'micronutrients_json',
+        'soil_texture',
+        'soil_type_id',
+        'health_score',
+        'soil_status',
+        'fertility_level',
         'report_file_id',
     ];
 
@@ -37,6 +45,9 @@ class SoilTest extends Model
         'phosphorus_kg_ha' => 'decimal:2',
         'potassium_kg_ha' => 'decimal:2',
         'organic_carbon_pct' => 'decimal:2',
+        'moisture_pct' => 'decimal:2',
+        'micronutrients_json' => 'array',
+        'health_score' => 'decimal:2',
     ];
 
     /**
@@ -53,6 +64,22 @@ class SoilTest extends Model
     public function field(): BelongsTo
     {
         return $this->belongsTo(FarmerField::class, 'field_id');
+    }
+
+    /**
+     * @return BelongsTo<Crop, $this>
+     */
+    public function crop(): BelongsTo
+    {
+        return $this->belongsTo(Crop::class, 'crop_id');
+    }
+
+    /**
+     * @return BelongsTo<SoilType, $this>
+     */
+    public function soilType(): BelongsTo
+    {
+        return $this->belongsTo(SoilType::class, 'soil_type_id');
     }
 
     /**

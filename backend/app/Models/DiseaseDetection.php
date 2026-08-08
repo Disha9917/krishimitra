@@ -20,13 +20,18 @@ class DiseaseDetection extends Model
     protected $fillable = [
         'uuid',
         'user_id',
+        'field_id',
         'crop_id',
         'disease_id',
         'disease_name',
         'scientific_name',
+        'description',
+        'symptoms',
         'confidence',
         'confidence_score',
         'severity',
+        'detection_source',
+        'detection_status',
         'treatment_snapshot',
         'detected_at',
         'model_version',
@@ -34,6 +39,7 @@ class DiseaseDetection extends Model
 
     protected $casts = [
         'confidence_score' => 'decimal:2',
+        'symptoms' => 'array',
         'treatment_snapshot' => 'array',
         'detected_at' => 'datetime',
     ];
@@ -54,6 +60,14 @@ class DiseaseDetection extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * @return BelongsTo<FarmerField, $this>
+     */
+    public function field(): BelongsTo
+    {
+        return $this->belongsTo(FarmerField::class, 'field_id');
     }
 
     /**

@@ -29,24 +29,33 @@ class Equipment extends Model
         'provider_id',
         'name',
         'equipment_type',
+        'category',
+        'brand',
+        'model',
         'description',
         'hourly_rate',
         'daily_rate',
+        'deposit_amount',
         'pincode',
         'district_id',
+        'taluka_id',
+        'village_id',
         'lat',
         'lng',
         'is_available',
         'image_file_id',
+        'images_json',
         'rating_avg',
     ];
 
     protected $casts = [
         'hourly_rate' => 'decimal:2',
         'daily_rate' => 'decimal:2',
+        'deposit_amount' => 'decimal:2',
         'lat' => 'decimal:6',
         'lng' => 'decimal:6',
         'is_available' => 'boolean',
+        'images_json' => 'array',
         'rating_avg' => 'decimal:2',
     ];
 
@@ -77,6 +86,22 @@ class Equipment extends Model
     }
 
     /**
+     * @return BelongsTo<Taluka, $this>
+     */
+    public function taluka(): BelongsTo
+    {
+        return $this->belongsTo(Taluka::class, 'taluka_id');
+    }
+
+    /**
+     * @return BelongsTo<Village, $this>
+     */
+    public function village(): BelongsTo
+    {
+        return $this->belongsTo(Village::class, 'village_id');
+    }
+
+    /**
      * @return BelongsTo<UploadedFile, $this>
      */
     public function imageFile(): BelongsTo
@@ -90,5 +115,17 @@ class Equipment extends Model
     public function bookings(): HasMany
     {
         return $this->hasMany(EquipmentBooking::class, 'equipment_id');
+    }
+
+    /**
+     * Resolve the uploaded files referenced by the images_json column.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection<int, UploadedFile>
+     */
+    public function imageFiles(): \Illuminate\Database\Eloquent\Collection
+    {
+        $ids = array_values(array_unique(array_map('intval', (array) ($this->images_json ?? []))));
+
+        return UploadedFile::whereIn('id', $ids)->get();
     }
 }

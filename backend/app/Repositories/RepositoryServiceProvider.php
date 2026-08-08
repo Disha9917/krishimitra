@@ -55,6 +55,7 @@ use App\Repositories\Contracts\SoilTypeRepositoryInterface;
 use App\Repositories\Contracts\TalukaRepositoryInterface;
 use App\Repositories\Contracts\TestimonialRepositoryInterface;
 use App\Repositories\Contracts\ThemeSettingRepositoryInterface;
+use App\Repositories\Contracts\TransportBookingRepositoryInterface;
 use App\Repositories\Contracts\TransportCalculationRepositoryInterface;
 use App\Repositories\Contracts\TransportRouteRepositoryInterface;
 use App\Repositories\Contracts\TransportVehicleTypeRepositoryInterface;
@@ -63,6 +64,7 @@ use App\Repositories\Contracts\UploadedFileRepositoryInterface;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Repositories\Contracts\UserRoleRepositoryInterface;
 use App\Repositories\Contracts\UserSettingRepositoryInterface;
+use App\Repositories\Contracts\VehicleRepositoryInterface;
 use App\Repositories\Contracts\VillageRepositoryInterface;
 use App\Repositories\Contracts\WeatherAlertRepositoryInterface;
 use App\Repositories\Contracts\WeatherCacheRepositoryInterface;
@@ -121,6 +123,7 @@ use App\Repositories\Eloquent\EloquentTalukaRepository;
 use App\Repositories\Eloquent\EloquentTestimonialRepository;
 use App\Repositories\Eloquent\EloquentThemeSettingRepository;
 use App\Repositories\Eloquent\EloquentTransportCalculationRepository;
+use App\Repositories\Eloquent\EloquentTransportBookingRepository;
 use App\Repositories\Eloquent\EloquentTransportRouteRepository;
 use App\Repositories\Eloquent\EloquentTransportVehicleTypeRepository;
 use App\Repositories\Eloquent\EloquentTreatmentRecommendationRepository;
@@ -128,6 +131,7 @@ use App\Repositories\Eloquent\EloquentUploadedFileRepository;
 use App\Repositories\Eloquent\EloquentUserRepository;
 use App\Repositories\Eloquent\EloquentUserRoleRepository;
 use App\Repositories\Eloquent\EloquentUserSettingRepository;
+use App\Repositories\Eloquent\EloquentVehicleRepository;
 use App\Repositories\Eloquent\EloquentVillageRepository;
 use App\Repositories\Eloquent\EloquentWeatherAlertRepository;
 use App\Repositories\Eloquent\EloquentWeatherCacheRepository;
@@ -399,6 +403,11 @@ class RepositoryServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
+            TransportBookingRepositoryInterface::class,
+            EloquentTransportBookingRepository::class,
+        );
+
+        $this->app->bind(
             TransportCalculationRepositoryInterface::class,
             EloquentTransportCalculationRepository::class,
         );
@@ -421,6 +430,11 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             UploadedFileRepositoryInterface::class,
             EloquentUploadedFileRepository::class,
+        );
+
+        $this->app->bind(
+            VehicleRepositoryInterface::class,
+            EloquentVehicleRepository::class,
         );
 
         $this->app->bind(
