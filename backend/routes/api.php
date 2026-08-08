@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\EquipmentController;
 use App\Http\Controllers\Api\FarmerController;
 use App\Http\Controllers\Api\GovernmentSchemeController;
 use App\Http\Controllers\Api\MarketController;
+use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\SoilController;
 use App\Http\Controllers\Api\TransportBookingController;
@@ -195,6 +196,17 @@ Route::prefix('transport')->middleware(['auth:sanctum', 'active'])->group(functi
     Route::put('{vehicleId}', [TransportController::class, 'update']);
     Route::patch('{vehicleId}', [TransportController::class, 'update']);
     Route::delete('{vehicleId}', [TransportController::class, 'destroy']);
+});
+
+Route::prefix('notifications')->middleware(['auth:sanctum', 'active'])->group(function () {
+    Route::get('/', [NotificationController::class, 'index']);
+    Route::get('unread-count', [NotificationController::class, 'unreadCount']);
+    Route::get('preferences', [NotificationController::class, 'preferences']);
+    Route::put('preferences', [NotificationController::class, 'updatePreferences']);
+    Route::patch('read-all', [NotificationController::class, 'markAllRead']);
+    Route::get('{notificationId}', [NotificationController::class, 'show']);
+    Route::patch('{notificationId}/read', [NotificationController::class, 'markAsRead']);
+    Route::delete('{notificationId}', [NotificationController::class, 'destroy']);
 });
 
 Route::prefix('weather')->middleware(['auth:sanctum', 'active'])->group(function () {
