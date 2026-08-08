@@ -40,6 +40,7 @@ use App\Repositories\Contracts\LanguageSettingRepositoryInterface;
 use App\Repositories\Contracts\MandiRepositoryInterface;
 use App\Repositories\Contracts\MarketPriceRepositoryInterface;
 use App\Repositories\Contracts\NearbyMandiRepositoryInterface;
+use App\Repositories\Contracts\NotificationPreferenceRepositoryInterface;
 use App\Repositories\Contracts\NotificationRepositoryInterface;
 use App\Repositories\Contracts\NotificationSettingRepositoryInterface;
 use App\Repositories\Contracts\OtpCodeRepositoryInterface;
@@ -110,6 +111,7 @@ use App\Repositories\Eloquent\EloquentLanguageSettingRepository;
 use App\Repositories\Eloquent\EloquentMandiRepository;
 use App\Repositories\Eloquent\EloquentMarketPriceRepository;
 use App\Repositories\Eloquent\EloquentNearbyMandiRepository;
+use App\Repositories\Eloquent\EloquentNotificationPreferenceRepository;
 use App\Repositories\Eloquent\EloquentNotificationRepository;
 use App\Repositories\Eloquent\EloquentNotificationSettingRepository;
 use App\Repositories\Eloquent\EloquentOtpCodeRepository;
@@ -321,6 +323,11 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             NotificationRepositoryInterface::class,
             EloquentNotificationRepository::class,
+        );
+
+        $this->app->bind(
+            NotificationPreferenceRepositoryInterface::class,
+            EloquentNotificationPreferenceRepository::class,
         );
 
         $this->app->bind(
