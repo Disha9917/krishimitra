@@ -17,9 +17,23 @@ class EloquentAiAdvisoryRepository extends BaseEloquentRepository implements AiA
 
     public function advisoriesForUser(int $userId): Collection
     {
-            return $this->model
-                ->where('user_id', $userId)
-                ->orderByDesc('id')
-                ->get();
+        return $this->model
+            ->where('user_id', $userId)
+            ->orderByDesc('id')
+            ->get();
+    }
+
+    public function historyForUser(int $userId, ?string $advisoryType, int $limit): Collection
+    {
+        $query = $this->model->where('user_id', $userId);
+
+        if ($advisoryType !== null && $advisoryType !== '') {
+            $query->where('advisory_type', $advisoryType);
+        }
+
+        return $query
+            ->orderByDesc('id')
+            ->limit($limit)
+            ->get();
     }
 }

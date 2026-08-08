@@ -32,6 +32,9 @@ use App\Repositories\Contracts\FarmerFieldRepositoryInterface;
 use App\Repositories\Contracts\FarmerProfileRepositoryInterface;
 use App\Repositories\Contracts\FeedbackRepositoryInterface;
 use App\Repositories\Contracts\GovernmentSchemeRepositoryInterface;
+use App\Repositories\Contracts\ImportHistoryRepositoryInterface;
+use App\Repositories\Contracts\ImportLogRepositoryInterface;
+use App\Repositories\Contracts\ImportWriteRepositoryInterface;
 use App\Repositories\Contracts\HarvestRepositoryInterface;
 use App\Repositories\Contracts\LanguageSettingRepositoryInterface;
 use App\Repositories\Contracts\MandiRepositoryInterface;
@@ -99,6 +102,9 @@ use App\Repositories\Eloquent\EloquentFarmerFieldRepository;
 use App\Repositories\Eloquent\EloquentFarmerProfileRepository;
 use App\Repositories\Eloquent\EloquentFeedbackRepository;
 use App\Repositories\Eloquent\EloquentGovernmentSchemeRepository;
+use App\Repositories\Eloquent\EloquentImportHistoryRepository;
+use App\Repositories\Eloquent\EloquentImportLogRepository;
+use App\Repositories\Eloquent\EloquentImportWriteRepository;
 use App\Repositories\Eloquent\EloquentHarvestRepository;
 use App\Repositories\Eloquent\EloquentLanguageSettingRepository;
 use App\Repositories\Eloquent\EloquentMandiRepository;
@@ -480,6 +486,21 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             WeatherStationRepositoryInterface::class,
             EloquentWeatherStationRepository::class,
+        );
+
+        $this->app->bind(
+            ImportHistoryRepositoryInterface::class,
+            EloquentImportHistoryRepository::class,
+        );
+
+        $this->app->bind(
+            ImportLogRepositoryInterface::class,
+            EloquentImportLogRepository::class,
+        );
+
+        $this->app->bind(
+            ImportWriteRepositoryInterface::class,
+            EloquentImportWriteRepository::class,
         );
 
     }

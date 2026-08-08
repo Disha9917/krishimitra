@@ -34,8 +34,6 @@ class ReportsModuleTest extends TestCase
 
     public function test_generation_is_queued_and_report_created(): void
     {
-        $cols = \Illuminate\Support\Facades\DB::select("SELECT column_name FROM information_schema.columns WHERE table_name = 'reports'");
-        fwrite(STDERR, "\nTEST-COLS: ".implode(',', array_map(fn ($c) => $c->column_name, $cols))."\n");
         Queue::fake();
 
         $user = $this->makeUser();

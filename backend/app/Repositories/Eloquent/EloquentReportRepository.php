@@ -19,7 +19,7 @@ class EloquentReportRepository extends BaseEloquentRepository implements ReportR
     {
         return $this->model
             ->where('user_id', $userId)
-            ->orderByDesc('generated_at')
+            ->orderByDesc('generated_at')->orderByDesc('id')
             ->get();
     }
 
@@ -32,7 +32,7 @@ class EloquentReportRepository extends BaseEloquentRepository implements ReportR
         }
 
         return $query
-            ->orderByDesc('generated_at')
+            ->orderByDesc('generated_at')->orderByDesc('id')
             ->limit($limit)
             ->get();
     }
@@ -42,7 +42,7 @@ class EloquentReportRepository extends BaseEloquentRepository implements ReportR
         return $this->model
             ->where('user_id', $userId)
             ->where('is_favorite', true)
-            ->orderByDesc('generated_at')
+            ->orderByDesc('generated_at')->orderByDesc('id')
             ->get();
     }
 
@@ -50,7 +50,7 @@ class EloquentReportRepository extends BaseEloquentRepository implements ReportR
     {
         return $this->model
             ->where('user_id', $userId)
-            ->orderByDesc('generated_at')
+            ->orderByDesc('generated_at')->orderByDesc('id')
             ->limit($limit)
             ->get();
     }

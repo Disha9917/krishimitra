@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Api\Admin\ImportController;
+use App\Http\Controllers\Api\AIAdvisoryController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ColdStorageBookingController;
 use App\Http\Controllers\Api\ColdStorageController;
@@ -228,4 +230,21 @@ Route::prefix('reports')->middleware(['auth:sanctum', 'active'])->group(function
     Route::get('{reportId}/download', [ReportController::class, 'download']);
     Route::patch('{reportId}/favorite', [ReportController::class, 'favorite']);
     Route::delete('{reportId}', [ReportController::class, 'destroy']);
+});
+
+Route::prefix('ai')->middleware(['auth:sanctum', 'active'])->group(function () {
+    Route::post('advisory', [AIAdvisoryController::class, 'store']);
+    Route::get('history', [AIAdvisoryController::class, 'index']);
+    Route::get('providers', [AIAdvisoryController::class, 'providers']);
+});
+
+Route::prefix('admin/imports')->middleware(['auth:sanctum', 'active', 'role:admin'])->group(function () {
+    Route::post('validate', [ImportController::class, 'validateCsv']);
+    Route::post('preview', [ImportController::class, 'preview']);
+    Route::post('dry-run', [ImportController::class, 'dryRun']);
+    Route::post('/', [ImportController::class, 'store']);
+    Route::post('{importId}/rollback', [ImportController::class, 'rollback']);
+    Route::get('/', [ImportController::class, 'index']);
+    Route::get('{importId}', [ImportController::class, 'show']);
+    Route::get('{importId}/logs', [ImportController::class, 'logs']);
 });

@@ -16,6 +16,7 @@ class AiAdvisory extends Model
 
     protected $fillable = [
         'user_id',
+        'advisory_type',
         'farmer_crop_id',
         'crop_id',
         'district_id',
@@ -28,6 +29,11 @@ class AiAdvisory extends Model
         'timeline_7_days',
         'generated_at',
         'model_version',
+        'provider',
+        'prompt_text',
+        'response_content',
+        'usage',
+        'latency_ms',
     ];
 
     protected $casts = [
@@ -37,6 +43,7 @@ class AiAdvisory extends Model
         'fertilizer_plan' => 'array',
         'pest_alert' => 'array',
         'timeline_7_days' => 'array',
+        'usage' => 'array',
         'generated_at' => 'datetime',
     ];
 
