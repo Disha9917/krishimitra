@@ -65,13 +65,19 @@ class AuthController extends Controller
 
     public function login(Request $request): JsonResponse
     {
-        $data = $request->validate([
-            'identifier' => ['required', 'string', 'max:255'],
-            'password' => ['required_without:otp', 'string'],
-            'otp' => ['required_without:password', 'string', 'size:6'],
-        ]);
+        $isOtpLogin = $request->filled('otp') && ! $request->filled('password');
 
-        $result = isset($data['otp'])
+        $data = $isOtpLogin
+            ? $request->validate([
+                'identifier' => ['required', 'string', 'max:255'],
+                'otp' => ['required', 'string', 'size:6'],
+            ])
+            : $request->validate([
+                'identifier' => ['required', 'string', 'max:255'],
+                'password' => ['required', 'string'],
+            ]);
+
+        $result = $isOtpLogin
             ? $this->auth->loginWithOtp($data['identifier'], $data['otp'])
             : $this->auth->loginWithPassword($data['identifier'], $data['password']);
 
