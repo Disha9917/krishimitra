@@ -8,6 +8,9 @@ import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
 import { ThemeToggle } from "../../components/ui/theme-toggle";
 import { LiveBreezeBackground } from "../../components/landing/live-breeze-background";
+import { authService } from "../../services/auth.service";
+import { isApiError } from "../../services/api";
+import { AlertBanner } from "../../components/feedback/alert-banner";
 import {
   Sprout,
   ShieldCheck,
@@ -139,57 +142,111 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [language, setLanguage] = useState<"en" | "hi" | "gu">("en");
 
   const t = translations[language];
 
-  // Handle Demo Login 1-Click filling & submission
-  const handleDemoLogin = () => {
-    setIsLoading(true);
-    setMobileNumber("+91 98765 43210");
-    if (loginMethod === "otp") {
-      setOtpSent(true);
-      setOtpCode("55819");
-    } else {
-      setPassword("Farmer2026#");
-    }
-
-    setTimeout(() => {
-      setIsLoading(false);
-      setIsSuccess(true);
-      if (typeof window !== "undefined") {
-        document.cookie = "krishi_auth=true; path=/; max-age=86400";
-        localStorage.setItem("krishi_auth", "true");
-      }
-      setTimeout(() => {
-        router.push("/dashboard");
-      }, 1500);
-    }, 800);
+  const normalizeIdentifier = (value: string) => {
+    let cleaned = value.replace(/[^0-9a-zA-Z@.+-]/g, "").trim();
+    // Strip the +91 country code so the backend receives the 10-digit mobile number.
+    if (/^91\d{10}$/.test(cleaned)) cleaned = cleaned.slice(2);
+    return cleaned;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const redirectToDashboard = () => {
+    setIsSuccess(true);
+    setTimeout(() => {
+      router.push("/dashboard");
+    }, 1200);
+  };
+
+  // 1-Click Demo Login: fills the password form with the demo account and submits it.
+  const handleDemoLogin = () => {
+    setLoginMethod("password");
+    setOtpSent(false);
+    setMobileNumber("9876543210");
+    setPassword("Farmer2026#");
+    setErrorMessage(null);
+    setTimeout(() => {
+      handleLoginWithPassword("9876543210", "Farmer2026#");
+    }, 100);
+  };
+
+  const handleLoginWithPassword = async (identifier: string, passwordValue: string) => {
+    setIsLoading(true);
+    setErrorMessage(null);
+    try {
+      await authService.login({ identifier, password: passwordValue });
+      redirectToDashboard();
+    } catch (error) {
+      setErrorMessage(loginErrorMessage(error));
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleLoginWithOtp = async (identifier: string, otpValue: string) => {
+    setIsLoading(true);
+    setErrorMessage(null);
+    try {
+      await authService.login({ identifier, otp: otpValue });
+      redirectToDashboard();
+    } catch (error) {
+      setErrorMessage(loginErrorMessage(error));
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleRequestOtp = async (identifier: string) => {
+    setIsLoading(true);
+    setErrorMessage(null);
+    try {
+      await authService.requestOtp({ identifier, channel: "sms", purpose: "login" });
+      setOtpSent(true);
+    } catch (error) {
+      setErrorMessage(loginErrorMessage(error));
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const loginErrorMessage = (error: unknown): string => {
+    if (!isApiError(error)) return "Unable to reach the server. Please try again.";
+    if (error.statusCode === 429) return "Too many attempts. Please wait a minute and try again.";
+    if (error.statusCode === 422) {
+      const first = Object.values(error.errors ?? {})[0];
+      if (Array.isArray(first) && first.length > 0) return first[0];
+      return "Invalid input. Please check your details.";
+    }
+    return error.message;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (loginMethod === "otp" && !otpSent) {
-      setIsLoading(true);
-      setTimeout(() => {
-        setIsLoading(false);
-        setOtpSent(true);
-      }, 800);
+    const identifier = normalizeIdentifier(mobileNumber);
+    if (!identifier) {
+      setErrorMessage("Please enter your mobile number or email.");
       return;
     }
-
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      setIsSuccess(true);
-      if (typeof window !== "undefined") {
-        document.cookie = "krishi_auth=true; path=/; max-age=86400";
-        localStorage.setItem("krishi_auth", "true");
+    if (loginMethod === "otp") {
+      if (!otpSent) {
+        await handleRequestOtp(identifier);
+        return;
       }
-      setTimeout(() => {
-        router.push("/dashboard");
-      }, 1500);
-    }, 1000);
+      if (!otpCode) {
+        setErrorMessage("Please enter the OTP code.");
+        return;
+      }
+      await handleLoginWithOtp(identifier, otpCode);
+    } else {
+      if (!password) {
+        setErrorMessage("Please enter your password.");
+        return;
+      }
+      await handleLoginWithPassword(identifier, password);
+    }
   };
 
   return (
@@ -356,6 +413,9 @@ export default function LoginPage() {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
+                  {errorMessage && (
+                    <AlertBanner type="error" title="Login failed" message={errorMessage} className="animate-fade-in" />
+                  )}
                   <AnimatePresence mode="wait">
                     {loginMethod === "otp" ? (
                       <motion.div

@@ -1,36 +1,49 @@
-import { UserProfile } from "../types/user";
+import { BackendUser } from "../types/backend";
 
-export interface MockAuthStore {
-  user: UserProfile | null;
+export interface AuthSession {
+  user: BackendUser | null;
   isAuthenticated: boolean;
-  login: (user: UserProfile) => void;
-  logout: () => void;
+  isLoading: boolean;
 }
 
-const DEFAULT_USER: UserProfile = {
-  id: "USR-9842",
-  fullName: "Rajesh Kumar",
-  phone: "+91 98765 43210",
-  email: "rajesh.kumar@farmer.in",
-  role: "Farmer",
-  farmSizeAcres: 4.5,
-  primaryCrop: "Wheat",
-  pinCode: "141001",
-  state: "Punjab",
-  district: "Ludhiana",
-  village: "Gill",
-  alertPreferences: {
-    smsEnabled: true,
-    whatsappEnabled: true,
-    priceThresholdAlerts: true,
-    diseaseAlerts: true,
-    weatherAlerts: true,
-    minPriceThresholdINR: 2350,
-  },
-  preferredLanguage: "Hindi",
+let session: AuthSession = {
+  user: null,
+  isAuthenticated: false,
+  isLoading: true,
 };
 
+type Listener = () => void;
+
+const listeners = new Set<Listener>();
+
+function emit(): void {
+  listeners.forEach((listener) => listener());
+}
+
 export const authStore = {
-  getUser: () => DEFAULT_USER,
-  isAuthenticated: () => true,
+  getSnapshot: (): AuthSession => session,
+  getUser: (): BackendUser | null => session.user,
+  isAuthenticated: (): boolean => session.isAuthenticated,
+
+  setUser(user: BackendUser | null): void {
+    session = { user, isAuthenticated: !!user, isLoading: false };
+    emit();
+  },
+
+  setLoading(isLoading: boolean): void {
+    session = { ...session, isLoading };
+    emit();
+  },
+
+  clearSession(): void {
+    session = { user: null, isAuthenticated: false, isLoading: false };
+    emit();
+  },
+
+  subscribe(listener: Listener): () => void {
+    listeners.add(listener);
+    return () => {
+      listeners.delete(listener);
+    };
+  },
 };

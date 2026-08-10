@@ -1,12 +1,15 @@
 import { authStore } from "../store/auth.store";
-import { UserProfile } from "../types/user";
+import { BackendUser } from "../types/backend";
 
 export const userService = {
-  async getProfile(): Promise<UserProfile> {
+  async getProfile(): Promise<BackendUser | null> {
     return authStore.getUser();
   },
-  async updateProfile(profile: Partial<UserProfile>): Promise<UserProfile> {
+  async updateProfile(profile: Partial<BackendUser>): Promise<BackendUser | null> {
     const current = authStore.getUser();
-    return { ...current, ...profile };
+    if (!current) return null;
+    const updated = { ...current, ...profile };
+    authStore.setUser(updated);
+    return updated;
   },
 };

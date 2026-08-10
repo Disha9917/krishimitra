@@ -1,18 +1,61 @@
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.krishimitra.agri/v1";
 
 export const API_ENDPOINTS = {
+  DASHBOARD: {
+    UNIFIED: "/dashboard/unified",
+  },
   AUTH: {
-    LOGIN: "/auth/login",
     REGISTER: "/auth/register",
+    REQUEST_OTP: "/auth/request-otp",
+    LOGIN: "/auth/login",
     VERIFY_OTP: "/auth/verify-otp",
+    REFRESH: "/auth/refresh",
+    FORGOT_PASSWORD: "/auth/forgot-password",
+    RESET_PASSWORD: "/auth/reset-password",
     LOGOUT: "/auth/logout",
     ME: "/auth/me",
   },
-  CROP: {
-    ADVISORY: "/crop/advisory",
-    CROPS_LIST: "/crop/supported-crops",
-    TIMELINE: "/crop/7-day-timeline",
+  FARMER: {
+    PROFILE: "/farmer/me",
+    DASHBOARD: "/farmer/dashboard",
+    FIELDS: "/farmer/fields",
+    FIELD: (fieldId: string | number) => `/farmer/fields/${fieldId}`,
   },
+  CROP: {
+    LIST: "/farmer/crops",
+    CREATE: "/farmer/crops",
+    CALENDAR: "/farmer/crops/calendar",
+    HARVEST_SUMMARY: "/farmer/crops/harvest-summary",
+    HISTORY: "/farmer/crops/history",
+    ACTIVE: "/farmer/crops/active",
+    SEASONAL: "/farmer/crops/seasonal",
+    SUMMARY: "/farmer/crops/summary",
+    TIMELINE: (cropId: string | number) => `/farmer/crops/${cropId}/timeline`,
+    GROWTH: (cropId: string | number) => `/farmer/crops/${cropId}/growth`,
+    STATUS: (cropId: string | number) => `/farmer/crops/${cropId}/status`,
+    DETAIL: (cropId: string | number) => `/farmer/crops/${cropId}`,
+  },
+  WEATHER: {
+    CURRENT: "/weather/current",
+    FORECAST: "/weather/forecast",
+    HOURLY: "/weather/hourly",
+    HISTORY: "/weather/history",
+    CACHE: "/weather/cache",
+    CACHE_REFRESH: "/weather/cache/refresh",
+    ALERTS: "/weather/alerts",
+    ALERTS_GENERATE: "/weather/alerts/generate",
+    DASHBOARD: "/weather/dashboard",
+    RAIN_PREDICTION: "/weather/rain-prediction",
+    TEMPERATURE_TREND: "/weather/temperature-trend",
+    HUMIDITY_TREND: "/weather/humidity-trend",
+    WIND: "/weather/wind",
+    UV_INDEX: "/weather/uv-index",
+    SUN: "/weather/sun",
+    SUMMARY: "/weather/summary",
+    NOTIFICATIONS: "/weather/notifications",
+    NOTIFICATIONS_GENERATE: "/weather/notifications/generate",
+  },
+  // Endpoints defined in docs/API_CONTRACT.md but NOT yet registered on the backend.
   DISEASE: {
     DETECT: "/disease/detect",
     SEARCH: "/disease/search",
@@ -22,19 +65,46 @@ export const API_ENDPOINTS = {
     TRENDS: "/market/trends",
     TRANSPORT_CALCULATE: "/market/transport-cost",
   },
-  WEATHER: {
-    CURRENT: "/weather/current",
-    FORECAST: "/weather/forecast",
-  },
   POST_HARVEST: {
     ANALYZE_RISK: "/post-harvest/analyze-risk",
   },
-  NOTIFICATIONS: {
-    LIST: "/notifications",
-    SETTINGS: "/notifications/settings",
+  SCHEMES: {
+    LIST: "/schemes",
+    DETAIL: (id: string | number) => `/schemes/${id}`,
+    ELIGIBILITY: (id: string | number) => `/schemes/${id}/eligibility`,
+  },
+  EQUIPMENT: {
+    LIST: "/equipment",
+    DETAIL: (id: string | number) => `/equipment/${id}`,
+    BOOKINGS: (id: string | number) => `/equipment/${id}/bookings`,
+    MY_BOOKINGS: "/equipment/bookings/me",
+  },
+  COLD_STORAGE: {
+    LIST: "/cold-storage",
+    DETAIL: (id: string | number) => `/cold-storage/${id}`,
+    BOOKINGS: (id: string | number) => `/cold-storage/${id}/bookings`,
+    MY_BOOKINGS: "/cold-storage/bookings/me",
   },
   REPORTS: {
     GENERATE: "/reports/generate",
-    DOWNLOAD: "/reports/download",
+    LIST: "/reports",
+    DOWNLOAD: (id: string | number) => `/reports/download/${id}`,
+    DELETE: (id: string | number) => `/reports/${id}`,
+  },
+  NOTIFICATIONS: {
+    LIST: "/notifications",
+    UNREAD_COUNT: "/notifications/unread-count",
+    MARK_ALL_READ: "/notifications/mark-all-read",
+    MARK_READ: (id: string | number) => `/notifications/${id}/read`,
+    SETTINGS: "/notifications/settings",
+  },
+  // Phase 15C AI Advisory API. Endpoints documented in the phase contract but
+  // NOT yet registered on the backend (no /ai routes in routes/api.php yet).
+  AI: {
+    ADVISORY: "/ai/advisory",
+    HISTORY: "/ai/history",
+    PROVIDERS: "/ai/providers",
+    FAVORITE: (id: string | number) => `/ai/history/${id}/favorite`,
+    FEEDBACK: (id: string | number) => `/ai/history/${id}/feedback`,
   },
 };

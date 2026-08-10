@@ -7,9 +7,16 @@ import { Logo } from "../../components/common/logo";
 import { ThemeToggle } from "../../components/ui/theme-toggle";
 import { Button } from "../../components/ui/button";
 import { LiveBreezeBackground } from "../../components/landing/live-breeze-background";
+import { LoadingSpinner } from "../../components/common/loading-spinner";
+import { AlertBanner } from "../../components/feedback/alert-banner";
+import { authService } from "../../services/auth.service";
+import { dashboardService } from "../../services/dashboard.service";
+import { isApiError } from "../../services/api";
+import { UnifiedDashboard } from "../../types/backend";
 import { GUJARAT_DISTRICT_ZONES } from "../../utils/constants";
 import { getPrecisionCropAdvisory, CropLifecycleAdvisory } from "../../utils/advisories";
 import { RegionDistrictSelector } from "../../components/forms/region-district-selector";
+import { CropRecommendationModule } from "../../components/dashboard/crop-recommendation-module";
 import { getLegacyDistrictFallback } from "../../lib/regionData";
 import {
   Sprout,
@@ -58,25 +65,45 @@ export default function DashboardPage() {
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [activeTab, setActiveTab] = useState<"overview" | "crops" | "disease" | "storage" | "mandi">("overview");
+  const [dashboardData, setDashboardData] = useState<UnifiedDashboard | null>(null);
+  const [dashboardLoading, setDashboardLoading] = useState(true);
+  const [dashboardError, setDashboardError] = useState<string | null>(null);
+  const [farmerName, setFarmerName] = useState<string | null>(null);
 
-  // Auth Protection Check
+  // Auth Protection: restore the session from the persisted token (with refresh),
+  // then load the unified dashboard for the authenticated user.
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const hasAuthCookie = document.cookie.includes("krishi_auth=true");
-      const hasAuthLocal = localStorage.getItem("krishi_auth") === "true";
-      if (!hasAuthCookie && !hasAuthLocal) {
-        router.push("/login");
-      } else {
-        setIsAuthenticated(true);
+    let cancelled = false;
+    (async () => {
+      const user = await authService.restoreSession();
+      if (cancelled) return;
+      if (!user) {
+        router.replace("/login");
+        return;
       }
-    }
+      setIsAuthenticated(true);
+      const firstName = user.fullName?.split(" ")[0];
+      if (firstName) setFarmerName(user.fullName);
+      try {
+        const data = await dashboardService.getUnifiedDashboard();
+        if (!cancelled) setDashboardData(data);
+      } catch (error) {
+        if (!cancelled) {
+          setDashboardError(
+            isApiError(error) ? error.message : "Unable to load your dashboard right now. Please try again."
+          );
+        }
+      } finally {
+        if (!cancelled) setDashboardLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, [router]);
 
   const handleSignOut = () => {
-    if (typeof window !== "undefined") {
-      document.cookie = "krishi_auth=; path=/; max-age=0";
-      localStorage.removeItem("krishi_auth");
-    }
+    authService.logout().catch(() => undefined);
     router.push("/login");
   };
 
@@ -353,6 +380,17 @@ export default function DashboardPage() {
     return matchesSearch && matchesZone;
   });
 
+  if (!isAuthenticated) {
+    return (
+      <div className="relative min-h-screen bg-emerald-50/40 dark:bg-[#0B0F14] flex items-center justify-center">
+        <LiveBreezeBackground />
+        <div className="relative z-10">
+          <LoadingSpinner label="Verifying your session..." />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="relative min-h-screen bg-gradient-to-b from-emerald-50/40 via-emerald-50/10 to-emerald-100/30 dark:from-[#0B0F14] dark:via-[#0B0F14]/95 dark:to-[#111827] flex flex-col text-slate-900 dark:text-white transition-colors duration-300 overflow-x-hidden">
       {/* Live Farm Breeze Canvas */}
@@ -393,7 +431,7 @@ export default function DashboardPage() {
               <div className="rounded-lg bg-emerald-600 p-1.5 text-white">
                 <User className="h-3.5 w-3.5" />
               </div>
-              <span>Rajesh Patel</span>
+              <span>{farmerName || "Farmer"}</span>
             </div>
 
             <ThemeToggle />
@@ -477,6 +515,14 @@ export default function DashboardPage() {
         {/* TAB 1: OVERVIEW */}
         {activeTab === "overview" && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-8">
+            {dashboardLoading && (
+              <div className="rounded-2xl border border-emerald-100/80 dark:border-[#2A2F3A] bg-white/80 dark:bg-[#161B22]/90 backdrop-blur-md shadow-xs">
+                <LoadingSpinner label="Loading your farm data..." />
+              </div>
+            )}
+            {dashboardError && !dashboardLoading && (
+              <AlertBanner type="error" title="Dashboard unavailable" message={dashboardError} className="animate-fade-in" />
+            )}
             {/* Statewide Gujarat 6-Region / 33-District Cascading Selector */}
             <RegionDistrictSelector
               selectedRegionId={selectedRegionId}
@@ -507,7 +553,7 @@ export default function DashboardPage() {
                   </div>
 
                   <h2 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-                    Welcome back, <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-700 via-teal-700 to-emerald-900 dark:from-emerald-300 dark:via-teal-200 dark:to-white">Rajesh!</span>
+                    Welcome back, <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-700 via-teal-700 to-emerald-900 dark:from-emerald-300 dark:via-teal-200 dark:to-white">{farmerName ? farmerName.split(" ")[0] : "Farmer"}!</span>
                   </h2>
 
                   <p className="text-xs sm:text-sm text-slate-700 dark:text-emerald-100/90 leading-relaxed max-w-xl font-medium">
@@ -558,6 +604,27 @@ export default function DashboardPage() {
                         <span className="text-slate-600 dark:text-emerald-200/80 font-medium">Market Benchmark:</span>
                         <span className="font-mono font-black text-slate-900 dark:text-white">₹{selectedDistrict.crops[0]?.price.toLocaleString()} / Qtl</span>
                       </div>
+                      {dashboardData?.overview && (
+                        <>
+                          <div className="border-t border-emerald-100 dark:border-emerald-800/60 pt-2" />
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="text-slate-600 dark:text-emerald-200/80 font-medium">Fields Registered:</span>
+                            <span className="font-extrabold text-slate-900 dark:text-white">{dashboardData.overview.fieldCount}</span>
+                          </div>
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="text-slate-600 dark:text-emerald-200/80 font-medium">Active Crops:</span>
+                            <span className="font-extrabold text-emerald-700 dark:text-emerald-300">{dashboardData.overview.cropCount}</span>
+                          </div>
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="text-slate-600 dark:text-emerald-200/80 font-medium">Unread Notifications:</span>
+                            <span className="font-extrabold text-slate-900 dark:text-white">{dashboardData.overview.unreadCount}</span>
+                          </div>
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="text-slate-600 dark:text-emerald-200/80 font-medium">Total Harvest:</span>
+                            <span className="font-extrabold text-slate-900 dark:text-white">{dashboardData.overview.totalHarvestKg.toLocaleString()} kg</span>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -784,6 +851,22 @@ export default function DashboardPage() {
                     </button>
                   ))}
               </div>
+            </div>
+
+            {/* AI RANKED ADVISORY (LIVE AI ENGINE) */}
+            <div className="rounded-3xl border border-emerald-100 dark:border-[#2A2F3A] bg-white/90 dark:bg-[#161B22]/90 backdrop-blur-md p-6 shadow-sm">
+              <div className="flex items-center justify-between border-b border-slate-100 dark:border-[#2A2F3A] pb-3 mb-6">
+                <div>
+                  <h3 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
+                    <Sparkles className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                    Generate AI Ranked Crop Recommendation
+                  </h3>
+                  <p className="text-xs text-slate-500 dark:text-[#8B949E] mt-0.5 leading-relaxed">
+                    The backend AI engine analyzes your field inputs and returns ranked advisories, irrigation &amp; fertilizer plans, pest alerts and a 7-day timeline for {selectedDistrict.name}.
+                  </p>
+                </div>
+              </div>
+              <CropRecommendationModule />
             </div>
 
             {/* STAGE TRACKER */}

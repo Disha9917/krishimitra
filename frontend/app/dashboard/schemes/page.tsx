@@ -7,6 +7,8 @@ import { Logo } from "../../../components/common/logo";
 import { ThemeToggle } from "../../../components/ui/theme-toggle";
 import { Button } from "../../../components/ui/button";
 import { LiveBreezeBackground } from "../../../components/landing/live-breeze-background";
+import { tokenStore } from "../../../store/token.store";
+import { authService } from "../../../services/auth.service";
 import {
   REGION_DISTRICT_MAPPING,
   getRecommendedSchemes,
@@ -47,9 +49,8 @@ export default function GovernmentSchemesPage() {
   // Auth Protection Check (same as main dashboard)
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const hasAuthCookie = document.cookie.includes("krishi_auth=true");
-      const hasAuthLocal = localStorage.getItem("krishi_auth") === "true";
-      if (!hasAuthCookie && !hasAuthLocal) {
+      const hasToken = tokenStore.getAccessToken();
+      if (!hasToken) {
         router.push("/login");
       } else {
         setIsAuthenticated(true);
@@ -58,10 +59,7 @@ export default function GovernmentSchemesPage() {
   }, [router]);
 
   const handleSignOut = () => {
-    if (typeof window !== "undefined") {
-      document.cookie = "krishi_auth=; path=/; max-age=0";
-      localStorage.removeItem("krishi_auth");
-    }
+    authService.logout().catch(() => undefined);
     router.push("/login");
   };
 
