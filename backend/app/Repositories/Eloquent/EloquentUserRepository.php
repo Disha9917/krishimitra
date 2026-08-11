@@ -21,13 +21,17 @@ class EloquentUserRepository extends BaseEloquentRepository implements UserRepos
 
     public function findByEmail(string $email): ?User
     {
-            return $this->model->where('email', $email)->first();
+            return $this->model->where('email', strtolower(trim($email)))->first();
     }
 
     public function findByIdentifier(string $identifier): ?User
     {
-        return $this->model->where('phone', $identifier)
-            ->orWhere('email', $identifier)
-            ->first();
+        $identifier = trim($identifier);
+
+        if (str_contains($identifier, '@')) {
+            return $this->model->where('email', strtolower($identifier))->first();
+        }
+
+        return $this->model->where('phone', $identifier)->first();
     }
 }
