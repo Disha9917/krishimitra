@@ -33,7 +33,9 @@ export interface LoginRequest {
 
 export interface RegisterRequest {
   fullName: string;
+  email: string;
   phone: string;
+  password: string;
   pinCode: string;
   preferredLanguage?: "gu" | "hi" | "en";
   role?: string;
@@ -60,5 +62,5 @@ export interface TokenPair {
 }
 
 export type LoginResponse = TokenPair;
-export type RegisterResponse = BackendUser;
+export type RegisterResponse = TokenPair;
 export type MeResponse = BackendUser;

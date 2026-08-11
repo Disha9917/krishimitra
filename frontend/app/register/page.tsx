@@ -10,6 +10,9 @@ import { ThemeToggle } from "../../components/ui/theme-toggle";
 import { LiveBreezeBackground } from "../../components/landing/live-breeze-background";
 import { GUJARAT_DISTRICT_ZONES } from "../../utils/constants";
 import { RegionDistrictSelector } from "../../components/forms/region-district-selector";
+import { authService } from "../../services/auth.service";
+import { isApiError } from "../../services/api";
+import { AlertBanner } from "../../components/feedback/alert-banner";
 import {
   Sprout,
   ShieldCheck,
@@ -22,7 +25,6 @@ import {
   Phone,
   Lock,
   Layers,
-  Zap,
   Check,
   QrCode,
   Award,
@@ -39,15 +41,16 @@ const translations = {
     step2Title: "District & Crops",
     step3Title: "AI Kisan Digital ID",
     fullNameLabel: "Full Name",
+    emailLabel: "Email Address",
     mobileLabel: "Mobile Number",
     passwordLabel: "Password",
+    pinCodeLabel: "PIN Code",
     selectDistrict: "Select Gujarat District Zone",
     landSizeLabel: "Farm Land Size (Acres):",
     selectedCropsLabel: "Selected Crops for your Zone:",
     nextBtn: "Next Step",
     prevBtn: "Previous",
     launchBtn: "Complete & Launch Dashboard",
-    demoRegisterBtn: "Instant Demo Registration (1-Click)",
     alreadyRegistered: "Already registered?",
     signInLink: "Sign In",
     passportHeader: "OFFICIAL KISAN DIGITAL ID",
@@ -61,15 +64,16 @@ const translations = {
     step2Title: "ज़िला और फसलें",
     step3Title: "एआई किसान डिजिटल आईडी",
     fullNameLabel: "पूरा नाम",
+    emailLabel: "ईमेल पता",
     mobileLabel: "मोबाइल नंबर",
     passwordLabel: "पासवर्ड",
+    pinCodeLabel: "पिन कोड",
     selectDistrict: "गुजरात जिला क्षेत्र चुनें",
     landSizeLabel: "कृषि भूमि का आकार (एकड़):",
     selectedCropsLabel: "आपके क्षेत्र के लिए चयनित फसलें:",
     nextBtn: "अगला चरण",
     prevBtn: "पिछला",
     launchBtn: "पंजीकरण पूर्ण करें और डैशबोर्ड खोलें",
-    demoRegisterBtn: "त्वरित डेमो पंजीकरण (1-क्लिक)",
     alreadyRegistered: "पहले से पंजीकृत हैं?",
     signInLink: "साइन इन करें",
     passportHeader: "आधिकारिक किसान डिजिटल आईडी",
@@ -83,15 +87,16 @@ const translations = {
     step2Title: "જીલ્લો અને પાક",
     step3Title: "એઆઈ કિસાન આઈડી",
     fullNameLabel: "પૂરું નામ",
+    emailLabel: "ઈમેલ સરનામું",
     mobileLabel: "મોબાઇલ નંબર",
     passwordLabel: "પાસવર્ડ",
+    pinCodeLabel: "પિન કોડ",
     selectDistrict: "ગુજરાત જિલ્લો પસંદ કરો",
     landSizeLabel: "જમીનનું ક્ષેત્રફળ (એકર):",
     selectedCropsLabel: "તમારા વિસ્તાર માટે પસંદ કરેલા પાક:",
     nextBtn: "આગળનું પગલું",
     prevBtn: "પાછળ",
     launchBtn: "નોંધણી પૂર્ણ કરો અને ડેશબોર્ડ ખોલો",
-    demoRegisterBtn: "ત્વરિત ડેમો નોંધણી (1-ક્લિક)",
     alreadyRegistered: "પહેલેથી જ નોંધાયેલ છો?",
     signInLink: "સાઇન ઇન કરો",
     passportHeader: "સત્તાવાર કિસાન ડિજિટલ આઈડી",
@@ -106,54 +111,67 @@ export default function RegisterPage() {
 
   // Form State
   const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
   const [password, setPassword] = useState("");
+  const [pinCode, setPinCode] = useState("");
   const [selectedRegionId, setSelectedRegionId] = useState("central-gujarat");
   const [selectedDistrictId, setSelectedDistrictId] = useState("anand");
   const [landAcres, setLandAcres] = useState(12);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const t = translations[language];
   const selectedDistrict = GUJARAT_DISTRICT_ZONES.find((d) => d.id === selectedDistrictId) || GUJARAT_DISTRICT_ZONES[0];
 
-  // 1-Click Instant Demo Registration
-  const handleDemoRegister = () => {
-    setIsLoading(true);
-    setFullName("Rajesh Patel");
-    setMobileNumber("+91 98765 43210");
-    setPassword("Farmer2026#");
-    setSelectedDistrictId("anand");
-    setLandAcres(12);
-
-    setTimeout(() => {
-      setIsLoading(false);
-      setIsSuccess(true);
-      if (typeof window !== "undefined") {
-        document.cookie = "krishi_auth=true; path=/; max-age=86400";
-        localStorage.setItem("krishi_auth", "true");
-      }
-      setTimeout(() => {
-        router.push("/dashboard");
-      }, 1200);
-    }, 800);
+  const normalizePhone = (value: string): string => {
+    const compact = value.replace(/[\s-]/g, "").replace(/^\+/, "");
+    if (/^91\d{10}$/.test(compact)) return compact.slice(2);
+    return compact;
   };
 
-  const handleFinalSubmit = (e: React.FormEvent) => {
+  const handleFinalSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMessage(null);
     setIsLoading(true);
 
-    setTimeout(() => {
+    const phone = normalizePhone(mobileNumber);
+    if (!/^[6-9]\d{9}$/.test(phone)) {
+      setErrorMessage("Please enter a valid 10-digit mobile number.");
       setIsLoading(false);
+      return;
+    }
+    if (!/^[1-9][0-9]{5}$/.test(pinCode)) {
+      setErrorMessage("Please enter a valid 6-digit PIN code.");
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      await authService.register({
+        fullName,
+        email: email.trim(),
+        phone,
+        password,
+        pinCode,
+        preferredLanguage: language,
+        role: "farmer",
+      });
       setIsSuccess(true);
-      if (typeof window !== "undefined") {
-        document.cookie = "krishi_auth=true; path=/; max-age=86400";
-        localStorage.setItem("krishi_auth", "true");
-      }
       setTimeout(() => {
         router.push("/dashboard");
       }, 1200);
-    }, 1000);
+    } catch (error) {
+      if (isApiError(error)) {
+        const first = Object.values(error.errors ?? {})[0];
+        setErrorMessage(Array.isArray(first) && first.length > 0 ? String(first[0]) : error.message);
+      } else {
+        setErrorMessage("Unable to reach the server. Please try again.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -252,6 +270,9 @@ export default function RegisterPage() {
             </div>
           ) : (
             <form onSubmit={handleFinalSubmit} className="space-y-6">
+              {errorMessage && (
+                <AlertBanner type="error" title="Registration failed" message={errorMessage} className="animate-fade-in" />
+              )}
               <AnimatePresence mode="wait">
                 
                 {/* STEP 1: Personal & Mobile Info */}
@@ -272,7 +293,16 @@ export default function RegisterPage() {
                       required
                     />
                     <Input
+                      label={t.emailLabel}
+                      type="email"
+                      placeholder="farmer@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                    <Input
                       label={t.mobileLabel}
+                      type="tel"
                       placeholder="+91 98765 43210"
                       value={mobileNumber}
                       onChange={(e) => setMobileNumber(e.target.value)}
@@ -284,6 +314,16 @@ export default function RegisterPage() {
                       placeholder="••••••••"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
+                      required
+                    />
+                    <Input
+                      label={t.pinCodeLabel}
+                      type="text"
+                      inputMode="numeric"
+                      maxLength={6}
+                      placeholder="382481"
+                      value={pinCode}
+                      onChange={(e) => setPinCode(e.target.value)}
                       required
                     />
                   </motion.div>
@@ -427,19 +467,6 @@ export default function RegisterPage() {
                     <ArrowRight className="h-4 w-4 ml-1" />
                   </Button>
                 )}
-              </div>
-
-              {/* 1-Click Instant Demo Auto-Register Button */}
-              <div className="pt-2">
-                <button
-                  type="button"
-                  onClick={handleDemoRegister}
-                  disabled={isLoading}
-                  className="w-full flex items-center justify-center gap-2 rounded-xl border border-dashed border-emerald-300 dark:border-emerald-700/60 bg-emerald-50/50 dark:bg-emerald-950/30 px-4 py-2.5 text-xs font-bold text-emerald-800 dark:text-emerald-300 hover:bg-emerald-100/70 dark:hover:bg-emerald-950/60 transition-all"
-                >
-                  <Zap className="h-4 w-4 text-emerald-600 dark:text-emerald-400 animate-pulse" />
-                  <span>{t.demoRegisterBtn}</span>
-                </button>
               </div>
             </form>
           )}

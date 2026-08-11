@@ -33,11 +33,22 @@ interface AuthServiceInterface
     /**
      * Create a new user account with a farmer profile and the given role.
      *
-     * No token is issued until the account is verified via OTP.
+     * The email is stored lowercased and the password is stored as a bcrypt hash.
+     * A token pair is issued immediately so the new account is signed in.
      *
-     * @throws \DomainException when the phone number is already registered
+     * @return array{access_token: string, refresh_token: string, token_type: string, expires_in: int, user: User}
+     *
+     * @throws \DomainException when the phone number or email address is already registered
      */
-    public function register(string $phone, string $fullName, string $pincode, string $preferredLanguage = 'gu', string $roleCode = 'farmer'): User;
+    public function register(
+        string $email,
+        string $password,
+        string $phone,
+        string $fullName,
+        string $pincode,
+        string $preferredLanguage = 'gu',
+        string $roleCode = 'farmer',
+    ): array;
 
     /**
      * Verify an OTP for the given purpose and return a token pair.

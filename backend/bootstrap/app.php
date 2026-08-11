@@ -23,11 +23,21 @@ return Application::configure(basePath: dirname(__DIR__))
             'permission' => CheckPermission::class,
             'active' => EnsureUserIsActive::class,
         ]);
+
+        $middleware->redirectGuestsTo('/login');
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $isApi = fn (Request $request) => $request->is('api/*') || str_starts_with($request->path(), 'v1/');
 
         $exceptions->shouldRenderJsonWhen($isApi);
+
+        $exceptions->render(function (\Illuminate\Auth\AuthenticationException $e, Request $request) use ($isApi) {
+            if ($isApi($request)) {
+                return ApiResponse::error('Unauthenticated.', 401, 'unauthenticated');
+            }
+
+            return null;
+        });
 
         $exceptions->render(function (\DomainException $e, Request $request) use ($isApi) {
             if ($isApi($request)) {

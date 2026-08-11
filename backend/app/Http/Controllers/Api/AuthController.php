@@ -23,13 +23,17 @@ class AuthController extends Controller
     {
         $data = $request->validate([
             'fullName' => ['required', 'string', 'max:150'],
+            'email' => ['required', 'email', 'max:255'],
             'phone' => ['required', 'regex:/^[6-9]\d{9}$/'],
             'pinCode' => ['required', 'regex:/^[1-9][0-9]{5}$/'],
+            'password' => ['required', 'string', 'min:8', 'max:72'],
             'preferredLanguage' => ['sometimes', 'in:gu,hi,en'],
             'role' => ['sometimes', 'string', 'max:50'],
         ]);
 
-        $user = $this->auth->register(
+        $result = $this->auth->register(
+            strtolower(trim($data['email'])),
+            $data['password'],
             $data['phone'],
             $data['fullName'],
             $data['pinCode'],
@@ -38,12 +42,12 @@ class AuthController extends Controller
         );
 
         try {
-            $this->auth->requestOtp($data['phone'], 'sms', 'register', (int) $user->id);
+            $this->auth->requestOtp($data['phone'], 'sms', 'register', (int) $result['user']->id);
         } catch (DomainException $e) {
             // A pending OTP already exists; verification can still proceed.
         }
 
-        return ApiResponse::success($this->profile($user), 'Account created. An OTP has been sent to verify your phone number.', 201);
+        return ApiResponse::success($this->tokenPair($result), 'Account created. You are now signed in.', 201);
     }
 
     public function requestOtp(Request $request): JsonResponse

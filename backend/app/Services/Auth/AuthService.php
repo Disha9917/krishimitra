@@ -107,8 +107,31 @@ class AuthService implements AuthServiceInterface
         ]) !== null;
     }
 
-    public function register(string $phone, string $fullName, string $pincode, string $preferredLanguage = 'gu', string $roleCode = 'farmer'): User
-    {
+    /**
+     * Create a new user account with a farmer profile and the given role.
+     *
+     * The email is stored lowercased and the password is stored as a bcrypt hash.
+     * A token pair is issued immediately so the new account is signed in.
+     *
+     * @return array{access_token: string, refresh_token: string, token_type: string, expires_in: int, user: User}
+     *
+     * @throws \DomainException when the phone number or email address is already registered
+     */
+    public function register(
+        string $email,
+        string $password,
+        string $phone,
+        string $fullName,
+        string $pincode,
+        string $preferredLanguage = 'gu',
+        string $roleCode = 'farmer',
+    ): array {
+        $email = strtolower(trim($email));
+
+        if ($this->users->findByEmail($email) !== null) {
+            throw new DomainException('An account with this email address already exists.');
+        }
+
         if ($this->users->findByPhone($phone) !== null) {
             throw new DomainException('An account with this phone number already exists.');
         }
@@ -116,8 +139,12 @@ class AuthService implements AuthServiceInterface
         $user = $this->users->create([
             'full_name' => $fullName,
             'phone' => $phone,
+            'email' => $email,
+            'password_hash' => Hash::make($password),
+            'email_verified_at' => now(),
             'preferred_language' => $preferredLanguage,
             'is_active' => true,
+            'last_login_at' => now(),
         ]);
 
         $this->profiles->create([
@@ -134,7 +161,7 @@ class AuthService implements AuthServiceInterface
             ]);
         }
 
-        return $user;
+        return $this->issueTokenPair($user->refresh());
     }
 
     public function loginWithOtp(string $identifier, string $code, string $purpose = 'login'): array
@@ -151,7 +178,7 @@ class AuthService implements AuthServiceInterface
 
         $this->verifyOtp($identifier, $purpose, $code);
 
-        $field = $user->email === $identifier ? 'email' : 'phone';
+        $field = $user->email !== null && strcasecmp($user->email, $identifier) === 0 ? 'email' : 'phone';
 
         $this->users->update((int) $user->id, [
             $field . '_verified_at' => now(),

@@ -148,10 +148,13 @@ export default function LoginPage() {
   const t = translations[language];
 
   const normalizeIdentifier = (value: string) => {
-    let cleaned = value.replace(/[^0-9a-zA-Z@.+-]/g, "").trim();
-    // Strip the +91 country code so the backend receives the 10-digit mobile number.
-    if (/^91\d{10}$/.test(cleaned)) cleaned = cleaned.slice(2);
-    return cleaned;
+    const trimmed = value.trim();
+    const compact = trimmed.replace(/[\s-]/g, "");
+    // Only normalize phone numbers: strip the +91 country code or whitespace.
+    if (/^\+?91\d{10}$/.test(compact)) return compact.replace(/^\+?91/, "");
+    if (/^\d{10}$/.test(compact)) return compact;
+    // Leave emails (and anything else) untouched so valid characters like _ + . - @ are preserved.
+    return trimmed;
   };
 
   const redirectToDashboard = () => {

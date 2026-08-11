@@ -20,11 +20,14 @@ function persistSession(pair: TokenPair): void {
 
 export const authService = {
   /**
-   * Creates the account and sends an OTP to verify the phone.
-   * No session is issued — call `verifyOtp` (or `login` with the OTP) to obtain tokens.
+   * Creates a real account with email + password and persists the returned session.
+   * The user is signed in immediately after registration.
    */
   async register(payload: RegisterRequest): Promise<RegisterResponse> {
-    return apiClient.post<RegisterResponse>(API_ENDPOINTS.AUTH.REGISTER, payload);
+    const response = await apiClient.post<RegisterResponse>(API_ENDPOINTS.AUTH.REGISTER, payload);
+    persistSession(response);
+    authStore.setUser(response.user);
+    return response;
   },
 
   /** Password-based or OTP-based login. Stores the returned tokens. */
