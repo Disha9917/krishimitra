@@ -35,6 +35,7 @@ export interface FarmerCropInput {
 }
 
 export interface RecommendationItem {
+  id?: string;
   rank?: number;
   title?: string;
   cropName: string;
