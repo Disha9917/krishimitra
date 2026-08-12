@@ -99,9 +99,29 @@ const MOCK_ADVISORY: AiAdvisory = {
     },
   ],
   timeline7Days: [],
-  irrigation: undefined,
-  fertilizer: undefined,
-  pestAlert: undefined,
+  irrigation: {
+    confidence: "Low",
+    title: "Basic Irrigation Plan",
+    waterQuantity: "Moderate",
+    frequency: "As needed",
+    explanation: "Maintain soil moisture at 60-70% field capacity.",
+    recommendedAction: "Irrigate at 30% available moisture depletion.",
+  },
+  fertilizer: {
+    confidence: "Low",
+    title: "Basic Fertilizer Plan",
+    npkRatio: "10-10-10",
+    dosagePerAcre: "50 kg/acre",
+    explanation: "Apply basal dose before sowing.",
+    recommendedAction: "Mix with soil during land preparation.",
+  },
+  pestAlert: {
+    confidence: "Low",
+    title: "Pest & Disease Alert",
+    severity: "Low",
+    explanation: "Monitor field regularly for early signs of disease.",
+    recommendedAction: "Remove affected plants immediately.",
+  },
   generatedAt: new Date().toISOString(),
 };
 
