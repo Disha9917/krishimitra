@@ -68,6 +68,20 @@ export interface FarmerProfile {
   alertPreferences: AlertPreferences | null;
 }
 
+/** PATCH /farmer/me payload (UpdateProfileRequest — all fields optional). */
+export interface FarmerProfileUpdatePayload {
+  fullName?: string;
+  preferredLanguage?: string;
+  farmSizeAcres?: number;
+  primaryCropId?: number;
+  pinCode?: string;
+  state?: string;
+  districtId?: number;
+  talukaId?: number;
+  village?: string;
+  alertPreferences?: AlertPreferences;
+}
+
 export interface FarmerField {
   id: number;
   name: string;

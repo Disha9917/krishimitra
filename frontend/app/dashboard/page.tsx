@@ -11,6 +11,7 @@ import { LoadingSpinner } from "../../components/common/loading-spinner";
 import { AlertBanner } from "../../components/feedback/alert-banner";
 import { authService } from "../../services/auth.service";
 import { dashboardService } from "../../services/dashboard.service";
+import { userService } from "../../services/user.service";
 import { isApiError } from "../../services/api";
 import { UnifiedDashboard } from "../../types/backend";
 import { GUJARAT_DISTRICT_ZONES } from "../../utils/constants";
@@ -84,6 +85,17 @@ export default function DashboardPage() {
       setIsAuthenticated(true);
       const firstName = user.fullName?.split(" ")[0];
       if (firstName) setFarmerName(user.fullName);
+
+      // Real farmer profile (GET /v1/farmer/me) — the dashboard header shows the
+      // backend fullName when available; falls back to the /auth/me value.
+      userService
+        .getProfile()
+        .then((profile) => {
+          if (cancelled || !profile?.fullName) return;
+          setFarmerName(profile.fullName);
+        })
+        .catch(() => undefined);
+
       try {
         const data = await dashboardService.getUnifiedDashboard();
         if (!cancelled) setDashboardData(data);

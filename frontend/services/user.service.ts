@@ -1,15 +1,20 @@
-import { authStore } from "../store/auth.store";
-import { BackendUser } from "../types/backend";
+import { API_ENDPOINTS } from "../constants/api";
+import { FarmerProfile, FarmerProfileUpdatePayload } from "../types/backend";
+import { apiClient } from "./api";
 
 export const userService = {
-  async getProfile(): Promise<BackendUser | null> {
-    return authStore.getUser();
+  /**
+   * Fetches the authenticated farmer's profile from the backend.
+   * Throws an ApiError on failure (401 clears the session via the apiClient).
+   */
+  async getProfile(): Promise<FarmerProfile> {
+    return apiClient.get<FarmerProfile>(API_ENDPOINTS.FARMER.PROFILE);
   },
-  async updateProfile(profile: Partial<BackendUser>): Promise<BackendUser | null> {
-    const current = authStore.getUser();
-    if (!current) return null;
-    const updated = { ...current, ...profile };
-    authStore.setUser(updated);
-    return updated;
+
+  /**
+   * Updates the authenticated farmer's profile. All payload fields are optional.
+   */
+  async updateProfile(payload: FarmerProfileUpdatePayload): Promise<FarmerProfile> {
+    return apiClient.patch<FarmerProfile>(API_ENDPOINTS.FARMER.PROFILE, payload);
   },
 };
