@@ -48,7 +48,18 @@ export const dashboardService = {
   async getUnifiedDashboard(): Promise<UnifiedDashboard> {
     try {
       const data = await apiClient.get<UnifiedDashboard>(API_ENDPOINTS.DASHBOARD.UNIFIED);
-      return { ...data, source: "unified" };
+
+      const rawOverview = (data as unknown as Record<string, unknown>).overview as Record<string, unknown> | null | undefined;
+      const overview = rawOverview
+        ? {
+            fieldCount: Number(rawOverview.fieldCount ?? rawOverview.fields_count ?? 0),
+            cropCount: Number(rawOverview.cropCount ?? rawOverview.crops_count ?? 0),
+            unreadCount: Number(rawOverview.unreadCount ?? rawOverview.unread_notifications ?? 0),
+            totalHarvestKg: Number(rawOverview.totalHarvestKg ?? rawOverview.harvest_total_kg ?? 0),
+          }
+        : null;
+
+      return { ...data, source: "unified", overview } as UnifiedDashboard;
     } catch (error) {
       if (isApiError(error) && error.statusCode === 404) {
         const farmer = await apiClient.get<FarmerDashboard>(API_ENDPOINTS.FARMER.DASHBOARD);

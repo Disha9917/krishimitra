@@ -9,6 +9,7 @@ export type RiskLevel = "Low" | "Medium" | "High" | "Critical";
 // Field names follow the backend AiAdvisory model + AIService conventions:
 //   farmer_crop_id, crop_id, district_id, pincode, input_snapshot.
 export interface AiAdvisoryRequest {
+  topic: string;
   cropName?: string;
   cropId?: number;
   fieldId?: number;

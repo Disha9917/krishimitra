@@ -12,6 +12,10 @@ import {
 
 export type AiAdvisory = CropAdvisoryResult & AiAdvisoryExtras;
 
+const EMPTY_IRRIGATION = { confidence: "Low" as const, title: "Irrigation Plan", waterQuantity: "N/A", frequency: "As needed", explanation: "Data not available for this advisory.", recommendedAction: "Consult your local agricultural officer." };
+const EMPTY_FERTILIZER = { confidence: "Low" as const, title: "Fertilizer Plan", npkRatio: "N/A", dosagePerAcre: "N/A", explanation: "Data not available for this advisory.", recommendedAction: "Consult your local agricultural officer." };
+const EMPTY_PEST_ALERT = { confidence: "Low" as const, title: "Pest & Disease Alert", severity: "Low", pestOrDiseaseName: "N/A", explanation: "Data not available for this advisory.", recommendedAction: "Monitor your crops regularly." };
+
 function toAdvisoryResult(res: AiAdvisoryResponse): AiAdvisory {
   return {
     farmerInput: res.inputSnapshot as FarmerCropInput | undefined,
@@ -21,9 +25,9 @@ function toAdvisoryResult(res: AiAdvisoryResponse): AiAdvisory {
     recommendations: res.recommendations,
     timeline: res.timeline7Days,
     timeline7Days: res.timeline7Days,
-    irrigation: res.irrigation ?? res.irrigationPlan,
-    fertilizer: res.fertilizer ?? res.fertilizerPlan,
-    pestAlert: res.pestAlert,
+    irrigation: res.irrigation ?? res.irrigationPlan ?? EMPTY_IRRIGATION,
+    fertilizer: res.fertilizer ?? res.fertilizerPlan ?? EMPTY_FERTILIZER,
+    pestAlert: res.pestAlert ?? EMPTY_PEST_ALERT,
     generatedAt: res.generatedAt,
     summary: res.summary,
     riskLevel: res.riskLevel,
@@ -45,6 +49,7 @@ export const aiService = {
    */
   async generateAdvisory(input: FarmerCropInput): Promise<AiAdvisory> {
     const payload: AiAdvisoryRequest = {
+      topic: input.cropType ?? "general",
       cropName: input.cropType,
       pinCode: input.pinCode,
       season: input.season,
