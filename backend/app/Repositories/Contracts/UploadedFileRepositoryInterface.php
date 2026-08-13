@@ -9,6 +9,10 @@ use Illuminate\Database\Eloquent\Collection;
 
 interface UploadedFileRepositoryInterface extends BaseRepositoryInterface
 {
-
     public function filesForUser(int $userId): Collection;
+
+    /**
+     * Find a file by its identifier belonging to a specific user.
+     */
+    public function findForUser(int $userId, int $fileId): ?UploadedFile;
 }

@@ -29,5 +29,7 @@
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
+        <!-- Keep the default provider offline; Gemini tests opt in per test. -->
+        <env name="AI_PROVIDER" value="null"/>
     </php>
 </phpunit>

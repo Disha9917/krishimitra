@@ -33,6 +33,12 @@ class ColdStorageBooking extends Model
         'end_date',
         'total_amount',
         'status',
+        'payment_status',
+        'payment_method',
+        'transaction_reference',
+        'reason',
+        'decided_at',
+        'completed_at',
     ];
 
     protected $casts = [
@@ -40,6 +46,8 @@ class ColdStorageBooking extends Model
         'start_date' => 'date',
         'end_date' => 'date',
         'total_amount' => 'decimal:2',
+        'decided_at' => 'datetime',
+        'completed_at' => 'datetime',
     ];
 
     /**

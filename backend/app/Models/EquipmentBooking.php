@@ -30,16 +30,26 @@ class EquipmentBooking extends Model
         'start_at',
         'end_at',
         'total_amount',
+        'deposit_amount',
         'status',
+        'payment_status',
+        'payment_method',
+        'transaction_reference',
         'location',
+        'reason',
         'cancelled_at',
+        'decided_at',
+        'completed_at',
     ];
 
     protected $casts = [
         'start_at' => 'datetime',
         'end_at' => 'datetime',
         'total_amount' => 'decimal:2',
+        'deposit_amount' => 'decimal:2',
         'cancelled_at' => 'datetime',
+        'decided_at' => 'datetime',
+        'completed_at' => 'datetime',
     ];
 
     /**

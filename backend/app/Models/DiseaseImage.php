@@ -33,6 +33,7 @@ class DiseaseImage extends Model
         'width' => 'integer',
         'height' => 'integer',
         'size_bytes' => 'integer',
+        'created_at' => 'datetime',
     ];
 
     /**

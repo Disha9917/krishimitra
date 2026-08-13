@@ -32,11 +32,15 @@ use App\Repositories\Contracts\FarmerFieldRepositoryInterface;
 use App\Repositories\Contracts\FarmerProfileRepositoryInterface;
 use App\Repositories\Contracts\FeedbackRepositoryInterface;
 use App\Repositories\Contracts\GovernmentSchemeRepositoryInterface;
+use App\Repositories\Contracts\ImportHistoryRepositoryInterface;
+use App\Repositories\Contracts\ImportLogRepositoryInterface;
+use App\Repositories\Contracts\ImportWriteRepositoryInterface;
 use App\Repositories\Contracts\HarvestRepositoryInterface;
 use App\Repositories\Contracts\LanguageSettingRepositoryInterface;
 use App\Repositories\Contracts\MandiRepositoryInterface;
 use App\Repositories\Contracts\MarketPriceRepositoryInterface;
 use App\Repositories\Contracts\NearbyMandiRepositoryInterface;
+use App\Repositories\Contracts\NotificationPreferenceRepositoryInterface;
 use App\Repositories\Contracts\NotificationRepositoryInterface;
 use App\Repositories\Contracts\NotificationSettingRepositoryInterface;
 use App\Repositories\Contracts\OtpCodeRepositoryInterface;
@@ -55,6 +59,7 @@ use App\Repositories\Contracts\SoilTypeRepositoryInterface;
 use App\Repositories\Contracts\TalukaRepositoryInterface;
 use App\Repositories\Contracts\TestimonialRepositoryInterface;
 use App\Repositories\Contracts\ThemeSettingRepositoryInterface;
+use App\Repositories\Contracts\TransportBookingRepositoryInterface;
 use App\Repositories\Contracts\TransportCalculationRepositoryInterface;
 use App\Repositories\Contracts\TransportRouteRepositoryInterface;
 use App\Repositories\Contracts\TransportVehicleTypeRepositoryInterface;
@@ -63,6 +68,7 @@ use App\Repositories\Contracts\UploadedFileRepositoryInterface;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Repositories\Contracts\UserRoleRepositoryInterface;
 use App\Repositories\Contracts\UserSettingRepositoryInterface;
+use App\Repositories\Contracts\VehicleRepositoryInterface;
 use App\Repositories\Contracts\VillageRepositoryInterface;
 use App\Repositories\Contracts\WeatherAlertRepositoryInterface;
 use App\Repositories\Contracts\WeatherCacheRepositoryInterface;
@@ -97,11 +103,15 @@ use App\Repositories\Eloquent\EloquentFarmerFieldRepository;
 use App\Repositories\Eloquent\EloquentFarmerProfileRepository;
 use App\Repositories\Eloquent\EloquentFeedbackRepository;
 use App\Repositories\Eloquent\EloquentGovernmentSchemeRepository;
+use App\Repositories\Eloquent\EloquentImportHistoryRepository;
+use App\Repositories\Eloquent\EloquentImportLogRepository;
+use App\Repositories\Eloquent\EloquentImportWriteRepository;
 use App\Repositories\Eloquent\EloquentHarvestRepository;
 use App\Repositories\Eloquent\EloquentLanguageSettingRepository;
 use App\Repositories\Eloquent\EloquentMandiRepository;
 use App\Repositories\Eloquent\EloquentMarketPriceRepository;
 use App\Repositories\Eloquent\EloquentNearbyMandiRepository;
+use App\Repositories\Eloquent\EloquentNotificationPreferenceRepository;
 use App\Repositories\Eloquent\EloquentNotificationRepository;
 use App\Repositories\Eloquent\EloquentNotificationSettingRepository;
 use App\Repositories\Eloquent\EloquentOtpCodeRepository;
@@ -121,6 +131,7 @@ use App\Repositories\Eloquent\EloquentTalukaRepository;
 use App\Repositories\Eloquent\EloquentTestimonialRepository;
 use App\Repositories\Eloquent\EloquentThemeSettingRepository;
 use App\Repositories\Eloquent\EloquentTransportCalculationRepository;
+use App\Repositories\Eloquent\EloquentTransportBookingRepository;
 use App\Repositories\Eloquent\EloquentTransportRouteRepository;
 use App\Repositories\Eloquent\EloquentTransportVehicleTypeRepository;
 use App\Repositories\Eloquent\EloquentTreatmentRecommendationRepository;
@@ -128,6 +139,7 @@ use App\Repositories\Eloquent\EloquentUploadedFileRepository;
 use App\Repositories\Eloquent\EloquentUserRepository;
 use App\Repositories\Eloquent\EloquentUserRoleRepository;
 use App\Repositories\Eloquent\EloquentUserSettingRepository;
+use App\Repositories\Eloquent\EloquentVehicleRepository;
 use App\Repositories\Eloquent\EloquentVillageRepository;
 use App\Repositories\Eloquent\EloquentWeatherAlertRepository;
 use App\Repositories\Eloquent\EloquentWeatherCacheRepository;
@@ -314,6 +326,11 @@ class RepositoryServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
+            NotificationPreferenceRepositoryInterface::class,
+            EloquentNotificationPreferenceRepository::class,
+        );
+
+        $this->app->bind(
             NotificationSettingRepositoryInterface::class,
             EloquentNotificationSettingRepository::class,
         );
@@ -399,6 +416,11 @@ class RepositoryServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
+            TransportBookingRepositoryInterface::class,
+            EloquentTransportBookingRepository::class,
+        );
+
+        $this->app->bind(
             TransportCalculationRepositoryInterface::class,
             EloquentTransportCalculationRepository::class,
         );
@@ -421,6 +443,11 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             UploadedFileRepositoryInterface::class,
             EloquentUploadedFileRepository::class,
+        );
+
+        $this->app->bind(
+            VehicleRepositoryInterface::class,
+            EloquentVehicleRepository::class,
         );
 
         $this->app->bind(
@@ -466,6 +493,21 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             WeatherStationRepositoryInterface::class,
             EloquentWeatherStationRepository::class,
+        );
+
+        $this->app->bind(
+            ImportHistoryRepositoryInterface::class,
+            EloquentImportHistoryRepository::class,
+        );
+
+        $this->app->bind(
+            ImportLogRepositoryInterface::class,
+            EloquentImportLogRepository::class,
+        );
+
+        $this->app->bind(
+            ImportWriteRepositoryInterface::class,
+            EloquentImportWriteRepository::class,
         );
 
     }
