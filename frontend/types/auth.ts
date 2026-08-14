@@ -36,7 +36,7 @@ export interface RegisterRequest {
   email: string;
   phone: string;
   password: string;
-  pinCode: string;
+  pinCode?: string;
   preferredLanguage?: "gu" | "hi" | "en";
   role?: string;
 }

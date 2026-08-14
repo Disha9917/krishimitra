@@ -24,8 +24,6 @@ import {
   Smartphone,
   Eye,
   EyeOff,
-  Zap,
-  Key,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -45,7 +43,7 @@ const translations = {
     stat3Sub: "Hyper-local sowing & spray schedule alerts",
     pauTag: "PAU Ludhiana Extension Network Integrated",
     cardTitle: "Farmer Sign In",
-    cardSub: "Select your preferred authentication method",
+    cardSub: "Enter your mobile number or email and password to sign in",
     mobileOtpTab: "Mobile OTP",
     passwordTab: "Password",
     mobileLabel: "Mobile Number",
@@ -134,7 +132,7 @@ const translations = {
 
 export default function LoginPage() {
   const router = useRouter();
-  const [loginMethod, setLoginMethod] = useState<"otp" | "password">("otp");
+  const [loginMethod, setLoginMethod] = useState<"otp" | "password">("password");
   const [mobileNumber, setMobileNumber] = useState("");
   const [password, setPassword] = useState("");
   const [otpSent, setOtpSent] = useState(false);
@@ -162,18 +160,6 @@ export default function LoginPage() {
     setTimeout(() => {
       router.push("/dashboard");
     }, 1200);
-  };
-
-  // 1-Click Demo Login: fills the password form with the demo account and submits it.
-  const handleDemoLogin = () => {
-    setLoginMethod("password");
-    setOtpSent(false);
-    setMobileNumber("9876543210");
-    setPassword("Farmer2026#");
-    setErrorMessage(null);
-    setTimeout(() => {
-      handleLoginWithPassword("9876543210", "Farmer2026#");
-    }, 100);
   };
 
   const handleLoginWithPassword = async (identifier: string, passwordValue: string) => {
@@ -373,40 +359,6 @@ export default function LoginPage() {
                 </p>
               </div>
 
-              {/* Login Method Tab Switcher */}
-              <div className="grid grid-cols-2 rounded-2xl bg-slate-100 dark:bg-[#111827] p-1 border border-slate-200/60 dark:border-[#2A2F3A]">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setLoginMethod("otp");
-                    setOtpSent(false);
-                  }}
-                  className={`flex items-center justify-center gap-2 rounded-xl py-2 text-xs font-bold transition-all ${
-                    loginMethod === "otp"
-                      ? "bg-white dark:bg-[#161B22] text-emerald-700 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-[#2A2F3A]"
-                      : "text-slate-600 dark:text-[#8B949E] hover:text-slate-900 dark:hover:text-white"
-                  }`}
-                >
-                  <Smartphone className="h-4 w-4" />
-                  <span>{t.mobileOtpTab}</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setLoginMethod("password");
-                    setOtpSent(false);
-                  }}
-                  className={`flex items-center justify-center gap-2 rounded-xl py-2 text-xs font-bold transition-all ${
-                    loginMethod === "password"
-                      ? "bg-white dark:bg-[#161B22] text-emerald-700 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-[#2A2F3A]"
-                      : "text-slate-600 dark:text-[#8B949E] hover:text-slate-900 dark:hover:text-white"
-                  }`}
-                >
-                  <Lock className="h-4 w-4" />
-                  <span>{t.passwordTab}</span>
-                </button>
-              </div>
-
               {/* Form Content */}
               {isSuccess ? (
                 <div className="py-8 text-center space-y-3 animate-fade-in">
@@ -517,47 +469,6 @@ export default function LoginPage() {
                       </span>
                     )}
                   </Button>
-
-                  {/* Dedicated Demo Credentials Compartment Box */}
-                  <div className="rounded-2xl border border-emerald-200 dark:border-emerald-800/40 bg-emerald-50/70 dark:bg-[#111827] p-3.5 space-y-2 text-xs text-slate-800 dark:text-[#C9D1D9]">
-                    <div className="flex items-center justify-between font-bold text-emerald-800 dark:text-emerald-400">
-                      <span className="flex items-center gap-1.5">
-                        <Key className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-                        <span>Demo Farmer Credentials</span>
-                      </span>
-                      <span className="rounded-full bg-emerald-200/70 dark:bg-emerald-900/50 px-2 py-0.5 text-[10px] text-emerald-900 dark:text-emerald-300 font-black uppercase">
-                        Test Account
-                      </span>
-                    </div>
-
-                    <div className="grid grid-cols-3 gap-1.5 text-[11px] font-medium bg-white/80 dark:bg-[#161B22] p-2.5 rounded-xl border border-emerald-100 dark:border-[#2A2F3A]">
-                      <div>
-                        <span className="text-slate-400 dark:text-[#8B949E] block text-[10px]">MOBILE</span>
-                        <span className="font-mono font-bold text-slate-900 dark:text-white">+91 98765 43210</span>
-                      </div>
-                      <div>
-                        <span className="text-slate-400 dark:text-[#8B949E] block text-[10px]">OTP CODE</span>
-                        <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">55819</span>
-                      </div>
-                      <div>
-                        <span className="text-slate-400 dark:text-[#8B949E] block text-[10px]">PASSWORD</span>
-                        <span className="font-mono font-bold text-slate-900 dark:text-white">Farmer2026#</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* 1-Click Instant Demo Account Login Button */}
-                  <div className="pt-1">
-                    <button
-                      type="button"
-                      onClick={handleDemoLogin}
-                      disabled={isLoading}
-                      className="w-full flex items-center justify-center gap-2 rounded-xl border border-dashed border-emerald-300 dark:border-emerald-700/60 bg-emerald-50/50 dark:bg-emerald-950/30 px-4 py-2.5 text-xs font-bold text-emerald-800 dark:text-emerald-300 hover:bg-emerald-100/70 dark:hover:bg-emerald-950/60 transition-all"
-                    >
-                      <Zap className="h-4 w-4 text-emerald-600 dark:text-emerald-400 animate-pulse" />
-                      <span>{t.demoLoginBtn}</span>
-                    </button>
-                  </div>
                 </form>
               )}
 

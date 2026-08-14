@@ -114,7 +114,6 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
   const [password, setPassword] = useState("");
-  const [pinCode, setPinCode] = useState("");
   const [selectedRegionId, setSelectedRegionId] = useState("central-gujarat");
   const [selectedDistrictId, setSelectedDistrictId] = useState("anand");
   const [landAcres, setLandAcres] = useState(12);
@@ -142,11 +141,6 @@ export default function RegisterPage() {
       setIsLoading(false);
       return;
     }
-    if (!/^[1-9][0-9]{5}$/.test(pinCode)) {
-      setErrorMessage("Please enter a valid 6-digit PIN code.");
-      setIsLoading(false);
-      return;
-    }
 
     try {
       await authService.register({
@@ -154,7 +148,6 @@ export default function RegisterPage() {
         email: email.trim(),
         phone,
         password,
-        pinCode,
         preferredLanguage: language,
         role: "farmer",
       });
@@ -314,16 +307,6 @@ export default function RegisterPage() {
                       placeholder="••••••••"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      required
-                    />
-                    <Input
-                      label={t.pinCodeLabel}
-                      type="text"
-                      inputMode="numeric"
-                      maxLength={6}
-                      placeholder="382481"
-                      value={pinCode}
-                      onChange={(e) => setPinCode(e.target.value)}
                       required
                     />
                   </motion.div>
