@@ -43,9 +43,9 @@ export const reportService = {
         return data.map((rep, idx) => ({
           id: String(rep.id ?? `REP-00${idx + 1}`),
           title: String(rep.title ?? "Agricultural Advisory Report"),
-          category: String(rep.reportType ?? rep.category ?? "Advisory"),
+          category: (rep.reportType || rep.category || "Advisory") as ReportSummary["category"],
           dateGenerated: String(rep.createdAt ?? rep.created_at ?? new Date().toISOString().split("T")[0]),
-          fileFormat: String(rep.format ?? rep.fileFormat ?? "PDF").toUpperCase(),
+          fileFormat: (String(rep.format || rep.fileFormat || "PDF").toUpperCase()) as ReportSummary["fileFormat"],
           fileSize: String(rep.fileSize ?? "1.5 MB"),
           summaryText: String(rep.summary ?? rep.summaryText ?? "Detailed report summary."),
           downloadUrl: API_ENDPOINTS.REPORTS.DOWNLOAD(String(rep.id)),

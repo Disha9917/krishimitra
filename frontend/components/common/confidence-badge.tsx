@@ -12,19 +12,19 @@ export interface ConfidenceBadgeProps {
 export function ConfidenceBadge({ confidence, score, className }: ConfidenceBadgeProps) {
   const config = {
     High: {
-      bg: "bg-emerald-50 text-emerald-700 border-emerald-200",
+      bg: "bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800",
       dot: "bg-emerald-500",
-      icon: <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />,
+      icon: <ShieldCheck className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />,
     },
     Medium: {
-      bg: "bg-amber-50 text-amber-700 border-amber-200",
+      bg: "bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800",
       dot: "bg-amber-500",
-      icon: <ShieldAlert className="h-3.5 w-3.5 text-amber-600" />,
+      icon: <ShieldAlert className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />,
     },
     Low: {
-      bg: "bg-rose-50 text-rose-700 border-rose-200",
+      bg: "bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800",
       dot: "bg-rose-500",
-      icon: <AlertCircle className="h-3.5 w-3.5 text-rose-600" />,
+      icon: <AlertCircle className="h-3.5 w-3.5 text-rose-600 dark:text-rose-400" />,
     },
   };
 

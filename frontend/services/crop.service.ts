@@ -18,8 +18,8 @@ export const cropService = {
             cropName: input.cropType || "Crop",
             confidence: "High" as const,
             confidenceScore: 90,
-            explanation: r.details || r.action,
-            recommendedAction: r.action,
+            explanation: (r as { details?: string; action?: string; explanation?: string }).details || (r as { details?: string; action?: string; explanation?: string }).action || r.explanation || "",
+            recommendedAction: (r as { action?: string; recommendedAction?: string }).action || r.recommendedAction || "",
             expectedYieldImprovement: "+15% Yield",
           })) ?? [],
           irrigation: res.irrigation ?? {

@@ -20,8 +20,8 @@ export function CropRecommendationModule() {
       )}
       <FarmerInputForm onSubmit={getAdvisory} isLoading={isLoading} />
       {isLoading && (
-        <div className="flex items-center gap-3 rounded-2xl border border-emerald-100 bg-emerald-50/70 p-4 text-sm font-semibold text-emerald-800">
-          <Sparkles className="h-5 w-5 animate-pulse text-emerald-600" />
+        <div className="flex items-center gap-3 rounded-2xl border border-emerald-100 dark:border-[#2A2F3A] bg-emerald-50/70 dark:bg-[#111827] p-4 text-sm font-semibold text-emerald-800 dark:text-emerald-300">
+          <Sparkles className="h-5 w-5 animate-pulse text-emerald-600 dark:text-emerald-400" />
           Generating AI advisory with the precision engine...
         </div>
       )}

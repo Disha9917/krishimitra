@@ -920,7 +920,7 @@ export default function DashboardPage() {
                       <span className={`text-[10px] font-extrabold px-1.5 py-0.5 rounded ${activeStageIndex === idx ? "bg-white/20 text-white" : "bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-400"}`}>
                         Step #{idx + 1}
                       </span>
-                      <span className={`text-[10px] font-bold ${activeStageIndex === idx ? "text-emerald-100" : "text-slate-400"}`}>
+                      <span className={`text-[10px] font-bold ${activeStageIndex === idx ? "text-emerald-100" : "text-slate-400 dark:text-[#8B949E]"}`}>
                         {stage.daysRange}
                       </span>
                     </div>

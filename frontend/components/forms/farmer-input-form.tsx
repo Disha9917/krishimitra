@@ -47,14 +47,14 @@ export function FarmerInputForm({ onSubmit, isLoading }: FarmerInputFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
-      <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+    <form onSubmit={handleSubmit} className="space-y-5 rounded-2xl border border-slate-100 dark:border-[#2A2F3A] bg-white dark:bg-[#161B22] p-6 shadow-sm">
+      <div className="flex items-center justify-between border-b border-slate-100 dark:border-[#2A2F3A] pb-4">
         <div>
-          <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-emerald-600" />
+          <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <Sparkles className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
             Farmer Field & Crop Details
           </h3>
-          <p className="text-xs text-slate-500">Provide field parameters to generate ranked AI advisories</p>
+          <p className="text-xs text-slate-500 dark:text-[#8B949E]">Provide field parameters to generate ranked AI advisories</p>
         </div>
       </div>
 
@@ -62,14 +62,14 @@ export function FarmerInputForm({ onSubmit, isLoading }: FarmerInputFormProps) {
         {/* GPS Location with Auto-detect */}
         <div className="space-y-1.5">
           <div className="flex items-center justify-between">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-[#C9D1D9]">
               GPS Location Coordinates
             </label>
             <button
               type="button"
               onClick={handleFetchGPS}
               disabled={isFetchingGPS}
-              className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 hover:underline"
+              className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline cursor-pointer"
             >
               <Navigation className="h-3 w-3" />
               {isFetchingGPS ? "Detecting..." : "Auto Detect GPS"}
@@ -106,21 +106,21 @@ export function FarmerInputForm({ onSubmit, isLoading }: FarmerInputFormProps) {
 
       {/* Weather Observation */}
       <div className="space-y-1.5">
-        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600">
+        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-[#C9D1D9]">
           Local Weather Observation
         </label>
         <textarea
           value={weatherObservation}
           onChange={(e) => setWeatherObservation(e.target.value)}
           rows={2}
-          className="w-full rounded-xl border border-slate-200 bg-white p-3 text-sm text-slate-900 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+          className="w-full rounded-xl border border-slate-200 dark:border-[#2A2F3A] bg-white dark:bg-[#111827] p-3 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-[#8B949E] focus:border-emerald-500 dark:focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
           placeholder="e.g. High humidity, sudden rainfall yesterday, overcast sky"
         />
       </div>
 
       {/* Optional Leaf Image Upload */}
       <div className="space-y-1.5">
-        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600">
+        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-[#C9D1D9]">
           Optional Leaf Image Upload (For Disease Risk Check)
         </label>
         <FileUpload onFileSelect={(file) => setLeafImage(file)} />
