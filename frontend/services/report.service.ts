@@ -1,3 +1,5 @@
+import { API_ENDPOINTS } from "../constants/api";
+import { apiClient } from "./axios";
 import { ReportSummary } from "../types/report";
 
 export const MOCK_REPORTS: ReportSummary[] = [
@@ -35,6 +37,24 @@ export const MOCK_REPORTS: ReportSummary[] = [
 
 export const reportService = {
   async getReports(): Promise<ReportSummary[]> {
+    try {
+      const data = await apiClient.get<Record<string, unknown>[]>(API_ENDPOINTS.REPORTS.LIST);
+      if (Array.isArray(data) && data.length > 0) {
+        return data.map((rep, idx) => ({
+          id: String(rep.id ?? `REP-00${idx + 1}`),
+          title: String(rep.title ?? "Agricultural Advisory Report"),
+          category: String(rep.reportType ?? rep.category ?? "Advisory"),
+          dateGenerated: String(rep.createdAt ?? rep.created_at ?? new Date().toISOString().split("T")[0]),
+          fileFormat: String(rep.format ?? rep.fileFormat ?? "PDF").toUpperCase(),
+          fileSize: String(rep.fileSize ?? "1.5 MB"),
+          summaryText: String(rep.summary ?? rep.summaryText ?? "Detailed report summary."),
+          downloadUrl: API_ENDPOINTS.REPORTS.DOWNLOAD(String(rep.id)),
+        }));
+      }
+    } catch {
+      // Safe fallback to mock reports
+    }
+
     return MOCK_REPORTS;
   },
-};
+};

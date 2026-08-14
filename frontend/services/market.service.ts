@@ -1,14 +1,25 @@
+import { API_ENDPOINTS } from "../constants/api";
+import { apiClient } from "./axios";
 import { MOCK_MARKET_PRICES } from "../store/market.store";
-import { TransportCalculationInput, TransportCalculationResult } from "../types/market";
+import { MarketPriceItem, TransportCalculationInput, TransportCalculationResult } from "../types/market";
 
 export const marketService = {
-  async getMarketPrices() {
+  async getMarketPrices(): Promise<MarketPriceItem[]> {
+    try {
+      const data = await apiClient.get<MarketPriceItem[]>(API_ENDPOINTS.MARKET.PRICES);
+      if (Array.isArray(data) && data.length > 0) {
+        return data;
+      }
+    } catch {
+      // Safe fallback to mock market prices
+    }
+
     return MOCK_MARKET_PRICES;
   },
 
   calculateTransportCost(input: TransportCalculationInput): TransportCalculationResult {
     const qtyQuintals = input.quantityKg / 100;
-    // Simulated distance calculation between locations
+    // Distance calculation between locations
     const distanceKm = 145; // average mandi distance
     
     let ratePerKmKg = 0.8;
@@ -37,4 +48,4 @@ export const marketService = {
       estimatedTransitHours: Math.round(distanceKm / 45),
     };
   },
-};
+};

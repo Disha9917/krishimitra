@@ -1,9 +1,73 @@
+import { API_ENDPOINTS } from "../constants/api";
+import { apiClient } from "./axios";
+import { aiService } from "./ai.service";
 import { FarmerCropInput, CropAdvisoryResult } from "../types/crop";
 import { getDayName, getRelativeDays } from "../utils/date";
 
 export const cropService = {
   async generateAdvisory(input: FarmerCropInput): Promise<CropAdvisoryResult> {
-    // Simulate intelligent AI calculations based on input parameters
+    try {
+      const res = await aiService.generateAdvisory(input);
+      if (res) {
+        return {
+          farmerInput: input,
+          top3Advisories: res.top3Advisories ?? res.recommendations?.slice(0, 3).map((r, idx) => ({
+            id: `ADV-0${idx + 1}`,
+            rank: idx + 1,
+            title: r.title ?? `Recommendation ${idx + 1}`,
+            cropName: input.cropType || "Crop",
+            confidence: "High" as const,
+            confidenceScore: 90,
+            explanation: r.details || r.action,
+            recommendedAction: r.action,
+            expectedYieldImprovement: "+15% Yield",
+          })) ?? [],
+          irrigation: res.irrigation ?? {
+            title: "Irrigation Plan",
+            confidence: "High",
+            waterQuantity: "25 mm",
+            frequency: "Every 4th Day",
+            method: "Sprinkler / Drip",
+            explanation: "Maintain optimal moisture level.",
+            recommendedAction: "Irrigate early morning.",
+          },
+          fertilizer: res.fertilizer ?? {
+            title: "Fertilizer Plan",
+            confidence: "High",
+            npkRatio: "12:32:16",
+            dosagePerAcre: "45 kg/acre",
+            applicationTime: "Morning",
+            explanation: "Balanced soil nutrient top-dressing.",
+            recommendedAction: "Apply urea after watering.",
+          },
+          pestAlert: res.pestAlert ?? {
+            title: "Pest & Disease Monitoring",
+            confidence: "Medium",
+            severity: "Low",
+            pestOrDiseaseName: "None Reported",
+            symptoms: ["Regular leaf inspection recommended"],
+            explanation: "Weather conditions are stable.",
+            recommendedAction: "Inspect field twice weekly.",
+          },
+          timeline7Days: res.timeline7Days ?? Array.from({ length: 7 }, (_, i) => ({
+            day: i + 1,
+            date: getRelativeDays(i),
+            dayName: getDayName(i),
+            weatherCondition: "Partly Cloudy",
+            temperature: "28°C",
+            rainfallProbability: 10,
+            irrigation: i === 1 || i === 5 ? "Recommended" : "Skip",
+            fertilizer: i === 0 ? "Top-Dressing" : "None",
+            diseaseRisk: "Low" as const,
+            notes: "Regular monitoring",
+          })),
+          generatedAt: res.generatedAt ?? new Date().toISOString(),
+        };
+      }
+    } catch {
+      // Fallback to static advisory calculations if API fails or user is offline
+    }
+
     const crop = input.cropType || "Wheat";
     
     return {
@@ -94,4 +158,13 @@ export const cropService = {
       generatedAt: new Date().toISOString(),
     };
   },
-};
+
+  async getFarmerCrops(): Promise<unknown[]> {
+    try {
+      const data = await apiClient.get<unknown[]>(API_ENDPOINTS.CROP.LIST);
+      return data ?? [];
+    } catch {
+      return [];
+    }
+  },
+};

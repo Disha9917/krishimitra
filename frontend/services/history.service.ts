@@ -1,3 +1,5 @@
+import { API_ENDPOINTS } from "../constants/api";
+import { apiClient } from "./axios";
 import { PredictionHistoryRecord } from "../types/prediction";
 
 export const MOCK_HISTORY: PredictionHistoryRecord[] = [
@@ -57,6 +59,27 @@ export const MOCK_HISTORY: PredictionHistoryRecord[] = [
 
 export const historyService = {
   async getHistory(): Promise<PredictionHistoryRecord[]> {
+    try {
+      const data = await apiClient.get<Record<string, unknown>[]>(API_ENDPOINTS.AI.HISTORY);
+      if (Array.isArray(data) && data.length > 0) {
+        return data.map((item, idx) => ({
+          id: String(item.id ?? `HIS-${100 + idx}`),
+          date: String(item.createdAt ?? item.created_at ?? new Date().toISOString().split("T")[0]),
+          crop: String(item.cropName ?? item.crop_name ?? "General Crop"),
+          predictionType: "Crop Advisory",
+          prediction: String(item.title ?? item.summary ?? "AI Crop Advisory"),
+          disease: "N/A",
+          recommendation: String(item.recommendedAction ?? item.recommendation ?? "Follow precision guidelines."),
+          confidence: "High",
+          location: String(item.location ?? "Farmgate"),
+          status: "Active",
+          downloadUrl: "#",
+        }));
+      }
+    } catch {
+      // Safe fallback to mock history if unauthenticated or offline
+    }
+
     return MOCK_HISTORY;
   },
-};
+};
