@@ -25,18 +25,20 @@ class AuthController extends Controller
             'fullName' => ['required', 'string', 'max:150'],
             'email' => ['required', 'email', 'max:255'],
             'phone' => ['required', 'regex:/^[6-9]\d{9}$/'],
-            'pinCode' => ['required', 'regex:/^[1-9][0-9]{5}$/'],
+            'pinCode' => ['sometimes', 'nullable', 'string', 'max:10'],
             'password' => ['required', 'string', 'min:8', 'max:72'],
             'preferredLanguage' => ['sometimes', 'in:gu,hi,en'],
             'role' => ['sometimes', 'string', 'max:50'],
         ]);
+
+        $pinCode = !empty($data['pinCode']) ? (string) $data['pinCode'] : '380001';
 
         $result = $this->auth->register(
             strtolower(trim($data['email'])),
             $data['password'],
             $data['phone'],
             $data['fullName'],
-            $data['pinCode'],
+            $pinCode,
             $data['preferredLanguage'] ?? 'gu',
             $data['role'] ?? 'farmer',
         );
