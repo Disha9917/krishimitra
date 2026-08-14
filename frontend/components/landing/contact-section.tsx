@@ -26,7 +26,7 @@ export function ContactSection() {
             Get In Touch
           </h2>
           <p className="text-sm text-slate-600 dark:text-[#C9D1D9] max-w-2xl mx-auto leading-relaxed">
-            Have questions about KrishiMitra AgriTech advisory, post-harvest features, or extension services?
+            Have questions about FasalDrishti AgriTech advisory, post-harvest features, or extension services?
           </p>
         </div>
 
@@ -52,7 +52,7 @@ export function ContactSection() {
                   </div>
                   <div>
                     <p className="font-semibold text-slate-900 dark:text-white text-xs">Email Support</p>
-                    <p className="text-[11px] text-slate-600 dark:text-[#8B949E] mt-0.5">support@krishimitra.agri</p>
+                    <p className="text-[11px] text-slate-600 dark:text-[#8B949E] mt-0.5">support@fasaldrishti.agri</p>
                   </div>
                 </div>
 

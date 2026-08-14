@@ -30,7 +30,7 @@ export function ServicesSection() {
         <div className="text-center space-y-4 max-w-2xl mx-auto">
           <div className="inline-flex items-center gap-2 rounded-full bg-emerald-500/10 dark:bg-emerald-400/10 backdrop-blur-md px-4 py-1.5 text-xs font-bold text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 dark:border-emerald-400/20">
             <Sparkles className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
-            <span>KrishiMitra Services Ecosystem</span>
+            <span>FasalDrishti Services Ecosystem</span>
           </div>
 
           <h2 className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">

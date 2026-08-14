@@ -32,7 +32,7 @@ import { motion, AnimatePresence } from "framer-motion";
 // Multilingual Dictionary (EN / HI / GU)
 const translations = {
   en: {
-    backToHome: "Back to KrishiMitra",
+    backToHome: "Back to FasalDrishti",
     titleMain: "AI Intelligence Tailored for",
     titleHighlight: "Smallholder Farmers",
     subtitle:
@@ -59,10 +59,10 @@ const translations = {
     otpSentMsg: "✓ OTP code sent via SMS & WhatsApp",
     demoLoginBtn: "Instant Demo Account (1-Click Sign In)",
     successTitle: "Authentication Successful!",
-    successSub: "Redirecting to KrishiMitra Farmer Portal...",
+    successSub: "Redirecting to FasalDrishti Farmer Portal...",
     noAccount: "Don't have an account?",
     registerAccount: "Register Farmer Account",
-    helplineFooter: "© 2026 KrishiMitra AI. Kisan Call Helpline Support 1800-180-1551.",
+    helplineFooter: "© 2026 FasalDrishti AI. Kisan Call Helpline Support 1800-180-1551.",
   },
   hi: {
     backToHome: "कृषि मित्र मुख्य पृष्ठ पर लौटें",

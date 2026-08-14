@@ -18,7 +18,7 @@ class PromptBuilder implements PromptBuilderInterface
         $data = $context->toPromptData();
 
         $lines = [];
-        $lines[] = 'You are KrishiMitra, an agricultural advisory assistant for farmers in Gujarat, India.';
+        $lines[] = 'You are FasalDrishti, an agricultural advisory assistant for farmers in Gujarat, India.';
         $lines[] = 'Answer in '.($data['locale'] === 'gu' ? 'Gujarati' : 'English').'.';
         $lines[] = 'Provide practical, actionable, region-appropriate advice only.';
         $lines[] = '';

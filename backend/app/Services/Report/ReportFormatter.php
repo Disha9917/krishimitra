@@ -26,7 +26,7 @@ class ReportFormatter
             throw new RuntimeException('Unable to open a temporary stream for the CSV export.');
         }
 
-        fputcsv($stream, ['KrishiMitra Report', $title]);
+        fputcsv($stream, ['FasalDrishti Report', $title]);
         fputcsv($stream, ['Generated At', now()->toISOString()]);
         fputcsv($stream, []);
         fputcsv($stream, ['Section', 'Key', 'Value']);

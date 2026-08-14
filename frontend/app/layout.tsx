@@ -4,7 +4,7 @@ import "../styles/animations.css";
 import { ThemeProvider } from "../components/theme-provider";
 
 export const metadata: Metadata = {
-  title: "KrishiMitra AI | Precision Crop Advisory & Post-Harvest Loss Planner",
+  title: "FasalDrishti AI | Precision Crop Advisory & Post-Harvest Loss Planner",
   description: "AI-powered precision crop advisory system, disease detection, and post-harvest loss reduction planner for smallholder farmers.",
 };
 

@@ -556,7 +556,7 @@ export default function SchemeDetailPage() {
 
       {/* Footer */}
       <footer className="relative z-20 text-center py-4 border-t border-slate-100 dark:border-[#2A2F3A] text-[11px] text-slate-500 dark:text-[#8B949E]">
-        © {new Date().getFullYear()} KrishiMitra AI. Kisan Call Helpline Support 1800-180-1551.
+        © {new Date().getFullYear()} FasalDrishti AI. Kisan Call Helpline Support 1800-180-1551.
       </footer>
     </div>
   );

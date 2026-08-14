@@ -21,7 +21,7 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
         <Logo />
         <p className="text-slate-400 dark:text-[#8B949E]">
-          © {new Date().getFullYear()} KrishiMitra AI. Precision Crop Advisory & Post-Harvest Loss Planner for Smallholder Farmers.
+          © {new Date().getFullYear()} FasalDrishti AI. Precision Crop Advisory & Post-Harvest Loss Planner for Smallholder Farmers.
         </p>
         <div className="flex gap-4">
           <Link

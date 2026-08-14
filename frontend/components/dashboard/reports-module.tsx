@@ -12,7 +12,7 @@ export function ReportsModule() {
           <p className="text-xs text-slate-500">Download formatted PDF, CSV data tables, or print official field reports</p>
         </div>
         <ReportExportButtons
-          title="KrishiMitra Advisory Comprehensive Report"
+          title="FasalDrishti Advisory Comprehensive Report"
           summaryText="Includes 7-day crop advisory, soil moisture metrics, disease diagnosis, and APMC mandi price history."
         />
       </div>

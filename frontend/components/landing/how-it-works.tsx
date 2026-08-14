@@ -10,7 +10,7 @@ export function HowItWorks() {
   return (
     <section className="py-16 bg-transparent">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12">
-        <h2 className="text-3xl font-black text-slate-900 dark:text-white text-center">How KrishiMitra AI Works</h2>
+        <h2 className="text-3xl font-black text-slate-900 dark:text-white text-center">How FasalDrishti AI Works</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {steps.map((step, idx) => (
             <div key={idx} className="rounded-2xl border border-emerald-100/80 dark:border-[#2A2F3A] bg-white/80 dark:bg-[#161B22]/90 backdrop-blur-md p-6 shadow-xs space-y-3 hover:shadow-md transition-all">

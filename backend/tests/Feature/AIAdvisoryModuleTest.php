@@ -50,7 +50,7 @@ class AIAdvisoryModuleTest extends TestCase
         ])->assertCreated();
 
         $response->assertJsonPath('data.provider', 'null')
-            ->assertJsonPath('data.model', 'krishimitra-null-v1')
+            ->assertJsonPath('data.model', 'fasaldrishti-null-v1')
             ->assertJsonPath('data.usage.totalTokens', 0);
 
         $this->assertStringContainsString($topic, $response->json('data.content'));
@@ -66,7 +66,7 @@ class AIAdvisoryModuleTest extends TestCase
         ])->assertCreated();
 
         $response->assertJsonPath('data.provider', 'null')
-            ->assertJsonPath('data.model', 'krishimitra-null-v1');
+            ->assertJsonPath('data.model', 'fasaldrishti-null-v1');
 
         $this->assertNotEmpty($response->json('data.content'));
     }

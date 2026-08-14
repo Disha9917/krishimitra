@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class AIService implements AIServiceInterface
 {
-    private const MODEL_VERSION = 'krishimitra-ai-v1';
+    private const MODEL_VERSION = 'fasaldrishti-ai-v1';
 
     public function __construct(
         private readonly AiAdvisoryRepositoryInterface $advisories,

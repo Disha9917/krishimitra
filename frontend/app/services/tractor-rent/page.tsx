@@ -422,13 +422,13 @@ export default function TractorRentPage() {
   // Sync state from localStorage
   React.useEffect(() => {
     setIsMounted(true);
-    const storedListings = localStorage.getItem("krishimitra_tractor_listings");
-    const storedBookings = localStorage.getItem("krishimitra_tractor_bookings");
+    const storedListings = localStorage.getItem("fasaldrishti_tractor_listings");
+    const storedBookings = localStorage.getItem("fasaldrishti_tractor_bookings");
 
     if (storedListings) {
       setListings(JSON.parse(storedListings));
     } else {
-      localStorage.setItem("krishimitra_tractor_listings", JSON.stringify(DEFAULT_TRACTORS));
+      localStorage.setItem("fasaldrishti_tractor_listings", JSON.stringify(DEFAULT_TRACTORS));
       setListings(DEFAULT_TRACTORS);
     }
 
@@ -439,12 +439,12 @@ export default function TractorRentPage() {
 
   const saveListingsToStorage = (updated: TractorListing[]) => {
     setListings(updated);
-    localStorage.setItem("krishimitra_tractor_listings", JSON.stringify(updated));
+    localStorage.setItem("fasaldrishti_tractor_listings", JSON.stringify(updated));
   };
 
   const saveBookingsToStorage = (updated: Booking[]) => {
     setBookings(updated);
-    localStorage.setItem("krishimitra_tractor_bookings", JSON.stringify(updated));
+    localStorage.setItem("fasaldrishti_tractor_bookings", JSON.stringify(updated));
   };
 
   // Reset Filters when Region/District changes to maintain consistency
@@ -1726,8 +1726,8 @@ export default function TractorRentPage() {
                   <button 
                     onClick={() => {
                       if (confirm("Reset marketplace to default pre-populated tractors?")) {
-                        localStorage.removeItem("krishimitra_tractor_listings");
-                        localStorage.removeItem("krishimitra_tractor_bookings");
+                        localStorage.removeItem("fasaldrishti_tractor_listings");
+                        localStorage.removeItem("fasaldrishti_tractor_bookings");
                         setListings(DEFAULT_TRACTORS);
                         setBookings([]);
                       }
@@ -2068,7 +2068,7 @@ export default function TractorRentPage() {
             </div>
 
             <div className="pt-2 text-[10px] text-slate-500">
-              Please quote KrishiMitra Marketplace ID <strong className="text-slate-800 dark:text-white">{contactTractor.id}</strong> when calling the owner.
+              Please quote FasalDrishti Marketplace ID <strong className="text-slate-800 dark:text-white">{contactTractor.id}</strong> when calling the owner.
             </div>
 
             <Button variant="outline" className="w-full mt-3" onClick={() => setContactTractor(null)}>

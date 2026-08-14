@@ -25,7 +25,7 @@ interface ApiEnvelope<T> {
   errorCode?: string | null;
 }
 
-export const UNAUTHORIZED_EVENT = "krishimitra:unauthorized";
+export const UNAUTHORIZED_EVENT = "fasaldrishti:unauthorized";
 
 const STATUS_MESSAGES: Record<number, string> = {
   401: "Your session has expired. Please log in again.",

@@ -399,14 +399,14 @@ export default function ColdStoragePage() {
   // Client Hydration & Storage Loading
   React.useEffect(() => {
     setIsMounted(true);
-    const storedCold = localStorage.getItem("krishimitra_cold_storages");
-    const storedBookings = localStorage.getItem("krishimitra_cold_bookings");
-    const storedReviews = localStorage.getItem("krishimitra_cold_reviews");
+    const storedCold = localStorage.getItem("fasaldrishti_cold_storages");
+    const storedBookings = localStorage.getItem("fasaldrishti_cold_bookings");
+    const storedReviews = localStorage.getItem("fasaldrishti_cold_reviews");
 
     if (storedCold) {
       setColdStorages(JSON.parse(storedCold));
     } else {
-      localStorage.setItem("krishimitra_cold_storages", JSON.stringify(DEFAULT_COLD_STORAGES));
+      localStorage.setItem("fasaldrishti_cold_storages", JSON.stringify(DEFAULT_COLD_STORAGES));
       setColdStorages(DEFAULT_COLD_STORAGES);
     }
 
@@ -414,24 +414,24 @@ export default function ColdStoragePage() {
     if (storedReviews) {
       setReviews(JSON.parse(storedReviews));
     } else {
-      localStorage.setItem("krishimitra_cold_reviews", JSON.stringify(DEFAULT_COLD_REVIEWS));
+      localStorage.setItem("fasaldrishti_cold_reviews", JSON.stringify(DEFAULT_COLD_REVIEWS));
       setReviews(DEFAULT_COLD_REVIEWS);
     }
   }, []);
 
   const saveStoragesToStorage = (updated: ColdStorageListing[]) => {
     setColdStorages(updated);
-    localStorage.setItem("krishimitra_cold_storages", JSON.stringify(updated));
+    localStorage.setItem("fasaldrishti_cold_storages", JSON.stringify(updated));
   };
 
   const saveBookingsToStorage = (updated: ColdStorageBooking[]) => {
     setBookings(updated);
-    localStorage.setItem("krishimitra_cold_bookings", JSON.stringify(updated));
+    localStorage.setItem("fasaldrishti_cold_bookings", JSON.stringify(updated));
   };
 
   const saveReviewsToStorage = (updated: ColdStorageReview[]) => {
     setReviews(updated);
-    localStorage.setItem("krishimitra_cold_reviews", JSON.stringify(updated));
+    localStorage.setItem("fasaldrishti_cold_reviews", JSON.stringify(updated));
   };
 
   // Cascading Filter Handlers
@@ -940,7 +940,7 @@ export default function ColdStoragePage() {
                               <div className="absolute top-3 left-3 flex flex-wrap gap-1.5 max-w-[85%]">
                                 <span className="bg-emerald-600 text-white text-[10px] font-black px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow-sm">
                                   <Snowflake className="h-3 w-3" />
-                                  KrishiMitra Verified
+                                  FasalDrishti Verified
                                 </span>
                                 {cs.isFssaiVerified && (
                                   <span className="bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
@@ -1787,7 +1787,7 @@ export default function ColdStoragePage() {
                 <div className="absolute bottom-4 left-4 right-4 text-white">
                   <div className="flex flex-wrap gap-2 mb-1">
                     <span className="bg-emerald-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1">
-                      <Snowflake className="h-3 w-3" /> KrishiMitra Verified
+                      <Snowflake className="h-3 w-3" /> FasalDrishti Verified
                     </span>
                     {selectedStorage.isFssaiVerified && (
                       <span className="bg-blue-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full">

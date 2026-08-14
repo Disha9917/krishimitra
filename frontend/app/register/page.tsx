@@ -34,7 +34,7 @@ import { motion, AnimatePresence } from "framer-motion";
 // Multilingual Dictionary for Register Wizard (EN / HI / GU)
 const translations = {
   en: {
-    backToHome: "Back to KrishiMitra",
+    backToHome: "Back to FasalDrishti",
     heading: "Farmer Profile Registration",
     subheading: "Set up your personalized Gujarat AI Advisory profile in 3 simple steps",
     step1Title: "Personal Details",
@@ -483,7 +483,7 @@ export default function RegisterPage() {
 
       {/* Footer copyright */}
       <footer className="relative z-20 text-center py-4 text-[11px] text-slate-500 dark:text-[#8B949E]">
-        © {new Date().getFullYear()} KrishiMitra AI. Kisan Call Helpline Support 1800-180-1551.
+        © {new Date().getFullYear()} FasalDrishti AI. Kisan Call Helpline Support 1800-180-1551.
       </footer>
     </div>
   );

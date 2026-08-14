@@ -1,4 +1,4 @@
-Krishimitra
+# FasalDrishti AI
 
 ## Local development
 

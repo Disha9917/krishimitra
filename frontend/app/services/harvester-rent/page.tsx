@@ -388,13 +388,13 @@ export default function HarvesterRentPage() {
   // Sync state from localStorage
   React.useEffect(() => {
     setIsMounted(true);
-    const storedListings = localStorage.getItem("krishimitra_harvester_listings");
-    const storedBookings = localStorage.getItem("krishimitra_harvester_bookings");
+    const storedListings = localStorage.getItem("fasaldrishti_harvester_listings");
+    const storedBookings = localStorage.getItem("fasaldrishti_harvester_bookings");
 
     if (storedListings) {
       setListings(JSON.parse(storedListings));
     } else {
-      localStorage.setItem("krishimitra_harvester_listings", JSON.stringify(DEFAULT_HARVESTERS));
+      localStorage.setItem("fasaldrishti_harvester_listings", JSON.stringify(DEFAULT_HARVESTERS));
       setListings(DEFAULT_HARVESTERS);
     }
 
@@ -405,12 +405,12 @@ export default function HarvesterRentPage() {
 
   const saveListingsToStorage = (updated: HarvesterListing[]) => {
     setListings(updated);
-    localStorage.setItem("krishimitra_harvester_listings", JSON.stringify(updated));
+    localStorage.setItem("fasaldrishti_harvester_listings", JSON.stringify(updated));
   };
 
   const saveBookingsToStorage = (updated: HarvesterBooking[]) => {
     setBookings(updated);
-    localStorage.setItem("krishimitra_harvester_bookings", JSON.stringify(updated));
+    localStorage.setItem("fasaldrishti_harvester_bookings", JSON.stringify(updated));
   };
 
   // Reset Filters when Region/District changes to maintain consistency
@@ -1681,8 +1681,8 @@ export default function HarvesterRentPage() {
                   <button 
                     onClick={() => {
                       if (confirm("Reset marketplace to default pre-populated harvesters?")) {
-                        localStorage.removeItem("krishimitra_harvester_listings");
-                        localStorage.removeItem("krishimitra_harvester_bookings");
+                        localStorage.removeItem("fasaldrishti_harvester_listings");
+                        localStorage.removeItem("fasaldrishti_harvester_bookings");
                         setListings(DEFAULT_HARVESTERS);
                         setBookings([]);
                       }
@@ -2021,7 +2021,7 @@ export default function HarvesterRentPage() {
             </div>
 
             <div className="pt-2 text-[10px] text-slate-500">
-              Please quote KrishiMitra Harvester ID <strong className="text-slate-800 dark:text-white">{contactHarvester.id}</strong> when calling the owner.
+              Please quote FasalDrishti Harvester ID <strong className="text-slate-800 dark:text-white">{contactHarvester.id}</strong> when calling the owner.
             </div>
 
             <Button variant="outline" className="w-full mt-3" onClick={() => setContactHarvester(null)}>

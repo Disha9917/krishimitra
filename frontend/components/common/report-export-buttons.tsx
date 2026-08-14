@@ -15,11 +15,11 @@ export function ReportExportButtons({
   title = "AgriTech Advisory Report",
   dataHeaders = ["Date", "Crop", "Recommendation", "Confidence"],
   dataRows = [["2026-07-21", "Wheat", "Optimal Nitrogen Application", "High"]],
-  summaryText = "KrishiMitra AI Advisory Summary",
+  summaryText = "FasalDrishti AI Advisory Summary",
   className,
 }: ReportExportButtonsProps) {
   const handleExportCSV = () => {
-    exportToCSV(`KrishiMitra_Report_${Date.now()}`, dataHeaders, dataRows);
+    exportToCSV(`FasalDrishti_Report_${Date.now()}`, dataHeaders, dataRows);
   };
 
   const handleExportPDF = () => {

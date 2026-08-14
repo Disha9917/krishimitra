@@ -38,7 +38,7 @@ export function downloadPDFSummary(title: string, content: string) {
         </style>
       </head>
       <body>
-        <h1>KrishiMitra AgriTech Advisory Report</h1>
+        <h1>FasalDrishti AgriTech Advisory Report</h1>
         <div class="header">Generated on ${new Date().toLocaleDateString("en-IN")}</div>
         <div class="section">
           <h2>${title}</h2>

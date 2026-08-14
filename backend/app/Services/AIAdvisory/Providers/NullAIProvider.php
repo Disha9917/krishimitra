@@ -26,7 +26,7 @@ class NullAIProvider implements AIProviderInterface
 
     public function model(): string
     {
-        return 'krishimitra-null-v1';
+        return 'fasaldrishti-null-v1';
     }
 
     public function generate(string $prompt, AdvisoryContextDTO $context): AdvisoryResponseDTO

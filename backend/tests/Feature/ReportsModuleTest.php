@@ -207,7 +207,7 @@ class ReportsModuleTest extends TestCase
 
         $this->assertStringContainsString('text/csv', (string) $response->headers->get('content-type'));
         $content = $response->streamedContent();
-        $this->assertStringContainsString('KrishiMitra Report', $content);
+        $this->assertStringContainsString('FasalDrishti Report', $content);
         $this->assertStringContainsString('Section,Key,Value', $content);
 
         $this->assertDatabaseHas('export_history', [

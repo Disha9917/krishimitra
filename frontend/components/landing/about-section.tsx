@@ -11,7 +11,7 @@ export function AboutSection() {
             <span>Empowering Agriculture</span>
           </div>
           <h2 className="text-3xl font-black text-slate-900 dark:text-white sm:text-4xl">
-            About KrishiMitra AI
+            About FasalDrishti AI
           </h2>
           <p className="text-sm text-slate-600 dark:text-[#C9D1D9] max-w-2xl mx-auto leading-relaxed">
             Precision Crop Advisory System & Post-Harvest Loss Reduction Planner engineered for smallholder farmers.
@@ -26,7 +26,7 @@ export function AboutSection() {
                 <span>Our Mission</span>
               </div>
               <p className="text-xs sm:text-sm text-slate-700 dark:text-[#C9D1D9] leading-relaxed">
-                Smallholder farmers face unpredictable weather, pest infestations, and severe post-harvest crop degradation that impacts rural livelihoods. KrishiMitra AI delivers hyper-local precision advisories, 7-day micro-climate timelines, AI leaf disease vision models, and commercial Sell vs Store decision engines to maximize farmer profitability.
+                Smallholder farmers face unpredictable weather, pest infestations, and severe post-harvest crop degradation that impacts rural livelihoods. FasalDrishti AI delivers hyper-local precision advisories, 7-day micro-climate timelines, AI leaf disease vision models, and commercial Sell vs Store decision engines to maximize farmer profitability.
               </p>
             </div>
 
