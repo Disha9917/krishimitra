@@ -6,6 +6,11 @@ import { ThemeProvider } from "../components/theme-provider";
 export const metadata: Metadata = {
   title: "FasalDrishti AI | Precision Crop Advisory & Post-Harvest Loss Planner",
   description: "AI-powered precision crop advisory system, disease detection, and post-harvest loss reduction planner for smallholder farmers.",
+  icons: {
+    icon: "/icon.png",
+    shortcut: "/icon.png",
+    apple: "/icon.png",
+  },
 };
 
 export default function RootLayout({
